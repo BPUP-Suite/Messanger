@@ -2,7 +2,9 @@
 
 App di messagistica in tempo reale sviluppato con tools come Flutter e Android Studio.
 
-Supporta Android, iOS, Windows, MacOS, Linux ed è utilizzabile anche sul web.
+Supporta Android, iOS, Windows, MacOS, Linux ed è utilizzabile anche sul web. (IN TEORIA, stiamo ancora lavorando a quella per android, QUINDI CALMA)
+
+Server hostato su docker in questa REPO (Metti il link alla repo che io non ho voglia :D)
 
 Timeline:
 
