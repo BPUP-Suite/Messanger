@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:messanger_bpup/faces/start/phone.dart';
-import 'package:messanger_bpup/main.dart';
+import 'package:messanger_bpup/faces/chatList.dart';
+import 'package:messanger_bpup/faces/start/emailCheck.dart';
+import 'package:messanger_bpup/src/obj/themes/themes.dart';
 
 class Start extends StatelessWidget {
   const Start({super.key});
@@ -8,6 +9,7 @@ class Start extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xff354966),
       appBar: AppBar(
           title: Text(
               "Start",
@@ -16,26 +18,48 @@ class Start extends StatelessWidget {
             ),
           ),
         centerTitle: true,
-        backgroundColor: Colors.blue,
+        backgroundColor: Color(0xff202c3e),
+        iconTheme: IconThemeData(color: Colors.white),
       ),
       body: Center(
-        child: ElevatedButton(
-          child: Text(
-              "Start",
-            style: TextStyle(
-              fontSize: 30
-            ),
-          ),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => Phone(),
+        child: Column(
+          children: [
+            ElevatedButton(
+              child: Text(
+                "Email",
+                style: TextStyle(
+                    fontSize: 30
+                ),
               ),
-            );
-          },
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EmailCheck(),
+                  ),
+                );
+              },
+            ),
+            ElevatedButton(
+              child: Text(
+                "Chat List",
+                style: TextStyle(
+                    fontSize: 30
+                ),
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ChatList(),
+                  ),
+                );
+              },
+            ),
+          ],
         ),
       ),
+
     );
   }
 }
