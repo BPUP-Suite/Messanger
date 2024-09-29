@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:messanger_bpup/faces/chatList.dart';
+import 'package:messanger_bpup/faces/start/Login/loginEmailCode.dart';
+import 'package:messanger_bpup/faces/start/Login/loginPassword.dart';
 import 'package:messanger_bpup/faces/start/emailCheck.dart';
 import 'package:messanger_bpup/src/obj/themes/themes.dart';
 
@@ -52,6 +54,38 @@ class Start extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) => ChatList(),
+                  ),
+                );
+              },
+            ),
+            ElevatedButton(
+              child: Text(
+                "Email code",
+                style: TextStyle(
+                    fontSize: 30
+                ),
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => LoginEmailCode(),
+                  ),
+                );
+              },
+            ),
+            ElevatedButton(
+              child: Text(
+                "Password Login",
+                style: TextStyle(
+                    fontSize: 30
+                ),
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => LoginPassword(),
                   ),
                 );
               },

@@ -30,7 +30,7 @@ class ChatList extends StatelessWidget {
               child: CircleAvatar(
                 radius: 52,
                 backgroundImage: NetworkImage(
-                    'https://unsplash.com/photos/a-large-brown-bear-standing-in-a-forest-Af8FDnadU0Q'
+                    'https://picsum.photos/200'
                 ),
               ),
             ),

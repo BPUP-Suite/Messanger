@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class EmailCheck extends StatelessWidget {
-  const EmailCheck({super.key});
+class LoginPassword extends StatelessWidget {
+  const LoginPassword({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class EmailCheck extends StatelessWidget {
         margin: const EdgeInsets.only(top: 20),
         child: Column(
           children: [
-            EmailLoginCheck(),
+            LoginPasswordCheck(),
             ElevatedButton(
               onPressed: () {
 
@@ -36,7 +36,7 @@ class EmailCheck extends StatelessWidget {
   }
 }
 
-class EmailLoginCheck extends StatelessWidget {
+class LoginPasswordCheck extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const SizedBox(
@@ -46,10 +46,9 @@ class EmailLoginCheck extends StatelessWidget {
         style: TextStyle(
           color: Colors.white,
         ),
-        // obscureText: true,
+        obscureText: true,
         decoration: InputDecoration(
-          labelText: 'Mail',
-
+          labelText: 'Password',
           labelStyle: TextStyle(color: Colors.white),
           enabledBorder: UnderlineInputBorder(
             borderSide: BorderSide(color: Colors.white),
