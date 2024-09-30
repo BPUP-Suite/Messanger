@@ -77,18 +77,32 @@ class MsgBottomBar extends StatelessWidget {
           //   ),
           // ),
           Container(
-            // child: CircleAvatar(
-            //   backgroundColor: Colors.lightBlue,
-            //   child: Icon(Icons.attach_file, color: Colors.white,),
-            // ),
-            child: IconButton(
-                onPressed: () {},
-                icon: CircleAvatar(
-                  backgroundColor: Colors.lightBlue,
-                  child: Icon(Icons.attach_file),
-                ),
+            child: GestureDetector(
+              onTap: () {
+                showModalBottomSheet(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return SizedBox(
+                        height: 400,
+                        child: Center(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              
+                            },
+                            child: Text("ciao"),
+                          ),
+                        ),
+                      );
+                    }
+                    );
+              },
+              child: CircleAvatar(
+                backgroundColor: Colors.lightBlue,
+                child: Icon(Icons.attach_file, color: Colors.white),
+              ),
             ),
           ),
+
           Expanded(
             child: Container(
               margin: EdgeInsets.only(left: 10, right: 10),
