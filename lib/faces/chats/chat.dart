@@ -7,36 +7,31 @@ class Chat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xff354966),
-      appBar: AppBar(
-        backgroundColor: Color(0xff202c3e),
-        iconTheme: IconThemeData(color: Colors.white),
-        title: Row(
-          children: [
-            CircleAvatar(
-              backgroundImage: NetworkImage('https://picsum.photos/200'), // Sostituisci con il percorso della tua immagine
-            ),
-            SizedBox(width: 15), // Spazio tra l'avatar e il testo
-            Text(
-              "Nome Chat",
-              style: TextStyle(color: Colors.white),
-            ),
-            Spacer(),
-            Icon(Icons.more_vert_rounded),
-          ],
+        backgroundColor: Color(0xff354966),
+        appBar: AppBar(
+          backgroundColor: Color(0xff202c3e),
+          iconTheme: IconThemeData(color: Colors.white),
+          title: Row(
+            children: [
+              CircleAvatar(
+                backgroundImage: NetworkImage(
+                    'https://picsum.photos/200'), // Sostituisci con il percorso della tua immagine
+              ),
+              SizedBox(width: 15), // Spazio tra l'avatar e il testo
+              Text(
+                "Nome Chat",
+                style: TextStyle(color: Colors.white),
+              ),
+              Spacer(),
+              Icon(Icons.more_vert_rounded),
+            ],
+          ),
         ),
-      ),
-
-      body: Stack(
-        children: [
+        body: Stack(children: [
           MsgBottomBar(),
-        ]
-      )
-    );
+        ]));
   }
 }
-
-
 
 class MsgBottomBar extends StatelessWidget {
   const MsgBottomBar({super.key});
@@ -59,15 +54,12 @@ class MsgBottomBar extends StatelessWidget {
                         height: 400,
                         child: Center(
                           child: ElevatedButton(
-                            onPressed: () {
-
-                            },
+                            onPressed: () {},
                             child: Text("ciao"),
                           ),
                         ),
                       );
-                    }
-                    );
+                    });
               },
               child: CircleAvatar(
                 backgroundColor: Colors.lightBlue,
@@ -75,42 +67,53 @@ class MsgBottomBar extends StatelessWidget {
               ),
             ),
           ),
-
           Expanded(
             child: Container(
               margin: EdgeInsets.only(left: 10, right: 10),
-              padding: EdgeInsets.only(left: 15),
-
+              padding: EdgeInsets.only(left: 15, right: 15),
               width: 250,
               height: 40,
               decoration: BoxDecoration(
-                // color: Colors.blue,
+                  // color: Colors.blue,
                   border: Border.all(color: Colors.white),
-                  borderRadius: BorderRadius.circular(100)
-              ),
+                  borderRadius: BorderRadius.circular(100)),
               child: Center(
                 child: TextField(
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(
+                    color: Colors.white,
+                    decoration: TextDecoration.none,
+                    decorationThickness: 0,
+                  ),
                   cursorColor: Colors.white,
                   decoration: InputDecoration(
                       border: InputBorder.none,
                       hintText: "Messaggio",
-                      hintStyle: TextStyle(
-                          color: Colors.white.withOpacity(0.7)
-                      )
-                  ),
+                      hintStyle:
+                          TextStyle(color: Colors.white.withOpacity(0.7))),
                 ),
               ),
+              // child: SizedBox(
+              //   width: 250,
+              //   child: TextField(
+              //     obscureText: true,
+              //     decoration: InputDecoration(
+              //       border: OutlineInputBorder(),
+              //       labelText: 'Password',
+              //     ),
+              //   ),
+              // ),
             ),
           ),
           Container(
             child: GestureDetector(
-              onTap: () {
-
-              },
+              onTap: () {},
               child: CircleAvatar(
                 backgroundColor: Colors.transparent,
-                child: Icon(Icons.send, color: Colors.white, size: 27,),
+                child: Icon(
+                  Icons.send,
+                  color: Colors.white,
+                  size: 27,
+                ),
               ),
             ),
           ),
@@ -119,6 +122,3 @@ class MsgBottomBar extends StatelessWidget {
     );
   }
 }
-
-
-

@@ -59,7 +59,7 @@ class SignupForm extends StatelessWidget {
 
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Per favore inserisci il tuo nome';
+                  return 'Per favore inserisci la tua email';
                 }
                 return null;
               },
@@ -68,7 +68,7 @@ class SignupForm extends StatelessWidget {
               cursorColor: Colors.white,
               style: TextStyle(color: Colors.white),
               decoration: InputDecoration(
-                labelText: 'password',
+                labelText: 'Password',
 
                 labelStyle: TextStyle(color: Colors.white),
                 enabledBorder: UnderlineInputBorder(
@@ -80,7 +80,91 @@ class SignupForm extends StatelessWidget {
               ),
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Per favore inserisci la tua email';
+                  return 'Per favore inserisci la tua password';
+                }
+                return null;
+              },
+            ),
+            TextFormField(
+              cursorColor: Colors.white,
+              style: TextStyle(color: Colors.white),
+              decoration: InputDecoration(
+                labelText: 'Conferma Password',
+
+                labelStyle: TextStyle(color: Colors.white),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white),
+                ),
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Per favore ripeti la tua password';
+                }
+                return null;
+              },
+            ),
+            TextFormField(
+              cursorColor: Colors.white,
+              style: TextStyle(color: Colors.white),
+              decoration: InputDecoration(
+                labelText: 'Nome',
+
+                labelStyle: TextStyle(color: Colors.white),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white),
+                ),
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Per favore inserisci il tuo nome';
+                }
+                return null;
+              },
+            ),
+            TextFormField(
+              cursorColor: Colors.white,
+              style: TextStyle(color: Colors.white),
+              decoration: InputDecoration(
+                labelText: 'Cognome',
+
+                labelStyle: TextStyle(color: Colors.white),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white),
+                ),
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Per favore inserisci il tuo cognome';
+                }
+                return null;
+              },
+            ),
+            TextFormField(
+              cursorColor: Colors.white,
+              style: TextStyle(color: Colors.white),
+              decoration: InputDecoration(
+                labelText: 'Handle',
+
+                labelStyle: TextStyle(color: Colors.white),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white),
+                ),
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Per favore inserisci il tuo handle';
                 }
                 return null;
               },

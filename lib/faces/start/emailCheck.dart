@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:messanger_bpup/faces/start/Login/loginEmailCode.dart';
 
 class EmailCheck extends StatelessWidget {
   const EmailCheck({super.key});
@@ -33,6 +34,8 @@ class EmailCheck extends StatelessWidget {
 class EmailCheckForm extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
 
+  final email = "test@test.com";
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -59,7 +62,10 @@ class EmailCheckForm extends StatelessWidget {
 
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Per favore inserisci il tuo nome';
+                  return 'Per favore inserisci la tua email';
+                }
+                if (value != email) {
+                  return 'Email errata';
                 }
                 return null;
               },
@@ -69,8 +75,11 @@ class EmailCheckForm extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Form valido!')),
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => LoginEmailCode(),
+                      ),
                     );
                   }
                 },

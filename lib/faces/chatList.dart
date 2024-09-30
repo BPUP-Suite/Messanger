@@ -109,6 +109,7 @@ class ChatList extends StatelessWidget {
                 "Nome Cognome",
                 style: TextStyle(
                   color: Colors.white,
+                  fontSize: 20
                 ),
               ),
             ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:messanger_bpup/faces/chatList.dart';
 
 class LoginPassword extends StatelessWidget {
   const LoginPassword({super.key});
@@ -30,9 +31,12 @@ class LoginPassword extends StatelessWidget {
   }
 }
 
+
+
 class LoginPasswordForm extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
 
+  final Password = "miao1234";
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -43,8 +47,11 @@ class LoginPasswordForm extends StatelessWidget {
           children: <Widget>[
             TextFormField(
               cursorColor: Colors.white,
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(
+                  color: Colors.white,
+              ),
               decoration: InputDecoration(
+
                 labelText: 'Password',
 
                 labelStyle: TextStyle(color: Colors.white),
@@ -59,7 +66,10 @@ class LoginPasswordForm extends StatelessWidget {
 
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Per favore inserisci il tuo nome';
+                  return 'Per favore inserisci la tua password';
+                }
+                if (value != Password) {
+                  return 'Password errata';
                 }
                 return null;
               },
@@ -69,8 +79,14 @@ class LoginPasswordForm extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Form valido!')),
+                    // ScaffoldMessenger.of(context).showSnackBar(
+                    //   SnackBar(content: Text('Form valido!')),
+                    // );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ChatList(),
+                      ),
                     );
                   }
                 },
