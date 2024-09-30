@@ -3,6 +3,7 @@ import 'package:messanger_bpup/faces/chatList.dart';
 import 'package:messanger_bpup/faces/chats/chat.dart';
 import 'package:messanger_bpup/faces/start/Login/loginEmailCode.dart';
 import 'package:messanger_bpup/faces/start/Login/loginPassword.dart';
+import 'package:messanger_bpup/faces/start/Signup/signup.dart';
 import 'package:messanger_bpup/faces/start/emailCheck.dart';
 import 'package:messanger_bpup/src/obj/themes/themes.dart';
 
@@ -103,6 +104,22 @@ class Start extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) => Chat(),
+                  ),
+                );
+              },
+            ),
+            ElevatedButton(
+              child: Text(
+                "Signup",
+                style: TextStyle(
+                    fontSize: 30
+                ),
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Signup(),
                   ),
                 );
               },

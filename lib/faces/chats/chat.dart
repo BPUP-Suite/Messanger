@@ -49,33 +49,6 @@ class MsgBottomBar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          // Container(
-          //   height: 40,
-          //   child: SpeedDial(
-          //     backgroundColor: Colors.lightBlue,
-          //     animatedIcon: AnimatedIcons.menu_close,
-          //     icon: Icons.add,
-          //     animatedIconTheme: IconThemeData(color: Colors.white),
-          //     spacing: 5,
-          //     spaceBetweenChildren: 5,
-          //     closeManually: false,
-          //     children: [
-          //       SpeedDialChild(
-          //           child: Icon(Icons.add),
-          //           shape: CircleBorder(),
-          //           label: "testo"
-          //       ),
-          //       SpeedDialChild(
-          //         child: Icon(Icons.add),
-          //         shape: CircleBorder(),
-          //       ),
-          //       SpeedDialChild(
-          //         child: Icon(Icons.add),
-          //         shape: CircleBorder(),
-          //       ),
-          //     ],
-          //   ),
-          // ),
           Container(
             child: GestureDetector(
               onTap: () {
@@ -87,7 +60,7 @@ class MsgBottomBar extends StatelessWidget {
                         child: Center(
                           child: ElevatedButton(
                             onPressed: () {
-                              
+
                             },
                             child: Text("ciao"),
                           ),
@@ -131,7 +104,15 @@ class MsgBottomBar extends StatelessWidget {
             ),
           ),
           Container(
-            child: Icon(Icons.send, color: Colors.white, size: 27,),
+            child: GestureDetector(
+              onTap: () {
+
+              },
+              child: CircleAvatar(
+                backgroundColor: Colors.transparent,
+                child: Icon(Icons.send, color: Colors.white, size: 27,),
+              ),
+            ),
           ),
         ],
       ),
