@@ -26,3 +26,16 @@ Timeline:
 - Mi ha dato il rimborso di star citizen, posso comprare la Mustang
 - Fanculo sto progetto (per ora) si deve conquistare lo spazio
 - {MM} scopre la possibilità di poter debuggare il progetto da un suo *PERSONAL* device, ed è estremamente contento 
+
+27/09/2024 - 30/09/2024
+
+- Tryhard su Star Citizen con rari casi di modifica al progetto
+
+31/09/2024
+
+- Me so rotto il cazo di SC, refund e continuo progetto
+- Database migliorato, aggiunta la possibilità di far partire il progetto tramite Docker (necessario per hostare database, proxy, dbadmin, api facilmente)
+- {MM} Migliora la grafica tantizzimo aggiungendo chat, bottoncini maaaagici, lista di chat figa, un menu ad hambuger (o 3 linee in alto a sinistra)
+- {MM} ha iniziato a fare troppi bambini e non si capisc nu caz, quindi si sistema l`intero tree delle directory dandogli un po' di senso (sia per l'API, che per il client)
+- Primi test di build android + windows + web (e funzionano abbastanza bene) {MM} contento (MacOS e iOS no perchè {EB} è strunz :D)
+- TODO: usare telegram come storage dei file più grossi (da pensare un file system per collegare ad ogni file un file_id di telegram, tramite un bot + una local api)
