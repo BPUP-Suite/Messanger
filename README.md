@@ -27,11 +27,11 @@ Timeline:
 - Fanculo sto progetto (per ora) si deve conquistare lo spazio
 - {MM} scopre la possibilità di poter debuggare il progetto da un suo *PERSONAL* device, ed è estremamente contento 
 
-27/09/2024 - 30/09/2024
+27/09/2024 - 29/09/2024
 
 - Tryhard su Star Citizen con rari casi di modifica al progetto
 
-31/09/2024
+30/09/2024
 
 - Me so rotto il cazo di SC, refund e continuo progetto
 - Database migliorato, aggiunta la possibilità di far partire il progetto tramite Docker (necessario per hostare database, proxy, dbadmin, api facilmente)
