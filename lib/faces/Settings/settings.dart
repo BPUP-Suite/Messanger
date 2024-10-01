@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:messanger_bpup/faces/Settings/changeThemes.dart';
+import 'package:messanger_bpup/faces/Settings/security.dart';
 
 class Settings extends StatelessWidget {
   const Settings({super.key});
@@ -32,6 +33,22 @@ class Settings extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) => ChangeThemes(),
+                  ),
+                );
+              },
+            ),
+            ElevatedButton(
+              child: Text(
+                "Security",
+                style: TextStyle(
+                    fontSize: 30
+                ),
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Security(),
                   ),
                 );
               },

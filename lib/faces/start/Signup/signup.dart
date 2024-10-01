@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 
+
+
 class Signup extends StatelessWidget {
   const Signup({super.key});
+
+  // final signupEmail =
 
   @override
   Widget build(BuildContext context) {
@@ -41,29 +45,29 @@ class SignupForm extends StatelessWidget {
         width: 250,
         child: Column(
           children: <Widget>[
-            TextFormField(
-              cursorColor: Colors.white,
-              style: TextStyle(color: Colors.white),
-              decoration: InputDecoration(
-                labelText: 'Email',
-
-                labelStyle: TextStyle(color: Colors.white),
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white),
-                ),
-                focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white),
-                ),
-              ),
-
-
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Per favore inserisci la tua email';
-                }
-                return null;
-              },
-            ),
+            // TextFormField(
+            //   cursorColor: Colors.white,
+            //   style: TextStyle(color: Colors.white),
+            //   decoration: InputDecoration(
+            //     labelText: 'Email',
+            //
+            //     labelStyle: TextStyle(color: Colors.white),
+            //     enabledBorder: UnderlineInputBorder(
+            //       borderSide: BorderSide(color: Colors.white),
+            //     ),
+            //     focusedBorder: UnderlineInputBorder(
+            //       borderSide: BorderSide(color: Colors.white),
+            //     ),
+            //   ),
+            //
+            //
+            //   validator: (value) {
+            //     if (value == null || value.isEmpty) {
+            //       return 'Per favore inserisci la tua email';
+            //     }
+            //     return null;
+            //   },
+            // ),
             TextFormField(
               cursorColor: Colors.white,
               style: TextStyle(color: Colors.white),

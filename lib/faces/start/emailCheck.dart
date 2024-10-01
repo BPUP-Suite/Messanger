@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:messanger_bpup/faces/start/Login/loginEmailCode.dart';
+import 'package:messanger_bpup/faces/start/Login/loginPassword.dart';
 
 class EmailCheck extends StatelessWidget {
   const EmailCheck({super.key});
@@ -78,7 +78,7 @@ class EmailCheckForm extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => LoginEmailCode(),
+                        builder: (context) => LoginPassword(),
                       ),
                     );
                   }
