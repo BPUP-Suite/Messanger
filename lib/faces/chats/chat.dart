@@ -58,7 +58,7 @@ class MsgBottomBar extends StatelessWidget {
                       height: 500,
                       child: Column(
                         children: [
-                          //barretta sopra al pannellino
+                          //barretta sopra al pannello attachments
                           Container(
                             margin: EdgeInsets.all(20),
                             height: 4,
@@ -68,6 +68,7 @@ class MsgBottomBar extends StatelessWidget {
                               borderRadius: BorderRadius.circular(100),
                             ),
                           ),
+                          //4 pannelli del pannello attachments
                           Expanded(
                             child: PageView(
                               controller: _pageController,
@@ -79,10 +80,12 @@ class MsgBottomBar extends StatelessWidget {
                               ],
                             ),
                           ),
+                          //solo una linea
                           Divider(
                             height: 0.7,
                             color: Color(0xff18212f),
                           ),
+                          //4 pulsanti del pannello attachments
                           Container(
                             padding: EdgeInsets.all(20),
                             child: Row(

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:messanger_bpup/faces/chatList.dart';
+import 'package:messanger_bpup/src/API/jsonParser.dart';
 
 class LoginPassword extends StatelessWidget {
-  const LoginPassword({super.key});
+  const LoginPassword({super.key, required this.emailValue});
+
+  final emailValue;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +25,7 @@ class LoginPassword extends StatelessWidget {
         margin: const EdgeInsets.only(top: 20),
         child: Column(
           children: [
-            LoginPasswordForm(),
+            LoginPasswordForm(emailValue),
           ],
         ),
         // child: PhoneForm(),
@@ -34,9 +37,14 @@ class LoginPassword extends StatelessWidget {
 
 
 class LoginPasswordForm extends StatelessWidget {
+
+  late String emailValue;
+  LoginPasswordForm(String emailValue){
+    this.emailValue=emailValue;
+  }
   final _formKey = GlobalKey<FormState>();
 
-  final Password = "miao1234";
+  late String passwordValue;
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -68,9 +76,7 @@ class LoginPasswordForm extends StatelessWidget {
                 if (value == null || value.isEmpty) {
                   return 'Per favore inserisci la tua password';
                 }
-                if (value != Password) {
-                  return 'Password errata';
-                }
+                passwordValue = value;
                 return null;
               },
             ),
@@ -82,12 +88,7 @@ class LoginPasswordForm extends StatelessWidget {
                     // ScaffoldMessenger.of(context).showSnackBar(
                     //   SnackBar(content: Text('Form valido!')),
                     // );
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ChatList(),
-                      ),
-                    );
+                    LoginAndNavigate(context, emailValue, passwordValue);
                   }
                 },
                 child: Text('Invia'),
@@ -97,5 +98,30 @@ class LoginPasswordForm extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+
+
+void LoginAndNavigate(BuildContext context, String emailValue, String passwordValue) async {
+  String loginPasswordJson = await JsonParser().loginPasswordJson(emailValue, passwordValue);
+
+  print("non fa una cazzuuuuuuuuzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
+  print(loginPasswordJson);
+  print("non fa una cazzuuuuuuuuzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
+
+  if (loginPasswordJson != "false") {
+    print(loginPasswordJson);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ChatList(),
+      ),
+    );
+  }
+  else{
+    print("non fa una cazzuuuuuuuuzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
+    print(loginPasswordJson);
+    print("non fa una cazzuuuuuuuuzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
   }
 }

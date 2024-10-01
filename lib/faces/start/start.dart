@@ -59,22 +59,22 @@ class Start extends StatelessWidget {
                 );
               },
             ),
-            ElevatedButton(
-              child: Text(
-                "Password Login",
-                style: TextStyle(
-                    fontSize: 30
-                ),
-              ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => LoginPassword(),
-                  ),
-                );
-              },
-            ),
+            // ElevatedButton(
+            //   child: Text(
+            //     "Password Login",
+            //     style: TextStyle(
+            //         fontSize: 30
+            //     ),
+            //   ),
+            //   onPressed: () {
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(
+            //         builder: (context) => LoginPassword(),
+            //       ),
+            //     );
+            //   },
+            // ),
             ElevatedButton(
               child: Text(
                 "Chat",
@@ -91,22 +91,22 @@ class Start extends StatelessWidget {
                 );
               },
             ),
-            ElevatedButton(
-              child: Text(
-                "Signup",
-                style: TextStyle(
-                    fontSize: 30
-                ),
-              ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Signup(),
-                  ),
-                );
-              },
-            ),
+            // ElevatedButton(
+            //   child: Text(
+            //     "Signup",
+            //     style: TextStyle(
+            //         fontSize: 30
+            //     ),
+            //   ),
+            //   onPressed: () {
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(
+            //         builder: (context) => Signup(),
+            //       ),
+            //     );
+            //   },
+            // ),
           ],
         ),
       ),

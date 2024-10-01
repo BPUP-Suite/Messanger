@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:messanger_bpup/faces/chatList.dart';
+import 'package:messanger_bpup/src/API/jsonParser.dart';
 
 
 
 class Signup extends StatelessWidget {
-  const Signup({super.key});
+  const Signup({super.key, required this.emailValue});
 
-  // final signupEmail =
+  final emailValue;
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +29,7 @@ class Signup extends StatelessWidget {
         margin: const EdgeInsets.only(top: 20),
         child: Column(
           children: [
-            SignupForm(),
+            SignupForm(emailValue),
           ],
         ),
         // child: PhoneForm(),
@@ -35,7 +39,19 @@ class Signup extends StatelessWidget {
 }
 
 class SignupForm extends StatelessWidget {
+  late String emailValue;
+  SignupForm(String emailValue){
+    this.emailValue=emailValue;
+  }
+
   final _formKey = GlobalKey<FormState>();
+
+
+  late String passwordValue;
+  late String confirm_passwordValue;
+  late String nameValue;
+  late String surnameValue;
+  late String handleValue;
 
   @override
   Widget build(BuildContext context) {
@@ -86,6 +102,7 @@ class SignupForm extends StatelessWidget {
                 if (value == null || value.isEmpty) {
                   return 'Per favore inserisci la tua password';
                 }
+                passwordValue = value;
                 return null;
               },
             ),
@@ -107,6 +124,7 @@ class SignupForm extends StatelessWidget {
                 if (value == null || value.isEmpty) {
                   return 'Per favore ripeti la tua password';
                 }
+                confirm_passwordValue = value;
                 return null;
               },
             ),
@@ -128,6 +146,7 @@ class SignupForm extends StatelessWidget {
                 if (value == null || value.isEmpty) {
                   return 'Per favore inserisci il tuo nome';
                 }
+                nameValue = value;
                 return null;
               },
             ),
@@ -149,6 +168,7 @@ class SignupForm extends StatelessWidget {
                 if (value == null || value.isEmpty) {
                   return 'Per favore inserisci il tuo cognome';
                 }
+                surnameValue = value;
                 return null;
               },
             ),
@@ -170,6 +190,7 @@ class SignupForm extends StatelessWidget {
                 if (value == null || value.isEmpty) {
                   return 'Per favore inserisci il tuo handle';
                 }
+                handleValue = value;
                 return null;
               },
             ),
@@ -178,9 +199,7 @@ class SignupForm extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Form valido!')),
-                    );
+                    SignupAndNavigate(context, emailValue, nameValue, surnameValue, handleValue, passwordValue, confirm_passwordValue);
                   }
                 },
                 child: Text('Invia'),
@@ -190,6 +209,28 @@ class SignupForm extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+
+
+void SignupAndNavigate(BuildContext context, String emailValue, String nameValue, String surnameValue, String handleValue, String passwordValue, String confirm_passwordValue) async {
+  bool signupResponse = await JsonParser().signupJson(emailValue, nameValue, surnameValue, handleValue, passwordValue, confirm_passwordValue);
+
+  print(signupResponse == true);
+
+  if (signupResponse) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ChatList(),
+      ),
+    );
+  }
+  else{
+    print("non fa una cazzuuuuuuuuzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
+    print(signupResponse);
+    print("non fa una cazzuuuuuuuuzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
   }
 }
 
