@@ -31,7 +31,8 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_speed_dial:
-  image_picker:
+  local_auth:
+  shared_preferences:
 
 
 

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:messanger_bpup/faces/chatList.dart';
 import 'package:messanger_bpup/faces/chats/chat.dart';
-import 'package:messanger_bpup/faces/start/Login/loginPassword.dart';
-import 'package:messanger_bpup/faces/start/Signup/signup.dart';
 import 'package:messanger_bpup/faces/start/emailCheck.dart';
-import 'package:messanger_bpup/src/obj/themes/themes.dart';
+import 'package:local_auth/local_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Start extends StatelessWidget {
   const Start({super.key});
@@ -27,6 +27,7 @@ class Start extends StatelessWidget {
       body: Center(
         child: Column(
           children: [
+            BiometricsAppOpening(),
             ElevatedButton(
               child: Text(
                 "Email",
@@ -115,52 +116,104 @@ class Start extends StatelessWidget {
   }
 }
 
-// void main() {
-//   runApp(MyApp());
-// }
 
-// class Start extends StatelessWidget {
-//   const Start({super.key});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       debugShowCheckedModeBanner: false,
-//       home: Scaffold(
-//         backgroundColor: Colors.blue,
-//         body: Center(
-//           child: Builder(
-//             builder: (BuildContext context) {
-//               // Usa un nuovo contesto locale
-//               return ElevatedButton(
-//                 onPressed: () {
-//                   Navigator.push(
-//                     context,
-//                     MaterialPageRoute(
-//                         builder: (context) =>
-//                             const login()), // Usa il nuovo contesto
-//                   );
-//                 },
-//                 // child: Container(
-//                 //   height: 100,
-//                 //   width: 300,
-//                 //   decoration: BoxDecoration(
-//                 //     color: Colors.amberAccent,
-//                 //     borderRadius: BorderRadius.circular(20),
-//                 //   ),
-//                 //   padding: const EdgeInsets.all(30),
-//                 child: const Text(
-//                   "Start",
-//                   style: TextStyle(
-//                     fontSize: 28,
-//                   ),
-//                 ),
-//                 // ),
-//               );
-//             },
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
+
+//Biometrics
+class BiometricsAppOpening extends StatefulWidget {
+  const BiometricsAppOpening({super.key});
+
+  @override
+  State<BiometricsAppOpening> createState() => _BiometricsAppOpeningState();
+}
+
+class _BiometricsAppOpeningState extends State<BiometricsAppOpening> {
+  bool _isBiometricEnabled = false;
+  late LocalAuthentication auth;
+
+  @override
+  void initState() {
+    super.initState();
+    auth = LocalAuthentication();
+    _loadBiometricPreference().then((_) {
+      _authenticate();
+    });
+
+  }
+
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+    );
+  }
+
+
+
+  // Carica lo stato della preferenza dalle SharedPreferences
+  //subito non andava, poi ho fatto /flutter clean e /flutter pub get e magicamente salva la preferenza
+  Future<void> _loadBiometricPreference() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _isBiometricEnabled = prefs.getBool('biometricEnabled') ?? false;
+      print("preferenza biometrica su start:");
+      print(_isBiometricEnabled);
+    });
+  }
+
+
+
+  Future<void> _authenticate() async {
+    print("bubassssssssssssssssssssssss");
+    print(_isBiometricEnabled);
+    if(_isBiometricEnabled == true){
+      print("FUNZIONA");
+      try{
+        bool authenticated = await auth.authenticate(
+          //messaggino che appare sopra al sensore quando appare il pannello dell'impronta
+          localizedReason: "Autenticazione",
+          options: const AuthenticationOptions(
+              stickyAuth: true,
+              biometricOnly: true     //solo biometria --> no password, codici, pin...
+          ),
+        );
+
+        //stampa true o false se l'autenticazione è avvenuta
+        print("Authenticated: $authenticated");
+
+        // if(authenticated){
+        //
+        // }
+
+      }on PlatformException catch (e) {
+        print(e);
+      }
+    }
+    else{
+      print("non funziona");
+    }
+  }
+
+
+  // Future<void> _getAvailableBiometrics() async {
+  //   List<BiometricType> availableBiometrics = await auth.getAvailableBiometrics();
+  //
+  //   print("Lista dispositivi biometrici: $availableBiometrics");
+  //
+  //   if(!mounted) {
+  //     return;
+  //   }
+  // }
+}
+
+
+
+
+
+
+
+
+
+
+
+

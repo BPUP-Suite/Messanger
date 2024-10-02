@@ -106,10 +106,6 @@ class LoginPasswordForm extends StatelessWidget {
 void LoginAndNavigate(BuildContext context, String emailValue, String passwordValue) async {
   String loginPasswordJson = await JsonParser().loginPasswordJson(emailValue, passwordValue);
 
-  print("non fa una cazzuuuuuuuuzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
-  print(loginPasswordJson);
-  print("non fa una cazzuuuuuuuuzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
-
   if (loginPasswordJson != "false") {
     print(loginPasswordJson);
     Navigator.push(
@@ -120,8 +116,6 @@ void LoginAndNavigate(BuildContext context, String emailValue, String passwordVa
     );
   }
   else{
-    print("non fa una cazzuuuuuuuuzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
-    print(loginPasswordJson);
-    print("non fa una cazzuuuuuuuuzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
+    print("ha ritornato TRUE, male");
   }
 }
