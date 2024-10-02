@@ -39,3 +39,12 @@ Timeline:
 - {MM} ha iniziato a fare troppi bambini e non si capisc nu caz, quindi si sistema l`intero tree delle directory dandogli un po' di senso (sia per l'API, che per il client)
 - Primi test di build android + windows + web (e funzionano abbastanza bene) {MM} contento (MacOS e iOS no perchè {EB} è strunz :D)
 - TODO: usare telegram come storage dei file più grossi (da pensare un file system per collegare ad ogni file un file_id di telegram, tramite un bot + una local api)
+
+01/10/2024
+
+- Nuovo mese, inizia l'università e piango
+- Ho finalmente {SOD} finito l'API per la sezione login,signup e access con hash della password, generazione di un API key utilizzata per l'accesso alle proprie risorse e tante belle cosine
+- Ho configurato anche Nginx Proxy Manager e Cloudflare DNS insieme ad un serverino di Oracle Cloud (sia lodato il cielo e il tuo indirizzo IPv4 statico che io banana gigantesca son sotto CG-NAT, grazie Virgin Fibra(e no, non me lo danno l'IPv6 e col caxo che pago 4 euro al mese per avere un indirizzo inutile))
+- L'API (dopo tanti fix perchè non so scrivere Dockerfile in modo consistente :( ) funziona ed è operativa :D
+- {MM} e io {SOD} abbiamo finalmente iniziato a collaborare (urlando uno addosso all'altro :D) ma abbiamo collegato il client al server permettendo l'access (in pratica il processo che indentifica se un determinato utente è già registrato o meno portandoti alla specifica pagina), il signup e il login (che da come errore UNPROCESSABLE ENTITY dal server nei log, AIUTO COSA VUOL DIRE, però almeno sappiamo che errore è solo che ormai sono le 00:48 del 02/10/2024 e non ho voglia, sia lodato io che ho pensato di fare un logger di tutte le query e richieste API :D)
+- Buonanotte 😴
