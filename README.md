@@ -48,3 +48,11 @@ Timeline:
 - L'API (dopo tanti fix perchè non so scrivere Dockerfile in modo consistente :( ) funziona ed è operativa :D
 - {MM} e io {SOD} abbiamo finalmente iniziato a collaborare (urlando uno addosso all'altro :D) ma abbiamo collegato il client al server permettendo l'access (in pratica il processo che indentifica se un determinato utente è già registrato o meno portandoti alla specifica pagina), il signup e il login (che da come errore UNPROCESSABLE ENTITY dal server nei log, AIUTO COSA VUOL DIRE, però almeno sappiamo che errore è solo che ormai sono le 00:48 del 02/10/2024 e non ho voglia, sia lodato io che ho pensato di fare un logger di tutte le query e richieste API :D)
 - Buonanotte 😴
+
+02/10/2024
+
+- Io {SOD} fatto niente / {MM} fatto niente (ah no giusto, riconoscimento biometrico, cosa easy da due secondi [{MM} mi ammazza per codesta affermazione :D] )
+
+03/10/2024
+
+- Io {SOD} fatto niente / {MM} inizia a fare la vera e propria chat, con i messaggini e cose tattiche nucleari
