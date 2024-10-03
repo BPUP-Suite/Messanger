@@ -55,4 +55,4 @@ Timeline:
 
 03/10/2024
 
-- Io {SOD} fatto niente / {MM} inizia a fare la vera e propria chat, con i messaggini e cose tattiche nucleari
+- Io {SOD} fatto niente (fatta un minimo di documentazione per la sezione API) / {MM} inizia a fare la vera e propria chat, con i messaggini e cose tattiche nucleari
