@@ -21,14 +21,43 @@ class Settings extends StatelessWidget {
       body: Center(
         child: Column(
           children: [
-            ElevatedButton(
-              child: Text(
-                "Change Themes",
-                style: TextStyle(
-                    fontSize: 30
+            //Security
+            GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Security(),
+                    ),
+                  );
+                },
+                child: Column(
+                  children: [
+                    Container(
+                      child: ListTile(
+                        leading: ExcludeSemantics(
+                          child: Icon(
+                            Icons.shield_outlined, color: Colors.white,),
+                        ),
+                        title: Text(
+                          "Security",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Divider(
+                      height: 1,
+                      color: Color(0xff202c3e).withOpacity(0.4),
+                    ),
+                  ],
                 ),
-              ),
-              onPressed: () {
+            ),
+            //Themes
+            GestureDetector(
+              onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -36,22 +65,29 @@ class Settings extends StatelessWidget {
                   ),
                 );
               },
-            ),
-            ElevatedButton(
-              child: Text(
-                "Security",
-                style: TextStyle(
-                    fontSize: 30
-                ),
-              ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Security(),
+              child: Column(
+                children: [
+                  Container(
+                    child: ListTile(
+                      leading: ExcludeSemantics(
+                        child: Icon(
+                          Icons.color_lens_outlined, color: Colors.white,),
+                      ),
+                      title: Text(
+                        "Themes",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                        ),
+                      ),
+                    ),
                   ),
-                );
-              },
+                  Divider(
+                    height: 1,
+                    color: Color(0xff202c3e).withOpacity(0.4),
+                  ),
+                ],
+              ),
             ),
           ],
         ),

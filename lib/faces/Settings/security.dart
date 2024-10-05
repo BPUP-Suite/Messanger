@@ -3,10 +3,11 @@ import 'package:local_auth/local_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Security extends StatelessWidget {
-  const Security({super.key, });
+  const Security({
+    super.key,
+  });
 
   // bool _isBiometricEnabled = false;
-
 
   @override
   Widget build(BuildContext context) {
@@ -15,9 +16,7 @@ class Security extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           "Security",
-          style: TextStyle(
-              color: Colors.white
-          ),
+          style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
         backgroundColor: Color(0xff202c3e),
@@ -26,22 +25,17 @@ class Security extends StatelessWidget {
       body: Center(
         child: Column(
           children: [
-            // SwitchListTile(
-            //   title: Text('Abilita Autenticazione Biometrica'),
-            //   value: _isBiometricEnabled,
-            //   onChanged: (bool value) {
-            //       _isBiometricEnabled = value;
-            //   },
-            // )
             BiometricsSwitchCheck(),
+            Divider(
+              height: 1,
+              color: Color(0xff202c3e).withOpacity(0.4),
+            ),
           ],
         ),
       ),
-
     );
   }
 }
-
 
 //Biometria
 
@@ -62,10 +56,10 @@ class _BiometricsSwitchCheckState extends State<BiometricsSwitchCheck> {
     super.initState();
     auth = LocalAuthentication();
     auth.isDeviceSupported().then(
-        (bool isSupported) => setState(() {
-          _supportState = isSupported;
-        }),
-    );
+          (bool isSupported) => setState(() {
+            _supportState = isSupported;
+          }),
+        );
   }
 
   @override
@@ -76,15 +70,15 @@ class _BiometricsSwitchCheckState extends State<BiometricsSwitchCheck> {
           if (_supportState)
             BiometricsSwitch()
           else
-            Text("Il dispositivo non supporta la biometria", style: TextStyle(color: Colors.white),)
+            Text(
+              "Il dispositivo non supporta la biometria",
+              style: TextStyle(color: Colors.white),
+            )
         ],
       ),
     );
   }
 }
-
-
-
 
 //Questa classe invece fa apparire lo switch se il dispositivo supporta la biometria
 class BiometricsSwitch extends StatefulWidget {
@@ -123,21 +117,29 @@ class _BiometricsSwitchButtonState extends State<BiometricsSwitch> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child:SwitchListTile(
-            title: Text(
-                'Abilita Autenticazione Biometrica',
-              style: TextStyle(
-                color: Colors.white,
-              ),
-            ),
-            value: _isBiometricEnabled,
-            onChanged: (bool value) {
-              setState(() {
-                _isBiometricEnabled = value;    //ho provato e restituisce true o false nella variabile, quindi oks
-                _saveBiometricPreference(value);
-              });
-            },
+      child: SwitchListTile(
+        title: Text(
+          'Abilita Autenticazione Biometrica',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
           ),
+        ),
+        value: _isBiometricEnabled,
+        onChanged: (bool value) {
+          setState(() {
+            _isBiometricEnabled =
+                value; //ho provato e restituisce true o false nella variabile, quindi oks
+            _saveBiometricPreference(value);
+          });
+        },
+        // Colore del thumb quando lo switch è attivo
+        activeColor: Colors.green,
+        // Colore del thumb quando lo switch è inattivo
+        // inactiveThumbColor: Colors.red,
+        // // Colore del track quando lo switch è inattivo
+        // inactiveTrackColor:Colors.red,
+      ),
     );
   }
 }

@@ -173,6 +173,8 @@ class ChatList extends StatelessWidget {
           ],
         ),
       ),
+
+      //action button
       floatingActionButton: SpeedDial(
         backgroundColor: Colors.lightBlue,
         animatedIcon: AnimatedIcons.menu_close,
@@ -181,6 +183,10 @@ class ChatList extends StatelessWidget {
         spacing: 5,
         spaceBetweenChildren: 5,
         closeManually: false,
+        overlayColor: Colors.black,
+        overlayOpacity: 0.4,
+
+        // 3 pulsantini che appaiono quando si clicca il pulsante
         children: [
           SpeedDialChild(
             child: Icon(Icons.add),
