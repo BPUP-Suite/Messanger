@@ -167,7 +167,7 @@ class _BiometricsAppOpeningState extends State<BiometricsAppOpening> {
     print("bubassssssssssssssssssssssss");
     print(_isBiometricEnabled);
     if(_isBiometricEnabled == true){
-      print("FUNZIONA");
+      print("niometric enabled");
       try{
         bool authenticated = await auth.authenticate(
           //messaggino che appare sopra al sensore quando appare il pannello dell'impronta
@@ -190,7 +190,7 @@ class _BiometricsAppOpeningState extends State<BiometricsAppOpening> {
       }
     }
     else{
-      print("non funziona");
+      print("biometrics not enabled");
     }
   }
 

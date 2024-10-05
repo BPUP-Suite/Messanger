@@ -1,8 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:messanger_bpup/faces/chats/chatMessageObject.dart';
+
+// late List<ChatMessage> ChatMessages = [];
+// final ValueNotifier<ChatMessage> _newMessage = ValueNotifier<ChatMessage>(ChatMessage("Text", "Sender", "Receiver"));
+
+
+//changenotifier
+class ListModel with ChangeNotifier {
+  final List<ChatMessage> _messages = <ChatMessage>[];
+  List<ChatMessage> get values => _messages.toList();
+
+  void add(ChatMessage message){
+    _messages.add(message);
+    notifyListeners();
+  }
+
+}
+
+//changenotifier
+ListModel _listNotifier = ListModel();
+
+
 
 class Chat extends StatelessWidget {
-  const Chat({super.key});
+  const Chat({super.key,});
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -28,24 +51,255 @@ class Chat extends StatelessWidget {
             ],
           ),
         ),
+
         //body
-        body: Stack(children: [
-          MsgBottomBar(), //barra sotto che comprende graffetta, messaggio, send button
-        ]));
+        body: Column(children: [
+          //parte in cui appaiono i messaggi
+          Expanded(
+            child: Container(
+              child: MsgListView(listNotifier: _listNotifier,),
+            ),
+          ),
+
+          //barra sotto che comprende graffetta, messaggio, send button
+          Container(
+            child: MsgBottomBar(),
+          ),
+          //PROVA DA ELIMINARE
+
+        ]
+        )
+    );
   }
 }
 
+
+
+//list view dei messaggi, li stampa
+class MsgListView extends StatelessWidget {
+  MsgListView({super.key, required this.listNotifier, });
+
+  final ListModel listNotifier;
+  final ScrollController _scrollController = ScrollController();
+
+  void autoScrollMsg() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    }
+    );
+  }
+
+
+
+  @override
+  Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    }
+    );
+    return Container(
+      margin: EdgeInsets.only(left: 10, right: 10),
+          child: Column(
+            children: <Widget>[
+              Container(
+                child: Expanded(
+                    child: ListenableBuilder(
+                        listenable: listNotifier,
+                        builder: (BuildContext context, Widget? child) {
+                          List<ChatMessage> messages = listNotifier._messages;
+                          return ListView.builder(
+                              controller: _scrollController,
+                              itemCount: messages.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return buildMessage(index, messages, context);
+                              }
+                          );
+                        }
+                    )
+                ),
+              )
+
+            ],
+          ),
+
+
+    );
+  }
+
+  //capisce se mettere il messaggio a destra o sinistra in base al sender e fa la grafichina dei msg
+  buildMessage(index, messages, context) {
+    if(messages[index].sender == "Matteo") {
+      return Align(
+        alignment: FractionalOffset.centerRight,
+        child: Container(
+          constraints: BoxConstraints(minWidth: 10, maxWidth: MediaQuery.of(context).size.width/2),
+          padding: EdgeInsets.all(10),
+          margin: EdgeInsets.all(5),
+          child: Text(
+            messages[index].getText,
+            style: TextStyle(color: Colors.white),
+          ),
+          decoration: BoxDecoration(
+              color: Colors.blueAccent,
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10),
+                  topRight: Radius.circular(10),
+                  bottomLeft: Radius.circular(10))),
+        ),
+      );
+    }
+    else if(messages[index].sender == "NonMatteo") {
+      return Align(
+        alignment: FractionalOffset.centerLeft,
+        child: Container(
+          constraints: BoxConstraints(minWidth: 10, maxWidth: MediaQuery.of(context).size.width/2),
+          padding: EdgeInsets.all(10),
+          margin: EdgeInsets.all(5),
+          child: Text(
+            messages[index].getText,
+            style: TextStyle(color: Colors.white),
+          ),
+          decoration: BoxDecoration(
+              color: Colors.blueAccent,
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10),
+                  topRight: Radius.circular(10),
+                  bottomRight: Radius.circular(10))),
+        ),
+      );
+    } else {
+      // Handle other senders or return a default widget
+      return print("Complimenti, è difficile ottenere questo errore... e tu ci sei riuscito");
+
+    }
+  }
+}
+
+
+// class MsgListView extends StatefulWidget {
+//   const MsgListView({super.key});
+//
+//   @override
+//   State<MsgListView> createState() => _MsgListViewState();
+// }
+//
+// class _MsgListViewState extends State<MsgListView> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Column(
+//       children: [
+//         Expanded(
+//           child: Container(
+//             // margin: EdgeInsets.all(10),
+//             child: ListView.builder(
+//               itemCount: ChatMessages.length,
+//               itemBuilder: (context, index) {
+//                 return ListTile(
+//                   title: buildMessageWidgets(index),
+//                 );
+//               },
+//             ),
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+//
+//   int count = 0;
+//
+//   buildMessageWidgets(index) {
+//     count++;
+//     print(count);
+//
+//     if (ChatMessages[index].getSender == "Matteo") {
+//       return Align(
+//         alignment: FractionalOffset.centerRight,
+//         child: Container(
+//           constraints: BoxConstraints(minWidth: 10, maxWidth: 100),
+//           padding: EdgeInsets.all(10),
+//           margin: EdgeInsets.all(3),
+//           child: Text(
+//             ChatMessages[index].getText,
+//             style: TextStyle(color: Colors.white),
+//           ),
+//           decoration: BoxDecoration(
+//               color: Colors.blueAccent,
+//               borderRadius: BorderRadius.only(
+//                   topLeft: Radius.circular(10),
+//                   topRight: Radius.circular(10),
+//                   bottomLeft: Radius.circular(10))),
+//         ),
+//       );
+//     } else if (ChatMessages[index].getSender == "AltroUser") {
+//       return Align(
+//         alignment: FractionalOffset.centerLeft,
+//         child: Container(
+//           constraints: BoxConstraints(minWidth: 10, maxWidth: 100),
+//           padding: EdgeInsets.all(10),
+//           margin: EdgeInsets.all(3),
+//           child: Text(
+//             ChatMessages[index].getText,
+//             style: TextStyle(color: Colors.white),
+//           ),
+//           decoration: BoxDecoration(
+//               color: Colors.blueAccent,
+//               borderRadius: BorderRadius.only(
+//                   topLeft: Radius.circular(10),
+//                   topRight: Radius.circular(10),
+//                   bottomRight: Radius.circular(10))),
+//         ),
+//       );
+//     } else {
+//       // Handle other senders or return a default widget
+//       return Container(
+//         child: Text("Complimenti, è difficile ottenere questo errore"),
+//       );
+//     }
+//   }
+// }
+
+
+
+//barra invio messaggio sotto
 class MsgBottomBar extends StatelessWidget {
-  const MsgBottomBar({super.key});
+  //controllo testo si/no per cambio di icona
+  final TextEditingController _controllerMessage = TextEditingController();
+  final ValueNotifier<bool> _hasText = ValueNotifier<bool>(false);
+
+
+
+  MsgBottomBar() {
+    _controllerMessage.addListener(() {
+      _hasText.value = _controllerMessage.text.isNotEmpty;
+    });
+  }
+
+  //fa controlli se il messaggio non è vuoto
+  void _onSend() {
+    if (_controllerMessage.text.isNotEmpty) {
+      // ChatMessages.add(ChatMessage(_controllerMessage.text, "Matteo", "AltroUser"));
+      //
+      // _newMessage.value = ChatMessage(_controllerMessage.text, "Matteo", "AltroUser");
+
+      //changenotifier
+      _listNotifier.add(ChatMessage(_controllerMessage.text, "NonMatteo", "NonMatteo"));
+
+
+
+      _controllerMessage.clear();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      alignment: Alignment.bottomCenter,
-      margin: EdgeInsets.all(10),
+      color: Color(0xff202c3e),
+      height: 60,
+      padding: EdgeInsets.all(10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
+          //pannello degli attachments
           Container(
             child: GestureDetector(
               onTap: () {
@@ -58,7 +312,7 @@ class MsgBottomBar extends StatelessWidget {
                       height: 500,
                       child: Column(
                         children: [
-                          //barretta sopra al pannello attachments
+                          //barretta grigia sopra al pannello attachments
                           Container(
                             margin: EdgeInsets.all(20),
                             height: 4,
@@ -145,7 +399,6 @@ class MsgBottomBar extends StatelessWidget {
                     );
                   },
                 );
-
               },
               child: CircleAvatar(
                 backgroundColor: Colors.lightBlue,
@@ -153,56 +406,56 @@ class MsgBottomBar extends StatelessWidget {
               ),
             ),
           ),
+
+          //barra centrale per i messaggi
           Expanded(
-            child: Container(
-              margin: EdgeInsets.only(left: 10, right: 10),
-              padding: EdgeInsets.only(left: 15, right: 15),
-              width: 250,
-              height: 40,
-              decoration: BoxDecoration(
-                  // color: Colors.blue,
-                  border: Border.all(color: Colors.white),
-                  borderRadius: BorderRadius.circular(100)),
-              child: Center(
-                child: TextField(
-                  style: TextStyle(
-                    color: Colors.white,
-                    decoration: TextDecoration.none,
-                    decorationThickness: 0,
-                  ),
-                  cursorColor: Colors.white,
-                  decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: "Messaggio",
-                      hintStyle:
-                          TextStyle(color: Colors.white.withOpacity(0.7))),
-                ),
-              ),
-              // child: SizedBox(
-              //   width: 250,
-              //   child: TextField(
-              //     obscureText: true,
-              //     decoration: InputDecoration(
-              //       border: OutlineInputBorder(),
-              //       labelText: 'Password',
-              //     ),
-              //   ),
-              // ),
-            ),
-          ),
-          Container(
-            child: GestureDetector(
-              onTap: () {},
-              child: CircleAvatar(
-                backgroundColor: Colors.transparent,
-                child: Icon(
-                  Icons.mic_none,
+          child: Container(
+            margin: EdgeInsets.only(left: 10, right: 10),
+            padding: EdgeInsets.only(left: 15, right: 15),
+            width: 170,
+            height: 40,
+            decoration: BoxDecoration(
+                // color: Colors.blue,
+                border: Border.all(color: Colors.white),
+                borderRadius: BorderRadius.circular(100)),
+            child: Center(
+              child: TextField(
+                controller: _controllerMessage,
+                //controllo testo si/no per cambio di icona
+                style: TextStyle(
                   color: Colors.white,
-                  size: 27,
+                  decoration: TextDecoration.none,
+                  decorationThickness: 0,
                 ),
+                cursorColor: Colors.white,
+                decoration: InputDecoration(
+                    border: InputBorder.none,
+                    hintText: "Messaggio",
+                    hintStyle: TextStyle(color: Colors.white.withOpacity(0.7))),
               ),
             ),
           ),
+          ),
+
+          //funzione controllo testo si/no per cambio di icona
+          ValueListenableBuilder<bool>(
+            valueListenable: _hasText,
+            builder: (context, hasText, child) {
+              return GestureDetector(
+                onTap: _onSend,
+                child: CircleAvatar(
+                  backgroundColor: Colors.transparent,
+                  child: Icon(
+                    hasText ? Icons.send : Icons.mic_none,
+                    color: Colors.white,
+                    size: 27,
+                  ),
+                ),
+              );
+            },
+          ),
+
+
         ],
       ),
     );
@@ -215,7 +468,8 @@ class MsgBottomBarAttachButton extends StatelessWidget {
   final IconData icon;
   double size;
 
-  MsgBottomBarAttachButton({super.key,
+  MsgBottomBarAttachButton({
+    super.key,
     required this.textColor,
     required this.backgroundColor,
     required this.icon,
@@ -228,7 +482,10 @@ class MsgBottomBarAttachButton extends StatelessWidget {
       width: size,
       height: size,
       child: Center(
-        child: Icon(icon, color: textColor,),
+        child: Icon(
+          icon,
+          color: textColor,
+        ),
       ),
       decoration: BoxDecoration(
         color: backgroundColor,
@@ -237,4 +494,3 @@ class MsgBottomBarAttachButton extends StatelessWidget {
     );
   }
 }
-
