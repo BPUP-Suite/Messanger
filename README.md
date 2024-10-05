@@ -56,3 +56,8 @@ Timeline:
 03/10/2024
 
 - Io {SOD} fatto niente (fatta un minimo di documentazione per la sezione API) / {MM} inizia a fare la vera e propria chat, con i messaggini e cose tattiche nucleari
+
+05/10/2024
+
+- {MM} sto scrivendo qualcosa, assurdo. Implementato l'invio dei messaggi: quando un messaggio viene inviato (per ora testato solo localmente e con solo del testo + emoji) viene in tempo reale visualizzato correttamente a dx/sx in base al mittente e formattato abbastanza bene.
+- Per rispondere a {SOD} il riconoscimento biometrico non è stato facile perchè nessuno giustamente ha fatto qualcosa simile al nostro, OVVIO, quindi ho incastrato 87 cose insieme meglio delle fatine che hanno pure la bacchetta.
