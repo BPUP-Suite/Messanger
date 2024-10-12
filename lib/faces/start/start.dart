@@ -156,18 +156,15 @@ class _BiometricsAppOpeningState extends State<BiometricsAppOpening> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       _isBiometricEnabled = prefs.getBool('biometricEnabled') ?? false;
-      print("preferenza biometrica su start:");
-      print(_isBiometricEnabled);
+      print("preferenza biometrica su start: $_isBiometricEnabled");
     });
   }
 
 
 
   Future<void> _authenticate() async {
-    print("bubassssssssssssssssssssssss");
-    print(_isBiometricEnabled);
     if(_isBiometricEnabled == true){
-      print("niometric enabled");
+      print("biometrics enabled");
       try{
         bool authenticated = await auth.authenticate(
           //messaggino che appare sopra al sensore quando appare il pannello dell'impronta

@@ -125,6 +125,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+
+      //imposta un tema generale di tutte le pagine (spero) per i TEXTFIELD
+      theme: ThemeData(
+        textSelectionTheme: TextSelectionThemeData(
+          selectionColor: Colors.blue,  // Colore dell'evidenziazione
+          selectionHandleColor: Colors.blue, // Colore del cursore quando evidenzi
+          cursorColor: Colors.blue,
+        ),
+      ),
+
       debugShowCheckedModeBanner: false,
       home: Start(),
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:messanger_bpup/faces/Settings/changeThemes.dart';
 import 'package:messanger_bpup/faces/Settings/security.dart';
+import 'package:messanger_bpup/faces/Settings/storage.dart';
 
 class Settings extends StatelessWidget {
   const Settings({super.key});
@@ -21,7 +22,7 @@ class Settings extends StatelessWidget {
       body: Center(
         child: Column(
           children: [
-            //Security
+            //to Security
             GestureDetector(
                 onTap: () {
                   Navigator.push(
@@ -55,7 +56,7 @@ class Settings extends StatelessWidget {
                   ],
                 ),
             ),
-            //Themes
+            //to Themes
             GestureDetector(
               onTap: () {
                 Navigator.push(
@@ -75,6 +76,40 @@ class Settings extends StatelessWidget {
                       ),
                       title: Text(
                         "Themes",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Divider(
+                    height: 1,
+                    color: Color(0xff202c3e).withOpacity(0.4),
+                  ),
+                ],
+              ),
+            ),
+            //to Storage
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Storage(),
+                  ),
+                );
+              },
+              child: Column(
+                children: [
+                  Container(
+                    child: ListTile(
+                      leading: ExcludeSemantics(
+                        child: Icon(
+                          Icons.folder_outlined, color: Colors.white,),
+                      ),
+                      title: Text(
+                        "Storage",
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 20,

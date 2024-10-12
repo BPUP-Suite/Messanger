@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:messanger_bpup/faces/start/Login/loginPassword.dart';
 import 'package:messanger_bpup/src/API/APImethods.dart';
 
 class JsonParser {
@@ -20,6 +19,8 @@ class JsonParser {
     }
   }
 
+
+
   Future<bool> signupJson(String email, String name, String surname, String handle, String password, String confirm_password) async {
     http.Response response = await APImethods.SignupAPI(email, name, surname, handle, password, confirm_password);
 
@@ -36,6 +37,7 @@ class JsonParser {
     }
   }
 
+
   //IMPORTANTE, DA SALVARE IN UNA VARIABILE NEL DISPOSITIVO \/
   Future<String> loginPasswordJson(String email, String password) async {
     http.Response response = await APImethods.LoginPasswordAPI(email, password);
@@ -43,13 +45,31 @@ class JsonParser {
     if (response.statusCode == 200) {
       Map<String, dynamic> jsonResponse = jsonDecode(response.body);
 
-      String emailResponse = jsonResponse['apiKey'].toString();
+      String loginResponse = jsonResponse['apiKey'].toString();
 
-      return emailResponse; // login
+      return loginResponse; //login
     } else {
       // Gestisci l'errore della risposta
       print('Errore nella richiesta: ${response.statusCode}');
       return "";
+    }
+  }
+
+
+
+  Future<bool> handleAvailability(String handle) async {
+    http.Response response = await APImethods.HandleAvailability(handle);
+
+    if (response.statusCode == 200) {
+      Map<String, dynamic> jsonResponse = jsonDecode(response.body);
+
+      bool handleAvailabilityResponse = jsonResponse['handle_available'];
+
+      return handleAvailabilityResponse; // handle availability
+    } else {
+      // Gestisci l'errore della risposta
+      print('Errore nella richiesta: ${response.statusCode}');
+      return false;
     }
   }
 }

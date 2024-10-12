@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:messanger_bpup/faces/chats/chatMessageObject.dart';
 
@@ -130,9 +131,9 @@ class MsgListView extends StatelessWidget {
           decoration: BoxDecoration(
               color: Colors.blueAccent,
               borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(10),
-                  topRight: Radius.circular(10),
-                  bottomLeft: Radius.circular(10))),
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                  bottomLeft: Radius.circular(20))),
         ),
       );
     } else if (messages[index].sender == "NonMatteo") {
@@ -150,9 +151,9 @@ class MsgListView extends StatelessWidget {
           decoration: BoxDecoration(
               color: Colors.blueAccent,
               borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(10),
-                  topRight: Radius.circular(10),
-                  bottomRight: Radius.circular(10))),
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                  bottomRight: Radius.circular(20))),
         ),
       );
     } else {
@@ -180,7 +181,7 @@ class MsgBottomBar extends StatelessWidget {
     if (_controllerMessage.text.isNotEmpty) {
       //changenotifier
       _listNotifier
-          .add(ChatMessage(_controllerMessage.text, "NonMatteo", "NonMatteo"));
+          .add(ChatMessage(_controllerMessage.text, "Matteo", "NonMatteo"));
 
       _controllerMessage.clear();
     }
@@ -325,21 +326,28 @@ class MsgBottomBar extends StatelessWidget {
                   border: Border.all(color: Colors.white),
                   borderRadius: BorderRadius.circular(100)),
               child: Center(
-                child: TextField(
-                  controller: _controllerMessage,
-                  //controllo testo si/no per cambio di icona
-                  style: TextStyle(
-                    color: Colors.white,
-                    decoration: TextDecoration.none,
-                    decorationThickness: 0,
+                // child: TextSelectionTheme(
+                  // data: TextSelectionThemeData(
+                  //   selectionColor: Colors.blue.withOpacity(0.3),
+                  //   selectionHandleColor: Colors.blue,
+                  //   cursorColor: Colors.blue,
+                  // ),
+                  child: TextField(
+                    //controllo testo si/no per cambio di icona
+                    controller: _controllerMessage,
+
+                    style: TextStyle(
+                      color: Colors.white,
+                      decoration: TextDecoration.none,
+                      decorationThickness: 0,
+                    ),
+                    decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: "Messaggio",
+                        hintStyle:
+                            TextStyle(color: Colors.white.withOpacity(0.7))),
                   ),
-                  cursorColor: Colors.white,
-                  decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: "Messaggio",
-                      hintStyle:
-                          TextStyle(color: Colors.white.withOpacity(0.7))),
-                ),
+                // ),
               ),
             ),
           ),
@@ -371,7 +379,7 @@ class MsgBottomBarAttachButton extends StatelessWidget {
   final Color textColor;
   final Color backgroundColor;
   final IconData icon;
-  double size;
+  final double size;
 
   MsgBottomBarAttachButton({
     super.key,
