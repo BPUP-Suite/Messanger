@@ -67,4 +67,10 @@ Timeline:
 - {SOD} me son dimenticato di fare update su sto readme quindi tutte le seguenti informazioni sono relative a (circa) una settimana di lavoro
 - {SOD} implementazione di nuovi metodi per permettere il send dei messaggi che vengono distinti in base al tipo di destinatario (utente,gruppo,canale). Il focus attuale è solo per l`utente (i metodi per canale/gruppo non esistono) e permette solo l'invio di messaggi a una specifica chat privata, è inoltre possibile creare una chat con un'altra persona tramite l'invio del primo messaggio (solo lato server, lato client verrà implementato successivamente)
 - Aggiunti anche dei metodi sperimentali relativi al download e all'upload dei file e l'implementazione di WebSocket per ricevere i vari messaggi (da capire se conviene usare un WebSocket per il send dei messaggi o semplicemente usare la chiamata all'API)
-- {MM} si diverte con flutter, non ho idea di cosa abbia fatto, sinceramente. L'ultima cosa che ha fatto è relativa alla registrazione con la sistemazione del validator anche con il check tramite api per verificare la disponibilitá dell'handle scelto 
+- {MM} si diverte con flutter, non ho idea di cosa abbia fatto, sinceramente. L'ultima cosa che ha fatto è relativa alla registrazione con la sistemazione del validator anche con il check tramite api per verificare la disponibilitá dell'handle scelto
+
+15/10/2024
+
+- Sto perdendo il conto delle feature aggiunte (soprattutto quelle di {MM} visto che ci sentiamo poco in sto periodo :( )
+- {SOD} DOPO TANTE ORE (VIVA I CIELI) sono riuscito a capire come funzionano le WebSocket (e anche se ancora con tanti bug, tipo le websocket che rimangono nell'array anche dopo la disconnessione) e siamo riusciti ad implementarla nell'applicazione (sia per ricevere i messaggi che per il send di ACK)
+- Quindi a livello teorico, il send e il receive dei messaggi sarebbe fattibile (per ora solo su API, visto che su client manca tutta la questione del database dei messaggi locali, la gestione delle credenziali [api_key] e dell'identitá della persona [user_id] e la gestione CORRETTA delle websocket)
