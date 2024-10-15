@@ -33,6 +33,7 @@ dependencies:
   flutter_speed_dial:
   local_auth:
   shared_preferences:
+  web_socket_channel:
 
 
 

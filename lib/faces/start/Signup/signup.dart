@@ -182,9 +182,6 @@ class _SignupFormState extends State<SignupForm> {
                   if (value == null || value.isEmpty) {
                     return 'Per favore inserisci il tuo handle';
                   }
-                  if(handleAvailabilityValidator){
-                    return null;
-                  }
                   handleValue = value;
                   return null;
                 },

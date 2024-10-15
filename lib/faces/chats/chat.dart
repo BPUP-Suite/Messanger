@@ -2,8 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:messanger_bpup/faces/chats/chatMessageObject.dart';
 
-// late List<ChatMessage> ChatMessages = [];
-// final ValueNotifier<ChatMessage> _newMessage = ValueNotifier<ChatMessage>(ChatMessage("Text", "Sender", "Receiver"));
 
 //changenotifier
 class ListModel with ChangeNotifier {
@@ -65,9 +63,13 @@ class Chat extends StatelessWidget {
           Container(
             child: MsgBottomBar(),
           ),
-          //PROVA DA ELIMINARE
         ]));
+
+
+
   }
+
+
 }
 
 //list view dei messaggi, li stampa
@@ -121,7 +123,10 @@ class MsgListView extends StatelessWidget {
         alignment: FractionalOffset.centerRight,
         child: Container(
           constraints: BoxConstraints(
-              minWidth: 10, maxWidth: MediaQuery.of(context).size.width / 2),
+              minWidth: 10, maxWidth: MediaQuery
+              .of(context)
+              .size
+              .width / 2),
           padding: EdgeInsets.all(10),
           margin: EdgeInsets.all(5),
           child: Text(
@@ -141,7 +146,10 @@ class MsgListView extends StatelessWidget {
         alignment: FractionalOffset.centerLeft,
         child: Container(
           constraints: BoxConstraints(
-              minWidth: 10, maxWidth: MediaQuery.of(context).size.width / 2),
+              minWidth: 10, maxWidth: MediaQuery
+              .of(context)
+              .size
+              .width / 2),
           padding: EdgeInsets.all(10),
           margin: EdgeInsets.all(5),
           child: Text(
@@ -204,7 +212,7 @@ class MsgBottomBar extends StatelessWidget {
                   backgroundColor: Color(0xff202c3e),
                   context: context,
                   builder: (BuildContext context) {
-                    PageController _pageController = PageController();
+                    PageController _sheetBottomBarChat = PageController();
                     return Container(
                       height: 500,
                       child: Column(
@@ -222,22 +230,72 @@ class MsgBottomBar extends StatelessWidget {
                           //4 pannelli del pannello attachments
                           Expanded(
                             child: PageView(
-                              controller: _pageController,
+                              controller: _sheetBottomBarChat,
                               children: [
-                                Center(
-                                    child: Container(
-                                  decoration: BoxDecoration(
-                                    color: Colors.red,
-                                    borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(10),
-                                      topRight: Radius.circular(10),
+                                Expanded(
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      // borderRadius: BorderRadius.vertical(
+                                      //   top: Radius.circular(10),
+                                      // ),
+                                      // color: Colors.yellow,
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        'Pannello 1',
+                                        style: TextStyle(fontSize: 50),
+                                      ),
                                     ),
                                   ),
-                                  child: Text("Pannello 1"),
-                                )),
-                                Center(child: Text('Pannello 2')),
-                                Center(child: Text('Pannello 3')),
-                                Center(child: Text('Pannello 4')),
+                                ),
+                                Expanded(
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      // borderRadius: BorderRadius.vertical(
+                                      //   top: Radius.circular(10),
+                                      // ),
+                                      // color: Colors.yellow,
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        'Pannello 2',
+                                        style: TextStyle(fontSize: 50),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      // borderRadius: BorderRadius.vertical(
+                                      //   top: Radius.circular(10),
+                                      // ),
+                                      // color: Colors.yellow,
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        'Pannello 3',
+                                        style: TextStyle(fontSize: 50),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      // borderRadius: BorderRadius.vertical(
+                                      //   top: Radius.circular(10),
+                                      // ),
+                                      // color: Colors.yellow,
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        'Pannello 4',
+                                        style: TextStyle(fontSize: 50),
+                                      ),
+                                    ),
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -253,7 +311,7 @@ class MsgBottomBar extends StatelessWidget {
                               children: [
                                 GestureDetector(
                                   onTap: () {
-                                    _pageController.jumpToPage(0);
+                                    _sheetBottomBarChat.jumpToPage(0);
                                   },
                                   child: MsgBottomBarAttachButton(
                                     textColor: Colors.white,
@@ -265,7 +323,7 @@ class MsgBottomBar extends StatelessWidget {
                                 Spacer(),
                                 GestureDetector(
                                   onTap: () {
-                                    _pageController.jumpToPage(1);
+                                    _sheetBottomBarChat.jumpToPage(1);
                                   },
                                   child: MsgBottomBarAttachButton(
                                     textColor: Colors.white,
@@ -277,7 +335,7 @@ class MsgBottomBar extends StatelessWidget {
                                 Spacer(),
                                 GestureDetector(
                                   onTap: () {
-                                    _pageController.jumpToPage(2);
+                                    _sheetBottomBarChat.jumpToPage(2);
                                   },
                                   child: MsgBottomBarAttachButton(
                                     textColor: Colors.white,
@@ -289,7 +347,7 @@ class MsgBottomBar extends StatelessWidget {
                                 Spacer(),
                                 GestureDetector(
                                   onTap: () {
-                                    _pageController.jumpToPage(3);
+                                    _sheetBottomBarChat.jumpToPage(3);
                                   },
                                   child: MsgBottomBarAttachButton(
                                     textColor: Colors.white,
@@ -322,31 +380,31 @@ class MsgBottomBar extends StatelessWidget {
               width: 170,
               height: 40,
               decoration: BoxDecoration(
-                  // color: Colors.blue,
+                // color: Colors.blue,
                   border: Border.all(color: Colors.white),
                   borderRadius: BorderRadius.circular(100)),
               child: Center(
                 // child: TextSelectionTheme(
-                  // data: TextSelectionThemeData(
-                  //   selectionColor: Colors.blue.withOpacity(0.3),
-                  //   selectionHandleColor: Colors.blue,
-                  //   cursorColor: Colors.blue,
-                  // ),
-                  child: TextField(
-                    //controllo testo si/no per cambio di icona
-                    controller: _controllerMessage,
+                // data: TextSelectionThemeData(
+                //   selectionColor: Colors.blue.withOpacity(0.3),
+                //   selectionHandleColor: Colors.blue,
+                //   cursorColor: Colors.blue,
+                // ),
+                child: TextField(
+                  //controllo testo si/no per cambio di icona
+                  controller: _controllerMessage,
 
-                    style: TextStyle(
-                      color: Colors.white,
-                      decoration: TextDecoration.none,
-                      decorationThickness: 0,
-                    ),
-                    decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: "Messaggio",
-                        hintStyle:
-                            TextStyle(color: Colors.white.withOpacity(0.7))),
+                  style: TextStyle(
+                    color: Colors.white,
+                    decoration: TextDecoration.none,
+                    decorationThickness: 0,
                   ),
+                  decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: "Messaggio",
+                      hintStyle:
+                      TextStyle(color: Colors.white.withOpacity(0.7))),
+                ),
                 // ),
               ),
             ),
@@ -407,3 +465,7 @@ class MsgBottomBarAttachButton extends StatelessWidget {
     );
   }
 }
+
+
+
+
