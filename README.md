@@ -61,3 +61,10 @@ Timeline:
 
 - {MM} sto scrivendo qualcosa, assurdo. Implementato l'invio dei messaggi: quando un messaggio viene inviato (per ora testato solo localmente e con solo del testo + emoji) viene in tempo reale visualizzato correttamente a dx/sx in base al mittente e formattato abbastanza bene.
 - Per rispondere a {SOD} il riconoscimento biometrico non è stato facile perchè nessuno giustamente ha fatto qualcosa simile al nostro, OVVIO, quindi ho incastrato 87 cose insieme meglio delle fatine che hanno pure la bacchetta.
+
+13/10/2024
+
+- {SOD} me son dimenticato di fare update su sto readme quindi tutte le seguenti informazioni sono relative a (circa) una settimana di lavoro
+- {SOD} implementazione di nuovi metodi per permettere il send dei messaggi che vengono distinti in base al tipo di destinatario (utente,gruppo,canale). Il focus attuale è solo per l`utente (i metodi per canale/gruppo non esistono) e permette solo l'invio di messaggi a una specifica chat privata, è inoltre possibile creare una chat con un'altra persona tramite l'invio del primo messaggio (solo lato server, lato client verrà implementato successivamente)
+- Aggiunti anche dei metodi sperimentali relativi al download e all'upload dei file e l'implementazione di WebSocket per ricevere i vari messaggi (da capire se conviene usare un WebSocket per il send dei messaggi o semplicemente usare la chiamata all'API)
+- {MM} si diverte con flutter, non ho idea di cosa abbia fatto, sinceramente. L'ultima cosa che ha fatto è relativa alla registrazione con la sistemazione del validator anche con il check tramite api per verificare la disponibilitá dell'handle scelto 
