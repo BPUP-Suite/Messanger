@@ -101,7 +101,7 @@ class _BiometricsSwitchButtonState extends State<BiometricsSwitch> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       _isBiometricEnabled = prefs.getBool('biometricEnabled') ?? false;
-      print("ciaooooooooooo");
+      print("Preferenza biometrica: ");
       print(_isBiometricEnabled);
     });
   }
@@ -110,7 +110,7 @@ class _BiometricsSwitchButtonState extends State<BiometricsSwitch> {
   Future<void> _saveBiometricPreference(bool value) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool('biometricEnabled', value);
-    print("ciaooooooooooo");
+    print("Preferenza biometrica: ");
     print(value);
   }
 

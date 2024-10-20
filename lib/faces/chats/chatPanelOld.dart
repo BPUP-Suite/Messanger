@@ -1,11 +1,16 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:messanger_bpup/faces/chats/chatMessageObject.dart';
+import 'package:messanger_bpup/src/obj/chat.dart';
+import 'package:messanger_bpup/src/obj/chatMessage.dart';
+import 'package:messanger_bpup/main.dart';
+import '../../src/obj/databaseAccess.dart';
+
 
 
 //changenotifier
 class ListModel with ChangeNotifier {
-  final List<ChatMessage> _messages = <ChatMessage>[];
+  final chatID = "";
+  late final List<ChatMessage> _messages = LocalDatabaseAccess.database.chats.where((e)=>e.chatID==chatID).elementAt(0).messages;
 
   List<ChatMessage> get values => _messages.toList();
 
@@ -14,17 +19,43 @@ class ListModel with ChangeNotifier {
     notifyListeners();
   }
 }
-
 //changenotifier
 ListModel _listNotifier = ListModel();
 
-class Chat extends StatelessWidget {
-  const Chat({
-    super.key,
-  });
+
+
+
+
+//web socket receive message
+Future<String> WebSocketReceiver() async {
+  await webSocketChannel.ready;
+
+  webSocketChannel.stream.listen((message) {
+    webSocketChannel.sink.add('received!');
+    _listNotifier.add(ChatMessage(message, "NonMatteo", DateTime.now(), "id_messaggio"));
+  }
+  );
+  return "return function web socket";
+}
+
+
+
+
+
+class ChatPanelOld extends StatelessWidget {
+  const ChatPanelOld({super.key, required this.chatID});
+
+  final chatID;
+
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
+    Chat chatObject = LocalDatabaseAccess.database.chats.where((e)=>e.chatID==chatID).elementAt(0);
+    WebSocketReceiver();
     return Scaffold(
         backgroundColor: Color(0xff354966),
         appBar: AppBar(
@@ -38,9 +69,15 @@ class Chat extends StatelessWidget {
                     'https://picsum.photos/200'), // Sostituisci con il percorso della tua immagine
               ),
               SizedBox(width: 15), // Spazio tra l'avatar e il testo
-              Text(
-                "Nome Chat",
-                style: TextStyle(color: Colors.white),
+              Builder(
+                  builder: (context) {
+                    if(chatObject.groupChannelName == null){
+                      return Text(chatObject.usersHandle[1], style: TextStyle(color: Colors.white),);
+                    }
+                    else{
+                      return Text(chatObject.groupChannelName.toString(), style: TextStyle(color: Colors.white),);
+                    }
+                  }
               ),
               Spacer(),
               Icon(Icons.more_vert_rounded),
@@ -63,11 +100,14 @@ class Chat extends StatelessWidget {
           Container(
             child: MsgBottomBar(),
           ),
+
         ]));
 
 
 
   }
+
+
 
 
 }
@@ -90,9 +130,9 @@ class MsgListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    // });
     return Container(
       margin: EdgeInsets.only(left: 10, right: 10),
       child: Column(
@@ -126,7 +166,7 @@ class MsgListView extends StatelessWidget {
               minWidth: 10, maxWidth: MediaQuery
               .of(context)
               .size
-              .width / 2),
+              .width / 1.4),
           padding: EdgeInsets.all(10),
           margin: EdgeInsets.all(5),
           child: Text(
@@ -138,7 +178,10 @@ class MsgListView extends StatelessWidget {
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(20),
                   topRight: Radius.circular(20),
-                  bottomLeft: Radius.circular(20))),
+                  bottomLeft: Radius.circular(20),
+                  bottomRight: Radius.circular(2)
+              ),
+          ),
         ),
       );
     } else if (messages[index].sender == "NonMatteo") {
@@ -149,7 +192,7 @@ class MsgListView extends StatelessWidget {
               minWidth: 10, maxWidth: MediaQuery
               .of(context)
               .size
-              .width / 2),
+              .width / 1.4),
           padding: EdgeInsets.all(10),
           margin: EdgeInsets.all(5),
           child: Text(
@@ -161,7 +204,10 @@ class MsgListView extends StatelessWidget {
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(20),
                   topRight: Radius.circular(20),
-                  bottomRight: Radius.circular(20))),
+                  bottomRight: Radius.circular(20),
+                  bottomLeft: Radius.circular(2)
+              ),
+          ),
         ),
       );
     } else {
@@ -189,7 +235,7 @@ class MsgBottomBar extends StatelessWidget {
     if (_controllerMessage.text.isNotEmpty) {
       //changenotifier
       _listNotifier
-          .add(ChatMessage(_controllerMessage.text, "Matteo", "NonMatteo"));
+          .add(ChatMessage(_controllerMessage.text, "Matteo", DateTime.now(), "id_messaggio"));
 
       _controllerMessage.clear();
     }
@@ -374,40 +420,36 @@ class MsgBottomBar extends StatelessWidget {
 
           //barra centrale per i messaggi
           Expanded(
-            child: Container(
-              margin: EdgeInsets.only(left: 10, right: 10),
-              padding: EdgeInsets.only(left: 15, right: 15),
-              width: 170,
-              height: 40,
-              decoration: BoxDecoration(
-                // color: Colors.blue,
-                  border: Border.all(color: Colors.white),
-                  borderRadius: BorderRadius.circular(100)),
-              child: Center(
-                // child: TextSelectionTheme(
-                // data: TextSelectionThemeData(
-                //   selectionColor: Colors.blue.withOpacity(0.3),
-                //   selectionHandleColor: Colors.blue,
-                //   cursorColor: Colors.blue,
-                // ),
-                child: TextField(
-                  //controllo testo si/no per cambio di icona
-                  controller: _controllerMessage,
-
-                  style: TextStyle(
-                    color: Colors.white,
-                    decoration: TextDecoration.none,
-                    decorationThickness: 0,
-                  ),
-                  decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: "Messaggio",
-                      hintStyle:
-                      TextStyle(color: Colors.white.withOpacity(0.7))),
+              child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 10),
+                padding: EdgeInsets.symmetric(horizontal: 15),
+                width: 170,
+                height: 40,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.white),  // Usa questo per i bordi esterni visibili
+                  borderRadius: BorderRadius.circular(100),
                 ),
-                // ),
+                child: Center(
+                  child: TextField(
+                    textAlignVertical: TextAlignVertical.center,
+                    controller: _controllerMessage,
+                    style: TextStyle(
+                      color: Colors.white,
+                      decoration: TextDecoration.none,
+                    ),
+                    decoration: InputDecoration(
+                      hintText: "Messaggio",
+                      hintStyle: TextStyle(color: Colors.white.withOpacity(0.7)),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(100), // Stessa forma del container
+                        borderSide: BorderSide.none, // Nessun bordo visibile
+                      ),
+                      isCollapsed: true,  // Previene padding extra nel campo
+                    ),
+                  ),
+                ),
               ),
-            ),
+
           ),
 
           //funzione controllo testo si/no per cambio di icona

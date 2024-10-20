@@ -6,19 +6,20 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 //web socket
 final webSocketChannel = WebSocketChannel.connect(
   Uri.parse(
-      'wss://api.messanger.bpup.israiken.it/ws/1000000000000000000/gbitFE9c_ysdVzWoxb0BXVDOshqCv76ZSPGQzghvwnw9A6dQBrJ4kan2bw9eFn-yBpWtItevNLQQJafb7qyT1jBRHGQb7ek7PZvtU01nOehoWieFfrBQWWWLDMRwPxr3jyKfxKzyy-M1Ww5bc2t1CJJDQi86BCMkYkR7JU_TBqc8LGR3Jy9q3yGp3kQCUr6EXxcm4Xib7E8jIKJlDKnlSnsrLUxK26BMpaDvTPbEh0vBvTUvyuiIQA-oT6FxI_zYQNvCS8cjCFv41jg_Qg-Yos0WI6VoZfrjmAmjjwfeXXYB8VDimatU8hb1WvjAw-jMtPxOMjfOV8EPQIzwrdno9w'),
+      'wss://api.messanger.bpup.israiken.it/ws/1000000000000000007/l_3lWqxkXrjAPKICwRgHxZtSKWkdKUulZ_M0egIuZQyIPu4njv2P9voBTXfVV9VCUaab0mTM2ci6aiTJOJca7OTWm_FvI0OhtCLaW4TTj_K3mYvp43p4YdzUsm_ZwuADyHLDewZ4zTxyIoaiv87rLflwh552zeENTpHZnUtyIJPkSi0zZNnM-ulLR0HJgKv8TowQGrrJMH4XEeSI8m_u2V8L6eLZAa_woqNXy9F14KTCPM3iyAUfnN-kj8QWFIJzZTQoINBk91i5qtC0PgNe79eRkYqjq7502L2wEbpUWM9Eppa0S7DaOsHtX9oiBdgRT5PDY2GAMcaTAIf_4AjOtg'),
 );
 
 Future<String> WebSocketReceiver() async {
   await webSocketChannel.ready;
 
   webSocketChannel.stream.listen((message) {
-    webSocketChannel.sink.add('received!');
-    print(message);
+    webSocketChannel.sink.add('Matteo: connessione effettuata');
+    // _listNotifier.add(ChatMessage(message, "NonMatteo", DateTime.now()));
   }
   );
-  return "return function web socket";
+  return "return of web socket function";
 }
+
 
 
 

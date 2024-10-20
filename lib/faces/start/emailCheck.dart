@@ -38,7 +38,7 @@ class EmailCheck extends StatelessWidget {
 class EmailCheckForm extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
 
-  late String emailValue;
+  late final String emailValue;
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +110,7 @@ class EmailCheckForm extends StatelessWidget {
 }
 
 void checkEmailAndNavigate(BuildContext context, String emailValue) async {
-  String emailResponse = await JsonParser().emailCheckJson(emailValue);
+  String emailResponse = await JsonParser.emailCheckJson(emailValue);
 
   if (emailResponse == "signup") {
     Navigator.push(

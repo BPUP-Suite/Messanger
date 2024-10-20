@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:messanger_bpup/faces/Settings/changeThemes.dart';
 import 'package:messanger_bpup/faces/Settings/security.dart';
 import 'package:messanger_bpup/faces/Settings/storage.dart';
+import 'package:messanger_bpup/faces/start/emailCheck.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Settings extends StatelessWidget {
   const Settings({super.key});
@@ -24,37 +26,39 @@ class Settings extends StatelessWidget {
           children: [
             //to Security
             GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Security(),
-                    ),
-                  );
-                },
-                child: Column(
-                  children: [
-                    Container(
-                      child: ListTile(
-                        leading: ExcludeSemantics(
-                          child: Icon(
-                            Icons.shield_outlined, color: Colors.white,),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Security(),
+                  ),
+                );
+              },
+              child: Column(
+                children: [
+                  Container(
+                    child: ListTile(
+                      leading: ExcludeSemantics(
+                        child: Icon(
+                          Icons.shield_outlined,
+                          color: Colors.white,
                         ),
-                        title: Text(
-                          "Security",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                          ),
+                      ),
+                      title: Text(
+                        "Security",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
                         ),
                       ),
                     ),
-                    Divider(
-                      height: 1,
-                      color: Color(0xff202c3e).withOpacity(0.4),
-                    ),
-                  ],
-                ),
+                  ),
+                  Divider(
+                    height: 1,
+                    color: Color(0xff202c3e).withOpacity(0.4),
+                  ),
+                ],
+              ),
             ),
             //to Themes
             GestureDetector(
@@ -72,7 +76,9 @@ class Settings extends StatelessWidget {
                     child: ListTile(
                       leading: ExcludeSemantics(
                         child: Icon(
-                          Icons.color_lens_outlined, color: Colors.white,),
+                          Icons.color_lens_outlined,
+                          color: Colors.white,
+                        ),
                       ),
                       title: Text(
                         "Themes",
@@ -106,7 +112,9 @@ class Settings extends StatelessWidget {
                     child: ListTile(
                       leading: ExcludeSemantics(
                         child: Icon(
-                          Icons.folder_outlined, color: Colors.white,),
+                          Icons.folder_outlined,
+                          color: Colors.white,
+                        ),
                       ),
                       title: Text(
                         "Storage",
@@ -124,8 +132,61 @@ class Settings extends StatelessWidget {
                 ],
               ),
             ),
+            //logout
+            GestureDetector(
+              onTap: () {
+                resetBiometricsPreference();      //works
+
+                //potenziali altri motodi
+
+                backToLoginAfterLogout(context);  //works
+              },
+              child: Column(
+                children: [
+                  Container(
+                    child: ListTile(
+                      leading: ExcludeSemantics(
+                        child: Icon(
+                          Icons.logout_outlined,
+                          color: Colors.red,
+                        ),
+                      ),
+                      title: Text(
+                        "Logout",
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontSize: 20,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Divider(
+                    height: 1,
+                    color: Color(0xff202c3e).withOpacity(0.4),
+                  ),
+                ],
+              ),
+            )
           ],
         ),
+      ),
+    );
+  }
+
+  //1° funzione del logout: reset preferenza biometrica
+  Future<void> resetBiometricsPreference() async {
+    SharedPreferences biometricsPreference =
+        await SharedPreferences.getInstance();
+    biometricsPreference.setBool('biometricEnabled', false);
+    print("Preferenza biometrica resettata a FALSE");
+  }
+
+  //2° funzione del logout: rimanda al login
+  void backToLoginAfterLogout(context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EmailCheck(),
       ),
     );
   }

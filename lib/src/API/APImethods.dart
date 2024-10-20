@@ -19,7 +19,12 @@ class APImethods {
   }
 
   static Future<http.Response> LoginPasswordAPI(String email, String password) async {
-    final url = Uri.parse('$APIlink/user/action/login?email=$email');
+    final url = Uri.parse('$APIlink/user/action/login?email=$email&password=$password');
+    return await http.get(url);
+  }
+
+  static Future<http.Response> GetUserID(String apiKey) async {
+    final url = Uri.parse('$APIlink/user/action/get-user-id?api_key=$apiKey');
     return await http.get(url);
   }
 }

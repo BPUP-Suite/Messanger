@@ -3,8 +3,10 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:messanger_bpup/faces/Settings/profile.dart';
 import 'package:messanger_bpup/faces/Settings/settings.dart';
+import 'package:messanger_bpup/faces/chats/chatPanel.dart';
 import 'package:messanger_bpup/faces/start/start.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:messanger_bpup/src/obj/databaseAccess.dart';
 
 class ChatList extends StatelessWidget {
   const ChatList({
@@ -13,8 +15,6 @@ class ChatList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var chatNumber = 14;
-    // var i = 0;
     return Scaffold(
       backgroundColor: Color(0xff354966),
       extendBodyBehindAppBar: true,                     //importante per potenziali effetti blur nell'appbar
@@ -63,28 +63,42 @@ class ChatList extends StatelessWidget {
               height: 1,
               color: Color(0xff202c3e).withOpacity(0.4),
             ),
-            for (int i = 0; i < chatNumber; i++)
+            for (int i = 0; i < LocalDatabaseAccess.database.chats.length; i++)
               Column(
                 children: [
                   Container(
                     // Adjust padding
-                    child: ListTile(
-                      leading: ExcludeSemantics(
-                        child: CircleAvatar(
-                          backgroundImage:
-                              NetworkImage('https://picsum.photos/200'),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ChatPanel(chatID: LocalDatabaseAccess.database.chats[i].chatID,),
+                          ),
+                        );
+                      },
+                      child: ListTile(
+                        leading: ExcludeSemantics(
+                          child: CircleAvatar(
+                            backgroundImage:
+                                NetworkImage('https://picsum.photos/200'),
+                          ),
                         ),
-                      ),
-                      title: Text(
-                        "Item $i",
-                        style: TextStyle(
-                          color: Colors.white,
+                        title: Builder(
+                          builder: (context) {
+                            if(LocalDatabaseAccess.database.chats[i].groupChannelName == null){
+                              return Text(LocalDatabaseAccess.database.chats[i].usersHandle[1], style: TextStyle(color: Colors.white),);
+                            }
+                            else{
+                              return Text(LocalDatabaseAccess.database.chats[i].groupChannelName.toString(), style: TextStyle(color: Colors.white),);
+                            }
+                          }
                         ),
-                      ),
-                      subtitle: Text(
-                        "Sottotitolo",
-                        style: TextStyle(
-                          color: Colors.white.withOpacity(0.6),
+                        subtitle: Text(
+                          "Sottotitolo",
+                          style: TextStyle(
+                            color: Colors.white.withOpacity(0.6),
+                          ),
                         ),
                       ),
                     ),

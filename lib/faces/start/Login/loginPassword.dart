@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:messanger_bpup/faces/chatList.dart';
 import 'package:messanger_bpup/src/API/jsonParser.dart';
+import 'package:messanger_bpup/src/obj/localDatabase.dart';
+import 'package:messanger_bpup/src/obj/databaseAccess.dart';
 
 class LoginPassword extends StatelessWidget {
   const LoginPassword({super.key, required this.emailValue});
@@ -38,13 +40,13 @@ class LoginPassword extends StatelessWidget {
 
 class LoginPasswordForm extends StatelessWidget {
 
-  late String emailValue;
+  late final String emailValue;
   LoginPasswordForm(String emailValue){
     this.emailValue=emailValue;
   }
   final _formKey = GlobalKey<FormState>();
 
-  late String passwordValue;
+  late final String passwordValue;
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -88,6 +90,7 @@ class LoginPasswordForm extends StatelessWidget {
                     // ScaffoldMessenger.of(context).showSnackBar(
                     //   SnackBar(content: Text('Form valido!')),
                     // );
+
                     LoginAndNavigate(context, emailValue, passwordValue);
                   }
                 },
@@ -104,10 +107,15 @@ class LoginPasswordForm extends StatelessWidget {
 
 
 void LoginAndNavigate(BuildContext context, String emailValue, String passwordValue) async {
-  String loginPasswordJson = await JsonParser().loginPasswordJson(emailValue, passwordValue);
+  String apiKey = await JsonParser.loginPasswordJson(emailValue, passwordValue);
 
-  if (loginPasswordJson != "false") {
-    print(loginPasswordJson);
+
+
+  if (apiKey != "false") {
+    LocalDatabaseAccess.database = await LocalDatabase.init(apiKey);
+    print(apiKey);
+    print(LocalDatabaseAccess.database.localUser.userID);
+
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -116,6 +124,10 @@ void LoginAndNavigate(BuildContext context, String emailValue, String passwordVa
     );
   }
   else{
-    print("ha ritornato TRUE, male");
+    print("Password errata");
   }
 }
+
+
+
+

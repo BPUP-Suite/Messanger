@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:messanger_bpup/faces/chatList.dart';
-import 'package:messanger_bpup/faces/chats/chat.dart';
+import 'package:messanger_bpup/faces/chats/chatPanel.dart';
 import 'package:messanger_bpup/faces/start/emailCheck.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -87,7 +87,7 @@ class Start extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => Chat(),
+                    builder: (context) => ChatPanel(chatID: null,),
                   ),
                 );
               },

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:messanger_bpup/faces/chatList.dart';
+import 'package:messanger_bpup/faces/start/Login/loginPassword.dart';
 import 'package:messanger_bpup/src/API/jsonParser.dart';
 import 'dart:async';
 
@@ -376,27 +376,27 @@ void SignupAndNavigate(
     String handleValue,
     String passwordValue,
     String confirm_passwordValue) async {
-  bool signupResponse = await JsonParser().signupJson(emailValue, nameValue,
+  bool signupResponse = await JsonParser.signupJson(emailValue, nameValue,
       surnameValue, handleValue, passwordValue, confirm_passwordValue);
 
-  print(signupResponse == true);
+  print("signup state: $signupResponse");
 
   if (signupResponse) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ChatList(),
+        builder: (context) => LoginPassword(emailValue: emailValue),
       ),
     );
   } else {
-    print(signupResponse);
+    print("signup state: $signupResponse");
   }
 }
 
 
 
 void checkHandleAvailability(String handle) async {
-  bool handleAvailability = await JsonParser().handleAvailability(handle);
+  bool handleAvailability = await JsonParser.handleAvailability(handle);
 
   // print(handleAvailability == true);
 
