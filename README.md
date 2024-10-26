@@ -74,3 +74,9 @@ Timeline:
 - Sto perdendo il conto delle feature aggiunte (soprattutto quelle di {MM} visto che ci sentiamo poco in sto periodo :( )
 - {SOD} DOPO TANTE ORE (VIVA I CIELI) sono riuscito a capire come funzionano le WebSocket (e anche se ancora con tanti bug, tipo le websocket che rimangono nell'array anche dopo la disconnessione) e siamo riusciti ad implementarla nell'applicazione (sia per ricevere i messaggi che per il send di ACK)
 - Quindi a livello teorico, il send e il receive dei messaggi sarebbe fattibile (per ora solo su API, visto che su client manca tutta la questione del database dei messaggi locali, la gestione delle credenziali [api_key] e dell'identitá della persona [user_id] e la gestione CORRETTA delle websocket)
+
+21/10/2024
+
+- E dopo quasi una settimana tempo di aggiornare questa fantastica timeline
+- Il client ora è super aggiornatissimo con tantissime nuove funzioni, principalmente adesso presenta un database funzione (basato su array e oggetti) che permette lo storage (teoricamente non permanente, ma questo è da capire) dei messaggi e delle chat che sono anche automaticamente visualizzare a schermo con anche la possibilità di entrarci dentro e aggiungere messaggi all'array
+- Di conseguenza {SOD} ho sviluppato la sezione relativa all'ottenimento di tutti i dati dell'utente in seguito al login, richiesta e risposta fatte entrambe tramite websocket che permettono di ottenere in qualunque dispositivo le proprie chat/messaggi e dati basi relative all'utente locale 
