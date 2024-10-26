@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:messanger_bpup/src/obj/chat.dart';
 import 'package:messanger_bpup/src/obj/chatMessage.dart';
 import 'package:messanger_bpup/main.dart';
-import '../../src/obj/databaseAccess.dart';
+import '../../src/obj/localDatabaseAccess.dart';
 
 
 

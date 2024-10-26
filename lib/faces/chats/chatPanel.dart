@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:messanger_bpup/src/obj/chat.dart';
 import 'package:messanger_bpup/src/obj/chatMessage.dart';
-import '../../src/obj/databaseAccess.dart';
+import '../../src/obj/localDatabaseAccess.dart';
 
 final List<ChatMessage> chatMessages = [];
 

@@ -136,8 +136,10 @@ class Settings extends StatelessWidget {
             GestureDetector(
               onTap: () {
                 resetBiometricsPreference();      //works
+                resetLoggedIn();
 
-                //potenziali altri motodi
+                //potenziali altri motodi, tipo
+                //1 - cancella database
 
                 backToLoginAfterLogout(context);  //works
               },
@@ -190,4 +192,14 @@ class Settings extends StatelessWidget {
       ),
     );
   }
+
+  //3° funzione del logout: reset preferenza isLoggedIn
+  Future<void> resetLoggedIn() async {
+    SharedPreferences isLoggedInPreference =
+    await SharedPreferences.getInstance();
+    isLoggedInPreference.setBool('isLoggedIn', false);
+    print("Preferenza isLoggedIn a FALSE");
+  }
+
+
 }

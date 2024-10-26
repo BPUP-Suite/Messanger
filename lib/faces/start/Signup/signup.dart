@@ -104,6 +104,9 @@ class _SignupFormState extends State<SignupForm> {
                 if (value == null || value.isEmpty) {
                   return 'Per favore ripeti la tua password';
                 }
+                if (value != passwordValue) {
+                  return 'Non coincide con la password';
+                }
                 confirm_passwordValue = value;
                 return null;
               },

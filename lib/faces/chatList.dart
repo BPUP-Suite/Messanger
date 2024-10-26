@@ -6,7 +6,7 @@ import 'package:messanger_bpup/faces/Settings/settings.dart';
 import 'package:messanger_bpup/faces/chats/chatPanel.dart';
 import 'package:messanger_bpup/faces/start/start.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:messanger_bpup/src/obj/databaseAccess.dart';
+import 'package:messanger_bpup/src/obj/localDatabaseAccess.dart';
 
 class ChatList extends StatelessWidget {
   const ChatList({

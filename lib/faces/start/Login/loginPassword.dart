@@ -2,12 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:messanger_bpup/faces/chatList.dart';
 import 'package:messanger_bpup/src/API/jsonParser.dart';
 import 'package:messanger_bpup/src/obj/localDatabase.dart';
-import 'package:messanger_bpup/src/obj/databaseAccess.dart';
+import 'package:messanger_bpup/src/obj/localDatabaseAccess.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+late bool _isLoggedIn;
 
 class LoginPassword extends StatelessWidget {
   const LoginPassword({super.key, required this.emailValue});
 
   final emailValue;
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -36,17 +41,17 @@ class LoginPassword extends StatelessWidget {
   }
 }
 
-
-
 class LoginPasswordForm extends StatelessWidget {
-
   late final String emailValue;
-  LoginPasswordForm(String emailValue){
-    this.emailValue=emailValue;
+
+  LoginPasswordForm(String emailValue) {
+    this.emailValue = emailValue;
   }
+
   final _formKey = GlobalKey<FormState>();
 
   late final String passwordValue;
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -58,12 +63,10 @@ class LoginPasswordForm extends StatelessWidget {
             TextFormField(
               cursorColor: Colors.white,
               style: TextStyle(
-                  color: Colors.white,
+                color: Colors.white,
               ),
               decoration: InputDecoration(
-
                 labelText: 'Password',
-
                 labelStyle: TextStyle(color: Colors.white),
                 enabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(color: Colors.white),
@@ -72,8 +75,6 @@ class LoginPasswordForm extends StatelessWidget {
                   borderSide: BorderSide(color: Colors.white),
                 ),
               ),
-
-
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Per favore inserisci la tua password';
@@ -106,15 +107,37 @@ class LoginPasswordForm extends StatelessWidget {
 
 
 
-void LoginAndNavigate(BuildContext context, String emailValue, String passwordValue) async {
+
+void LoginAndNavigate(
+    BuildContext context, String emailValue, String passwordValue) async {
   String apiKey = await JsonParser.loginPasswordJson(emailValue, passwordValue);
 
 
-
   if (apiKey != "false") {
+
+
+
+
+    //DA MODIFICARE, ATTENZIONE ERA SOLO PER TESTARE IN ATTESA DELLO STORAGE LOCALE \/\/\/\/\/\/\/\/
+
+    // if(LocalDatabaseAccess.database.localUser.name.isEmpty) {
+    //   if(apiKey.isNotEmpty) {
+    //     LocalDatabaseAccess.database = await LocalDatabase.init(apiKey);
+    //   }
+    // }
+
     LocalDatabaseAccess.database = await LocalDatabase.init(apiKey);
+
+
+
     print(apiKey);
     print(LocalDatabaseAccess.database.localUser.userID);
+
+
+    _loadLoggedIn();
+    _saveLoggedIn(true);
+
+
 
     Navigator.push(
       context,
@@ -122,8 +145,7 @@ void LoginAndNavigate(BuildContext context, String emailValue, String passwordVa
         builder: (context) => ChatList(),
       ),
     );
-  }
-  else{
+  } else {
     print("Password errata");
   }
 }
@@ -131,3 +153,21 @@ void LoginAndNavigate(BuildContext context, String emailValue, String passwordVa
 
 
 
+
+
+
+//carica preferenza se utente loggato oppure no
+Future<void> _loadLoggedIn() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  _isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+  print("funzione login load Loggato?: ");
+  print(_isLoggedIn);
+}
+
+// Salva lo stato della preferenza nelle SharedPreferences
+Future<void> _saveLoggedIn(bool value) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.setBool('isLoggedIn', value);
+  print("funzione login save Loggato?: ");
+  print(value);
+}
