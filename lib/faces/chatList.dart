@@ -63,52 +63,52 @@ class ChatList extends StatelessWidget {
               height: 1,
               color: Color(0xff202c3e).withOpacity(0.4),
             ),
-            for (int i = 0; i < LocalDatabaseAccess.database.chats.length; i++)
-              Column(
-                children: [
-                  Container(
-                    // Adjust padding
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ChatPanel(chatID: LocalDatabaseAccess.database.chats[i].chatID,),
-                          ),
-                        );
-                      },
-                      child: ListTile(
-                        leading: ExcludeSemantics(
-                          child: CircleAvatar(
-                            backgroundImage:
-                                NetworkImage('https://picsum.photos/200'),
-                          ),
-                        ),
-                        title: Builder(
-                          builder: (context) {
-                            if(LocalDatabaseAccess.database.chats[i].groupChannelName == null){
-                              return Text(LocalDatabaseAccess.database.chats[i].usersHandle[1], style: TextStyle(color: Colors.white),);
-                            }
-                            else{
-                              return Text(LocalDatabaseAccess.database.chats[i].groupChannelName.toString(), style: TextStyle(color: Colors.white),);
-                            }
-                          }
-                        ),
-                        subtitle: Text(
-                          "Sottotitolo",
-                          style: TextStyle(
-                            color: Colors.white.withOpacity(0.6),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Divider(
-                    height: 1,
-                    color: Color(0xff202c3e).withOpacity(0.4),
-                  ),
-                ],
-              )
+            // for (int i = 0; i < LocalDatabaseAccess.database.chats.length; i++)
+            //   Column(
+            //     children: [
+            //       Container(
+            //         // Adjust padding
+            //         child: GestureDetector(
+            //           onTap: () {
+            //             Navigator.push(
+            //               context,
+            //               MaterialPageRoute(
+            //                 builder: (context) => ChatPanel(chatID: LocalDatabaseAccess.database.chats[i].chatID,),
+            //               ),
+            //             );
+            //           },
+            //           child: ListTile(
+            //             leading: ExcludeSemantics(
+            //               child: CircleAvatar(
+            //                 backgroundImage:
+            //                     NetworkImage('https://picsum.photos/200'),
+            //               ),
+            //             ),
+            //             title: Builder(
+            //               builder: (context) {
+            //                 if(LocalDatabaseAccess.database.chats[i].groupChannelName == null){
+            //                   return Text(LocalDatabaseAccess.database.chats[i].usersHandle[1], style: TextStyle(color: Colors.white),);
+            //                 }
+            //                 else{
+            //                   return Text(LocalDatabaseAccess.database.chats[i].groupChannelName.toString(), style: TextStyle(color: Colors.white),);
+            //                 }
+            //               }
+            //             ),
+            //             subtitle: Text(
+            //               "Sottotitolo",
+            //               style: TextStyle(
+            //                 color: Colors.white.withOpacity(0.6),
+            //               ),
+            //             ),
+            //           ),
+            //         ),
+            //       ),
+            //       Divider(
+            //         height: 1,
+            //         color: Color(0xff202c3e).withOpacity(0.4),
+            //       ),
+            //     ],
+            //   )
           ],
         ),
       ),

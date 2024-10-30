@@ -8,41 +8,40 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 late bool _isLoggedIn = false;
 
+
+
+
+//DA OTTIMIZZARE CORRETTAMENTE MA COME È ORA FUNZIONA
+//SE UTENTE LOGGATO ALLORA MANDA A CHATLIST, ALTRIMENTI NON DOVREBBE FARE UNA SEGA
+Future<bool> isLoggedInSkip(context) async{
+
+  await _loadLoggedIn();
+  print("Start skip Loggato?: $_isLoggedIn");
+  if(_isLoggedIn){
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ChatList(),
+      ),
+    );
+  }
+  if(!_isLoggedIn){
+    return false;
+  }
+  return false;
+}
+
+
+
+
 class Start extends StatelessWidget {
   const Start({super.key});
 
 
 
 
-
-  //DA OTTIMIZZARE CORRETTAMENTE MA COME È ORA FUNZIONA
-  //SE UTENTE LOGGATO ALLORA MANDA A CHATLIST, ALTRIMENTI NON DOVREBBE FARE UNA SEGA
-  Future<bool> isLoggedInSkip(context) async{
-    await _loadLoggedIn();
-    print("Start skip Loggato?: $_isLoggedIn");
-    if(_isLoggedIn){
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ChatList(),
-        ),
-      );
-    }
-    if(!_isLoggedIn){
-      return false;
-    }
-    return false;
-  }
-
-
-
-
-
-
   @override
   Widget build(BuildContext context) {
-    isLoggedInSkip(context);
-
 
 
 
@@ -60,7 +59,7 @@ class Start extends StatelessWidget {
       body: Center(
         child: Column(
           children: [
-            // BiometricsAppOpening(),
+            BiometricsAppOpening(),
             ElevatedButton(
               child: Text(
                 "Email",
@@ -166,9 +165,9 @@ class _BiometricsAppOpeningState extends State<BiometricsAppOpening> {
         //stampa true o false se l'autenticazione è avvenuta
         print("Authenticated: $authenticated");
 
-        // if(authenticated){
-        //
-        // }
+        if(authenticated){
+          isLoggedInSkip(context);              //NON GLI PIACE MA FUNZIONA
+        }
       } on PlatformException catch (e) {
         print(e);
       }
@@ -180,7 +179,6 @@ class _BiometricsAppOpeningState extends State<BiometricsAppOpening> {
 
 //carica preferenza se utente loggato oppure no
 Future<void> _loadLoggedIn() async {
-  print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
   SharedPreferences prefs = await SharedPreferences.getInstance();
   _isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
   print("Logged? start load: $_isLoggedIn");

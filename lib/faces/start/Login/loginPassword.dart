@@ -4,6 +4,8 @@ import 'package:messanger_bpup/src/API/jsonParser.dart';
 import 'package:messanger_bpup/src/obj/localDatabase.dart';
 import 'package:messanger_bpup/src/obj/localDatabaseAccess.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 
 late bool _isLoggedIn;
 
@@ -11,8 +13,6 @@ class LoginPassword extends StatelessWidget {
   const LoginPassword({super.key, required this.emailValue});
 
   final emailValue;
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -105,19 +105,11 @@ class LoginPasswordForm extends StatelessWidget {
   }
 }
 
-
-
-
 void LoginAndNavigate(
     BuildContext context, String emailValue, String passwordValue) async {
   String apiKey = await JsonParser.loginPasswordJson(emailValue, passwordValue);
 
-
   if (apiKey != "false") {
-
-
-
-
     //DA MODIFICARE, ATTENZIONE ERA SOLO PER TESTARE IN ATTESA DELLO STORAGE LOCALE \/\/\/\/\/\/\/\/
 
     // if(LocalDatabaseAccess.database.localUser.name.isEmpty) {
@@ -130,14 +122,13 @@ void LoginAndNavigate(
 
 
 
+
+
     print(apiKey);
     print(LocalDatabaseAccess.database.localUser.userID);
 
-
     _loadLoggedIn();
     _saveLoggedIn(true);
-
-
 
     Navigator.push(
       context,
@@ -149,12 +140,6 @@ void LoginAndNavigate(
     print("Password errata");
   }
 }
-
-
-
-
-
-
 
 //carica preferenza se utente loggato oppure no
 Future<void> _loadLoggedIn() async {

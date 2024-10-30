@@ -34,7 +34,8 @@ dependencies:
   local_auth:
   shared_preferences:
   web_socket_channel:
-  sembast:
+  path_provider:
+
 
 
   # The following adds the Cupertino Icons font to your application.
