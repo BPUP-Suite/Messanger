@@ -11,7 +11,7 @@ late bool _isLoggedIn = false;
 
 
 
-//DA OTTIMIZZARE CORRETTAMENTE MA COME È ORA FUNZIONA
+//DA OTTIMIZZARE CORRETTAMENTE MA COME È ORA FUNZIONA (?)
 //SE UTENTE LOGGATO ALLORA MANDA A CHATLIST, ALTRIMENTI NON DOVREBBE FARE UNA SEGA
 Future<bool> isLoggedInSkip(context) async{
 
@@ -166,13 +166,14 @@ class _BiometricsAppOpeningState extends State<BiometricsAppOpening> {
         print("Authenticated: $authenticated");
 
         if(authenticated){
-          isLoggedInSkip(context);              //NON GLI PIACE MA FUNZIONA
+          isLoggedInSkip(context);              //NON GLI PIACE MA FUNZIONA (?)
         }
       } on PlatformException catch (e) {
         print(e);
       }
     } else {
       print("biometrics not enabled");
+      isLoggedInSkip(context);              //NON GLI PIACE MA FUNZIONA (?)
     }
   }
 }

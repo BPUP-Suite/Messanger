@@ -4,6 +4,8 @@ import 'package:messanger_bpup/faces/Settings/security.dart';
 import 'package:messanger_bpup/faces/Settings/storage.dart';
 import 'package:messanger_bpup/faces/start/emailCheck.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart';
 
 class Settings extends StatelessWidget {
   const Settings({super.key});
@@ -136,10 +138,8 @@ class Settings extends StatelessWidget {
             GestureDetector(
               onTap: () {
                 resetBiometricsPreference();      //works
-                resetLoggedIn();
-
-                //potenziali altri motodi, tipo
-                //1 - cancella database
+                resetLoggedIn();                  //workava, spero continui a farlo
+                resetLocalDatabase();
 
                 backToLoginAfterLogout(context);  //works
               },
@@ -199,6 +199,16 @@ class Settings extends StatelessWidget {
     await SharedPreferences.getInstance();
     isLoggedInPreference.setBool('isLoggedIn', false);
     print("Preferenza isLoggedIn a FALSE");
+  }
+
+  //4° funzione del logout: fa sparire il database locale
+  Future<void> resetLocalDatabase() async {
+    final localDatabasePath = await getDatabasesPath();
+    final localDBPath = join(localDatabasePath, 'localDatabase.db');
+
+    await deleteDatabase(localDBPath);
+    print("Database locale eliminato (speriamo)");
+
   }
 
 

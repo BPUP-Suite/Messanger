@@ -5,7 +5,7 @@ import 'package:messanger_bpup/src/obj/localDatabase.dart';
 import 'package:messanger_bpup/src/obj/localDatabaseAccess.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:sqflite/sqflite.dart';
 
 late bool _isLoggedIn;
 
@@ -120,13 +120,91 @@ void LoginAndNavigate(
 
     LocalDatabaseAccess.database = await LocalDatabase.init(apiKey);
 
+    print("teoricamente il database si sta creando");
+    //DATABASE LOCALE
+    final localDatabase = openDatabase(
+      join(await getDatabasesPath(), 'localDatabase.db'),
+      onCreate: (db, version) {
+        return db.execute(
+          '''
+          CREATE TABLE localUser(
+            apiKey TEXT PRIMARY KEY, 
+            user_id TEXT, 
+            user_email TEXT, 
+            handle TEXT, 
+            name TEXT, 
+            surname TEXT
+          );
+          
+          CREATE TABLE users(
+            user_id PRIMARY KEY TEXT;
+            handle TEXT;
+          );
+          
+          CREATE TABLE chat_users(
+            chat_id TEXT,
+            user_id TEXT,
+            PRIMARY KEY (chat_id, user_id),
+            FOREIGN KEY (chat_id) REFERENCES chats(chat_id),
+            FOREIGN KEY (user_id) REFERENCES users(user_id)
+          );
+          
+          CREATE TABLE chats(
+            chat_id TEXT PRIMARY KEY,
+            group_channel_name TEXT,
+          );
+          
+          CREATE TABLE messages (
+            message_id TEXT PRIMARY KEY,
+            chat_id TEXT REFERENCES chats(chat_id),
+            sender TEXT,
+            text TEXT,
+            date_time DATETIME
+          );
+          ''',
+        );
 
+      },
+      version: 1,
+    );
 
+    Future<void> insertDog(name, age) async {
+      // Get a reference to the database.
+      final db = await localDatabase;
 
+      // Insert the Dog into the correct table. You might also specify the
+      // `conflictAlgorithm` to use in case the same dog is inserted twice.
+      //
+      // In this case, replace any previous data.
+      await db.insert(
+        'dogs',
+        {'name': name, 'age': age},
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+    }
+
+    insertDog("NomeCane1", 10);
+    insertDog("NomeCane2", 4);
+
+    Future<void> stampaTuttiICani() async {
+      final db = await localDatabase;
+
+      // Esegui una query per selezionare tutti i cani
+      final List<Map<String, dynamic>> maps = await db.query('dogs');
+
+      // Stampa i risultati direttamente dalle mappe
+      maps.forEach((row) {
+        print('Id: ${row['id']}, Cane: ${row['name']}, Età: ${row['age']}');
+      });
+    }
+
+    stampaTuttiICani();
+    print("database dovrebbe esistere");
 
     print(apiKey);
     print(LocalDatabaseAccess.database.localUser.userID);
 
+    //chiama i metodi per salvare un valore true/false se utente è loggato
     _loadLoggedIn();
     _saveLoggedIn(true);
 
