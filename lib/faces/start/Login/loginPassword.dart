@@ -108,6 +108,7 @@ class LoginPasswordForm extends StatelessWidget {
 void LoginAndNavigate(
     BuildContext context, String emailValue, String passwordValue) async {
   String apiKey = await JsonParser.loginPasswordJson(emailValue, passwordValue);
+  String localUserID = await JsonParser.getUserID(apiKey);
 
   if (apiKey != "false") {
     //DA MODIFICARE, ATTENZIONE ERA SOLO PER TESTARE IN ATTESA DELLO STORAGE LOCALE \/\/\/\/\/\/\/\/
@@ -128,8 +129,8 @@ void LoginAndNavigate(
         return db.execute(
           '''
           CREATE TABLE localUser(
-            apiKey TEXT PRIMARY KEY, 
-            user_id TEXT, 
+            user_id VARCHAR(255),
+            apiKey TEXT PRIMARY KEY,  
             user_email TEXT, 
             handle TEXT, 
             name TEXT, 
@@ -137,29 +138,29 @@ void LoginAndNavigate(
           );
           
           CREATE TABLE users(
-            user_id PRIMARY KEY TEXT;
+            user_id VARCHAR(255) PRIMARY KEY;
             handle TEXT;
           );
           
-          CREATE TABLE chat_users(
-            chat_id TEXT,
-            user_id TEXT,
-            PRIMARY KEY (chat_id, user_id),
-            FOREIGN KEY (chat_id) REFERENCES chats(chat_id),
-            FOREIGN KEY (user_id) REFERENCES users(user_id)
-          );
-          
           CREATE TABLE chats(
-            chat_id TEXT PRIMARY KEY,
+            chat_id VARCHAR(255) PRIMARY KEY,
             group_channel_name TEXT,
           );
           
           CREATE TABLE messages (
-            message_id TEXT PRIMARY KEY,
-            chat_id TEXT REFERENCES chats(chat_id),
+            message_id VARCHAR(255) PRIMARY KEY,
+            chat_id VARCHAR(255) REFERENCES chats(chat_id),
             sender TEXT,
             text TEXT,
             date_time DATETIME
+          );
+          
+          CREATE TABLE chat_users(
+            chat_id VARCHAR(255),
+            user_id VARCHAR(255),
+            PRIMARY KEY (chat_id, user_id),
+            FOREIGN KEY (chat_id) REFERENCES chats(chat_id),
+            FOREIGN KEY (user_id) REFERENCES users(user_id)
           );
           ''',
         );
@@ -168,33 +169,28 @@ void LoginAndNavigate(
       version: 1,
     );
 
-    Future<void> insertDog(name, age) async {
-      // Get a reference to the database.
+    Future<void> insertLocalUser(user_id, apiKey, user_email, handle, name, surname) async {
+
       final db = await localDatabase;
 
-      // Insert the Dog into the correct table. You might also specify the
-      // `conflictAlgorithm` to use in case the same dog is inserted twice.
-      //
-      // In this case, replace any previous data.
       await db.insert(
-        'dogs',
-        {'name': name, 'age': age},
+        'localUser',
+        {'user_id': user_id, 'apiKey': apiKey, 'user_email': user_email, 'handle': handle, 'name': name, 'surname': surname},
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
     }
 
-    insertDog("NomeCane1", 10);
-    insertDog("NomeCane2", 4);
+    insertLocalUser(apiKey, localUserID, "Email", "Handle", "Nome", "Cognome");
 
     Future<void> stampaTuttiICani() async {
       final db = await localDatabase;
 
       // Esegui una query per selezionare tutti i cani
-      final List<Map<String, dynamic>> maps = await db.query('dogs');
+      final List<Map<String, dynamic>> maps = await db.query('localUser');
 
       // Stampa i risultati direttamente dalle mappe
       maps.forEach((row) {
-        print('Id: ${row['id']}, Cane: ${row['name']}, Età: ${row['age']}');
+        print('\nId: ${row['id']}, \nAPI Key: ${row['apiKey']}, \nEmail: ${row['user_email']}, \nHandle: ${row['handle']}, \nName: ${row['name']}, \nSurname: ${row['surname']}');
       });
     }
 
