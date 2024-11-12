@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:messanger_bpup/faces/chatList.dart';
 import 'package:messanger_bpup/src/API/jsonParser.dart';
 import 'package:messanger_bpup/src/localDatabaseMethods.dart';
-import 'package:messanger_bpup/src/obj/localDatabase.dart';
-import 'package:messanger_bpup/src/obj/localDatabaseAccess.dart';
+import 'package:messanger_bpup/src/webSocketMethods.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 late bool _isLoggedIn;
@@ -49,7 +48,7 @@ class LoginPasswordForm extends StatelessWidget {
 
   final _formKey = GlobalKey<FormState>();
 
-  late final String passwordValue;
+  late String passwordValue;
 
   @override
   Widget build(BuildContext context) {
@@ -106,38 +105,31 @@ class LoginPasswordForm extends StatelessWidget {
 
 void LoginAndNavigate(
     BuildContext context, String emailValue, String passwordValue) async {
-  String apiKey = await JsonParser.loginPasswordJson(emailValue, passwordValue);
-  String localUserID = await JsonParser.getUserID(apiKey);
+    String apiKey = await JsonParser.loginPasswordJson(emailValue, passwordValue);
+    String localUserID = await JsonParser.getUserID(apiKey);
 
   if (apiKey != "false") {
-    //DA MODIFICARE, ATTENZIONE ERA SOLO PER TESTARE IN ATTESA DELLO STORAGE LOCALE \/\/\/\/\/\/\/\/
 
-    // if(LocalDatabaseAccess.database.localUser.name.isEmpty) {
-    //   if(apiKey.isNotEmpty) {
-    //     LocalDatabaseAccess.database = await LocalDatabase.init(apiKey);
-    //   }
-    // }
 
-    LocalDatabaseAccess.database = await LocalDatabase.init(apiKey);
-
-    print("teoricamente il database si sta creando");
     //DATABASE LOCALE
-
-
-
     LocalDatabaseMethods.databaseOpen();
-    LocalDatabaseMethods.insertLocalUser(localUserID, apiKey, "Email", "Handle", "Nome", "Cognome");
+    WebSocketMethods().openWebSocketConnection(localUserID, apiKey);
+    WebSocketMethods().WebSocketSenderMessage('{"type":"init","apiKey":"$apiKey"}');
+    LocalDatabaseMethods.insertLocalUser(localUserID, apiKey);
+    await WebSocketMethods().WebSocketReceiver();
+
+
     LocalDatabaseMethods.stampaTuttiICani();
-
-
-    print("database dovrebbe esistere");
-
-    print(apiKey);
-    print(LocalDatabaseAccess.database.localUser.userID);
+    
 
     //chiama i metodi per salvare un valore true/false se utente è loggato
     _loadLoggedIn();
     _saveLoggedIn(true);
+
+
+
+
+
 
     Navigator.push(
       context,

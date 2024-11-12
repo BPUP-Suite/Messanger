@@ -38,7 +38,7 @@ class EmailCheck extends StatelessWidget {
 class EmailCheckForm extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
 
-  late final String emailValue;
+  late String emailValue;
 
   @override
   Widget build(BuildContext context) {
@@ -69,6 +69,7 @@ class EmailCheckForm extends StatelessWidget {
                   return 'Per favore inserisci la tua email';
                 }
                 emailValue = value;
+
                 return null;
               },
 
@@ -78,24 +79,6 @@ class EmailCheckForm extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    // print("vafaffacualoooooooooooo");
-                    // print(JsonParser().emailCheckJson(emailValue));
-                    // if(JsonParser().emailCheckJson(emailValue) == "signup") {
-                    //   Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //       builder: (context) => Signup(),
-                    //     ),
-                    //   );
-                    // }
-                    // else{
-                    //   Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //       builder: (context) => LoginPassword(),
-                    //     ),
-                    //   );
-                    // }
                     checkEmailAndNavigate(context, emailValue);
                   }
                 },

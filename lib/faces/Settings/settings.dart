@@ -139,7 +139,7 @@ class Settings extends StatelessWidget {
               onTap: () {
                 resetBiometricsPreference();      //works
                 resetLoggedIn();                  //workava, spero continui a farlo
-                resetLocalDatabase();
+                resetLocalDatabase();             //da errore (magia)
 
                 backToLoginAfterLogout(context);  //works
               },
@@ -206,10 +206,9 @@ class Settings extends StatelessWidget {
     final localDatabasePath = await getDatabasesPath();
     final localDBPath = join(localDatabasePath, 'localDatabase.db');
 
+    // databaseFactory.deleteDatabase(localDBPath);
+
     await deleteDatabase(localDBPath);
     print("Database locale eliminato (speriamo)");
-
   }
-
-
 }

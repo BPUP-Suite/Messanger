@@ -24,20 +24,20 @@ class LocalDatabaseMethods {
           );
           
           CREATE TABLE chats(
-            chat_id VARCHAR(255) PRIMARY KEY,
+            chat_id TEXT PRIMARY KEY,
             group_channel_name TEXT,
           );
           
           CREATE TABLE messages (
-            message_id VARCHAR(255) PRIMARY KEY,
-            chat_id VARCHAR(255) REFERENCES chats(chat_id),
+            message_id TEXT PRIMARY KEY,
+            chat_id TEXT REFERENCES chats(chat_id),
             sender TEXT,
             text TEXT,
             date_time DATETIME
           );
           
           CREATE TABLE chat_users(
-            chat_id VARCHAR(255),
+              chat_id TEXT,
             user_id TEXT,
             PRIMARY KEY (chat_id, user_id),
             FOREIGN KEY (chat_id) REFERENCES chats(chat_id),
@@ -74,20 +74,52 @@ class LocalDatabaseMethods {
 
     // Stampa i risultati direttamente dalle mappe
     maps.forEach((row) {
-      print('\nId: ${row['id']}, \nAPI Key: ${row['apiKey']}, \nEmail: ${row['user_email']}, \nHandle: ${row['handle']}, \nName: ${row['name']}, \nSurname: ${row['surname']}');
+      print('\nId: ${row['user_id']}, \nAPI Key: ${row['apiKey']}, \nEmail: ${row['user_email']}, \nHandle: ${row['handle']}, \nName: ${row['name']}, \nSurname: ${row['surname']}');
     });
   }
 
 
 
-  static Future<void> insertLocalUser(user_id, apiKey, user_email, handle, name, surname) async {
+  static Future<void> insertLocalUser(user_id, apiKey) async {
 
     final db = await localDatabase;
 
     await db.insert(
       'localUser',
-      {'user_id': user_id, 'apiKey': apiKey, 'user_email': user_email, 'handle': handle, 'name': name, 'surname': surname},
+      {'user_id': user_id, 'apiKey': apiKey},
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
+
+
+
+  static Future<void> updateLocalUser(user_email, handle, name, surname) async {
+
+    final db = await localDatabase;
+
+    await db.update(
+      'localUser',
+      where: "true=true",
+      { 'user_email': user_email, 'handle': handle, 'name': name, 'surname': surname},
+    );
+  }
+
+
+
+  //check database esiste
+  static Future<bool> checkDatabaseExistence() async {
+    bool dbExists = await databaseFactory.databaseExists('localDatabase.db');
+    print(dbExists.toString());
+    return dbExists;
+  }
+
+
+
+  // static Future<void> init() async {
+  //
+  //   final db = await localDatabase;
+  //
+  //   await
+  //
+  // }
 }

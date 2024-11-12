@@ -2,7 +2,6 @@ import 'package:messanger_bpup/src/obj/chat.dart';
 import 'package:messanger_bpup/src/API/jsonParser.dart';
 import 'package:messanger_bpup/src/obj/chatMessage.dart';
 import 'package:messanger_bpup/src/obj/localUser.dart';
-import 'package:messanger_bpup/main.dart';
 
 
 
@@ -17,7 +16,6 @@ class LocalDatabase {
   static Future<LocalDatabase> init(String apiKey) async {
 
     //mando apikey a Samuele
-    webSocketChannel.sink.add('{"init":$apiKey}');
 
     String localUserID = await JsonParser.getUserID(apiKey);
 

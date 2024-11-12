@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:messanger_bpup/src/API/APImethods.dart';
 
+
 class JsonParser {
   static Future<String> emailCheckJson(String email) async {
     http.Response response = await APImethods.emailCheckAPI(email);
@@ -81,7 +82,7 @@ class JsonParser {
     if (response.statusCode == 200) {
       Map<String, dynamic> jsonResponse = jsonDecode(response.body);
 
-      String userIDResponse = jsonResponse['user-id'].toString();
+      String userIDResponse = jsonResponse['user_id'].toString();
 
       return userIDResponse; //user id
     } else {
@@ -89,5 +90,12 @@ class JsonParser {
       print('Errore nella richiesta: ${response.statusCode}');
       return "";
     }
+  }
+
+  static Future<String> getValue(String jsonString, String jsonParameter) async {
+
+    Map<String, dynamic> jsonData = jsonDecode(jsonString);
+
+    return(jsonData[jsonParameter]);
   }
 }
