@@ -79,4 +79,21 @@ Timeline:
 
 - E dopo quasi una settimana tempo di aggiornare questa fantastica timeline
 - Il client ora è super aggiornatissimo con tantissime nuove funzioni, principalmente adesso presenta un database funzione (basato su array e oggetti) che permette lo storage (teoricamente non permanente, ma questo è da capire) dei messaggi e delle chat che sono anche automaticamente visualizzare a schermo con anche la possibilità di entrarci dentro e aggiungere messaggi all'array
-- Di conseguenza {SOD} ho sviluppato la sezione relativa all'ottenimento di tutti i dati dell'utente in seguito al login, richiesta e risposta fatte entrambe tramite websocket che permettono di ottenere in qualunque dispositivo le proprie chat/messaggi e dati basi relative all'utente locale 
+- Di conseguenza {SOD} ho sviluppato la sezione relativa all'ottenimento di tutti i dati dell'utente in seguito al login, richiesta e risposta fatte entrambe tramite websocket che permettono di ottenere in qualunque dispositivo le proprie chat/messaggi e dati basi relative all'utente locale
+
+12/11/2024
+
+ - Mamamiaquanto tempo essele pasato, ma tante belle cosine essere state fate in questo arco di tempoz
+ - Creazione e sperimentazione di vari Project (su github) per la gestione del lavoro e varia documentazione (tipo il database, anche se devo trovare un modo migliore {anzi probabilmente mi conviene farlo da capo, fa schifo, tanto}):
+   1) Lista completa della feature che verranno aggiunte (almeno speriamo, alcune sono particolarmente complesse)
+   2) Timeline (a partire da qualche giorno fa) di tutto quello che facciamo lato client/server/documentazione ecc. (ci servirà nel futuro lo so)
+   3) Creazione di un gruppo Telegram (ci tocca ancora usarlo, finchè BPUP Messanger non sarà operativo) per il salvataggio di file VIDEO e FOTO (che verrano poi usati per fare un fantastico trailer di presentazione o anche solo per ricordo di quanto eravamo stupidi)
+- La parte server del send e receive dei messaggi è FUNZIONANTE (finalmente) ma non completa (più che altro servirebbe far funzionare la parte client per aggiungere le parti di informazioni mancanti e ottimizzare il codice qua e la)
+- OTTIMIZZAZIONE del codice relativo a log, authentication, encrypter e jsonparser (quest'ultimo ora usa i dict e le liste [prima usava le stringe -_-] )
+- Aggiornamento del file docker-compose.yml perchè mi sono dimenticato (ERRORE GRAVISSIMO) di salvare il SALT in locale (che quindi al riavvio del container veniva eliminato :/ con conseguente perdita di tutte le pass nel db)
+- Ora passo al lato client di {MM} anche se, visto che non faccio nulla di là, non ricordo molto:
+  1) Aggiunto database locale tramite sqlite per il salvataggio delle informazioni di base dell'utente + tutte le chat e messaggi
+  2) Inizio piccolo rework della gestione delle websocket (cosi oggi SPERO riusciamo a mandare un piccolissimo messaggio tra di noi in chat private)
+  3) Bho, sinceramente nun so :(
+ 
+  Ah giusto, fantastico sc btw
