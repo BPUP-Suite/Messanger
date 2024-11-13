@@ -206,9 +206,18 @@ class Settings extends StatelessWidget {
     final localDatabasePath = await getDatabasesPath();
     final localDBPath = join(localDatabasePath, 'localDatabase.db');
 
-    // databaseFactory.deleteDatabase(localDBPath);
+    try {
+      // Apri il database in modalità read-write
+      final database = await openDatabase(localDBPath);
 
-    await deleteDatabase(localDBPath);
-    print("Database locale eliminato (speriamo)");
+      // Chiudi tutte le transazioni aperte (se presenti)
+      await database.close();
+
+      // Elimina il file del database
+      await deleteDatabase(localDBPath);
+      print("Database locale eliminato correttamente");
+    } catch (e) {
+      print("Errore durante l'eliminazione del database: $e");
+    }
   }
 }

@@ -52,7 +52,7 @@ class LocalDatabaseMethods {
   }
 
 
-
+  static final localDatabase = databaseConnection();
 
   static Future<Database> databaseConnection() async {
     final localDatabase = openDatabase(
@@ -62,7 +62,7 @@ class LocalDatabaseMethods {
     return localDatabase;
   }
 
-  static final localDatabase = databaseConnection();
+
 
 
 
@@ -84,11 +84,16 @@ class LocalDatabaseMethods {
 
     final db = await localDatabase;
 
-    await db.insert(
-      'localUser',
-      {'user_id': user_id, 'apiKey': apiKey},
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
+    try {
+      await db.insert(
+        'localUser',
+        {'user_id': user_id, 'apiKey': apiKey},
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+    }
+    catch (e) {
+      print("Errore durante l'inserimento dell'utente: $e");
+    }
   }
 
 
