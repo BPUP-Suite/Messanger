@@ -7,29 +7,32 @@ class EmailCheck extends StatelessWidget {
   const EmailCheck({super.key});
 
 
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(0xff354966),
-      appBar: AppBar(
-        title: Text(
-          "Email",
-          style: TextStyle(color: Colors.white),
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        backgroundColor: Color(0xff354966),
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: Text(
+            "Email",
+            style: TextStyle(color: Colors.white),
+          ),
+          centerTitle: true,
+          backgroundColor: Color(0xff202c3e),
+          iconTheme: IconThemeData(color: Colors.white),
         ),
-        centerTitle: true,
-        backgroundColor: Color(0xff202c3e),
-        iconTheme: IconThemeData(color: Colors.white),
-      ),
-      body: Container(
-        alignment: Alignment.center, // Center content horizontally
-        margin: const EdgeInsets.only(top: 20),
-        child: Column(
-          children: [
-            EmailCheckForm(),
-          ],
+        body: Container(
+          alignment: Alignment.center, // Center content horizontally
+          margin: const EdgeInsets.only(top: 20),
+          child: Column(
+            children: [
+              EmailCheckForm(),
+            ],
+          ),
+          // child: PhoneForm(),
         ),
-        // child: PhoneForm(),
       ),
     );
   }
@@ -67,6 +70,9 @@ class EmailCheckForm extends StatelessWidget {
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Per favore inserisci la tua email';
+                }
+                if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]+').hasMatch(value)) {
+                  return 'Non hai inserito un indirizzo email';
                 }
                 emailValue = value;
 
