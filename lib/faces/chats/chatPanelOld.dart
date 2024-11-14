@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:messanger_bpup/src/obj/chat.dart';
 import 'package:messanger_bpup/src/obj/chatMessage.dart';
-import 'package:messanger_bpup/main.dart';
 import '../../src/obj/localDatabaseAccess.dart';
 
 
@@ -27,16 +26,16 @@ ListModel _listNotifier = ListModel();
 
 
 //web socket receive message
-Future<String> WebSocketReceiver() async {
-  await webSocketChannel.ready;
-
-  webSocketChannel.stream.listen((message) {
-    webSocketChannel.sink.add('received!');
-    _listNotifier.add(ChatMessage(message, "NonMatteo", DateTime.now(), "id_messaggio"));
-  }
-  );
-  return "return function web socket";
-}
+// Future<String> WebSocketReceiver() async {
+//   await webSocketChannel.ready;
+//
+//   webSocketChannel.stream.listen((message) {
+//     webSocketChannel.sink.add('received!');
+//     _listNotifier.add(ChatMessage(message, "NonMatteo", DateTime.now(), "id_messaggio"));
+//   }
+//   );
+//   return "return function web socket";
+// }
 
 
 
@@ -55,7 +54,7 @@ class ChatPanelOld extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Chat chatObject = LocalDatabaseAccess.database.chats.where((e)=>e.chatID==chatID).elementAt(0);
-    WebSocketReceiver();
+    // WebSocketReceiver();
     return Scaffold(
         backgroundColor: Color(0xff354966),
         appBar: AppBar(

@@ -93,7 +93,20 @@ class LoginPasswordForm extends StatelessWidget {
                     LoginAndNavigate(context, emailValue, passwordValue);
                   }
                 },
-                child: Text('Invia'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.lightBlue,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(100),
+                  ),
+
+                ),
+                // child: Icon(Icons.check, color: Colors.white,),
+                child: Text(
+                  "Invia",
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
               ),
             ),
           ],

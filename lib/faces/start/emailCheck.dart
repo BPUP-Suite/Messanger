@@ -15,12 +15,12 @@ class EmailCheck extends StatelessWidget {
         backgroundColor: Color(0xff354966),
         appBar: AppBar(
           automaticallyImplyLeading: false,
-          title: Text(
-            "Email",
-            style: TextStyle(color: Colors.white),
-          ),
+          // title: Text(
+          //   "Email",
+          //   style: TextStyle(color: Colors.white),
+          // ),
           centerTitle: true,
-          backgroundColor: Color(0xff202c3e),
+          backgroundColor: Color(0xff354966),
           iconTheme: IconThemeData(color: Colors.white),
         ),
         body: Container(
@@ -88,7 +88,20 @@ class EmailCheckForm extends StatelessWidget {
                     checkEmailAndNavigate(context, emailValue);
                   }
                 },
-                child: Text('Invia'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.lightBlue,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(100),
+                  ),
+
+                ),
+                // child: Icon(Icons.check, color: Colors.white,),
+                child: Text(
+                  "Invia",
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
               ),
             ),
           ],
