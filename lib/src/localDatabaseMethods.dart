@@ -7,7 +7,7 @@ class LocalDatabaseMethods {
     final localDatabase = openDatabase(
       join(await getDatabasesPath(), 'localDatabase.db'),
       onCreate: (db, version) {
-        return db.execute(
+        db.execute(
           '''
           CREATE TABLE localUser(
             user_id TEXT,
@@ -25,7 +25,7 @@ class LocalDatabaseMethods {
           
           CREATE TABLE chats(
             chat_id TEXT PRIMARY KEY,
-            group_channel_name TEXT,
+            group_channel_name TEXT NULL,
           );
           
           CREATE TABLE messages (
@@ -37,7 +37,7 @@ class LocalDatabaseMethods {
           );
           
           CREATE TABLE chat_users(
-              chat_id TEXT,
+            chat_id TEXT,
             user_id TEXT,
             PRIMARY KEY (chat_id, user_id),
             FOREIGN KEY (chat_id) REFERENCES chats(chat_id),
@@ -45,7 +45,6 @@ class LocalDatabaseMethods {
           );
           ''',
         );
-
       },
       version: 1,
     );
@@ -70,11 +69,11 @@ class LocalDatabaseMethods {
     final db = await localDatabase;
 
     // Esegui una query per selezionare tutti i cani
-    final List<Map<String, dynamic>> maps = await db.query('localUser');
+    final List<Map<String, dynamic>> maps = await db.query('chats');
 
     // Stampa i risultati direttamente dalle mappe
     maps.forEach((row) {
-      print('\nId: ${row['user_id']}, \nAPI Key: ${row['apiKey']}, \nEmail: ${row['user_email']}, \nHandle: ${row['handle']}, \nName: ${row['name']}, \nSurname: ${row['surname']}');
+      print('\nChat Id: ${row['chat_id']}, \nName: ${row['name']}');
     });
   }
 
@@ -107,6 +106,24 @@ class LocalDatabaseMethods {
       where: "true=true",
       { 'user_email': user_email, 'handle': handle, 'name': name, 'surname': surname},
     );
+  }
+
+
+
+  static Future<void> insertChat(chat_id, group_channel_name) async {
+
+    final db = await localDatabase;
+
+    try {
+      await db.insert(
+        'chats',
+        {'chat_id': chat_id, 'group_channel_name': group_channel_name},
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+    }
+    catch (e) {
+      print("Errore durante l'inserimento della chat: $e");
+    }
   }
 
 

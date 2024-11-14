@@ -60,6 +60,9 @@ class WebSocketMethods {
             String handle = localUserMap["handle"];
             String name = localUserMap["name"];
             String surname = localUserMap["surname"];
+            await LocalDatabaseMethods.updateLocalUser(user_email, handle, name, surname);
+
+
 
             //INSERIMENTO CHATS
             List<dynamic> chats = hashData["chats"];
@@ -67,7 +70,9 @@ class WebSocketMethods {
               HashMap<String, dynamic> chatMap = HashMap<String, dynamic>.from(chat);
 
               print("Chat ID print: ${chatMap["chat_id"]}");
+              LocalDatabaseMethods.insertChat(chatMap["chat_id"], chatMap["name"]);
 
+              //INSERIMENTO MESSAGES
               List<dynamic> messages = chatMap["messages"];
               for(var message in messages) {
                 HashMap<String, dynamic> messageMap = HashMap<String, dynamic>.from(message);
@@ -78,7 +83,7 @@ class WebSocketMethods {
 
 
 
-            await LocalDatabaseMethods.updateLocalUser(user_email, handle, name, surname);
+
             await LocalDatabaseMethods.stampaTuttiICani();
           }
           if(init == "False"){
