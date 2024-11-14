@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:collection';
 import 'package:http/http.dart' as http;
 import 'package:messanger_bpup/src/API/APImethods.dart';
+
 
 
 class JsonParser {
@@ -92,10 +94,39 @@ class JsonParser {
     }
   }
 
-  static Future<String> getValue(String jsonString, String jsonParameter) async {
+  // static Future<String> getValue(String jsonString, String jsonParameter) async {
+  //
+  //   Map<String, dynamic> jsonData = jsonDecode(jsonString);
+  //
+  //   return(jsonData[jsonParameter]);
+  // }
 
-    Map<String, dynamic> jsonData = jsonDecode(jsonString);
 
-    return(jsonData[jsonParameter]);
+
+  // Funzione per convertire una stringa JSON in una struttura dinamica con HashMap e List
+  dynamic convertJsonToDynamicStructure(String jsonString) {
+    // Converte la stringa JSON in una mappa o lista di base
+    dynamic jsonMap = jsonDecode(jsonString);
+
+    // Applica la conversione ricorsiva
+    return _convertToDynamic(jsonMap);
+  }
+
+
+
+  // Funzione ricorsiva per navigare e convertire mappe e liste
+  dynamic _convertToDynamic(dynamic value) {
+    if (value is Map) {
+      // Se è una mappa, converti ciascun elemento ricorsivamente e inserisci in un HashMap
+      return HashMap<String, dynamic>.fromEntries(
+          value.entries.map((entry) => MapEntry(entry.key, _convertToDynamic(entry.value)))
+      );
+    } else if (value is List) {
+      // Se è una lista, converti ciascun elemento della lista ricorsivamente
+      return value.map((item) => _convertToDynamic(item)).toList();
+    } else {
+      // Se è un valore semplice (stringa, numero, ecc.), restituiscilo direttamente
+      return value;
+    }
   }
 }

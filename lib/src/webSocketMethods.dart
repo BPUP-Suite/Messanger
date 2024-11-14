@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:messanger_bpup/src/API/jsonParser.dart';
 import 'package:messanger_bpup/src/localDatabaseMethods.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -43,22 +45,26 @@ class WebSocketMethods {
     webSocketChannel.stream.listen((data) async {
       // webSocketChannel.sink.add('{"init":$apiKey}');
       // _listNotifier.add(ChatMessage(message, "NonMatteo", DateTime.now()));
-      String type = await JsonParser.getValue(data, "type");
+      HashMap hashData = JsonParser().convertJsonToDynamicStructure(data);
+      String type = hashData["type"];
 
       switch(type) {
         case "init": {
-          String init = await JsonParser.getValue(data, "init");
+          String init = hashData["init"];
           if(init == "True"){
             print(data);
 
             //INSERIMENTO LOCAL USER
-            String localUser = await JsonParser.getValue(data, "localUser");
-            String user_email = await JsonParser.getValue(localUser, "email");
-            String handle = await JsonParser.getValue(localUser, "handle");
-            String name = await JsonParser.getValue(localUser, "name");
-            String surname = await JsonParser.getValue(localUser, "surname");
+            HashMap localUserMap = hashData["localUser"];
+            String user_email = localUserMap["email"];
+            String handle = localUserMap["handle"];
+            String name = localUserMap["name"];
+            String surname = localUserMap["surname"];
 
-            LocalDatabaseMethods.updateLocalUser(user_email, handle, name, surname);
+            print("NAMEEEEEEEEEEEEEEEEEEEEEEEEEEEE: $name");
+
+            await LocalDatabaseMethods.updateLocalUser(user_email, handle, name, surname);
+            await LocalDatabaseMethods.stampaTuttiICani();
           }
           if(init == "False"){
 
