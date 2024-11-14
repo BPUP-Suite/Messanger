@@ -3,7 +3,8 @@ import 'package:messanger_bpup/faces/start/Login/loginPassword.dart';
 import 'package:messanger_bpup/src/API/jsonParser.dart';
 import 'dart:async';
 
-bool handleAvailabilityValidator = false;       //controllo nel validator
+// bool handleAvailabilityValidator = false;       //controllo nel validator
+final handleAvailabilityValidator = ValueNotifier<bool>(false);
 
 class Signup extends StatelessWidget {
   const Signup({super.key, required this.emailValue});
@@ -15,12 +16,12 @@ class Signup extends StatelessWidget {
     return Scaffold(
       backgroundColor: Color(0xff354966),
       appBar: AppBar(
-        title: Text(
-          "Signup",
-          style: TextStyle(color: Colors.white),
-        ),
+        // title: Text(
+        //   "Signup",
+        //   style: TextStyle(color: Colors.white),
+        // ),
         centerTitle: true,
-        backgroundColor: Color(0xff202c3e),
+        backgroundColor: Color(0xff354966),
         iconTheme: IconThemeData(color: Colors.white),
       ),
       body: Container(
@@ -153,61 +154,130 @@ class _SignupFormState extends State<SignupForm> {
                 return null;
               },
             ),
-            TextFormField(
-                cursorColor: Colors.white,
-                style: TextStyle(color: Colors.white),
-                decoration: InputDecoration(
-                  labelText: 'Handle',
-                  labelStyle: TextStyle(color: Colors.white),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white),
-                  ),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white),
-                  ),
-                ),
 
-              //Quando il testo non viene modificato per 3 secondi fa una chiamata API
-              //per capire se l'handle è già in uso oppure no.
-              onChanged: (text) {
-                if (_handleAvailabilityTimer?.isActive ?? false)
-                  _handleAvailabilityTimer!.cancel();
-                _handleAvailabilityTimer =
-                    Timer(const Duration(milliseconds: 3000), () {
-                      checkHandleAvailability(text);
-                });
-              },
-              validator: (value) {
-                  if(!handleAvailabilityValidator) {
-                    print(handleAvailabilityValidator);
-                    return 'Handle già in uso';
-                  }
-                  if (value == null || value.isEmpty) {
-                    return 'Per favore inserisci il tuo handle';
-                  }
-                  handleValue = value;
-                  return null;
-                },
 
-                ),
+
+            ValueListenableBuilder(
+                valueListenable: handleAvailabilityValidator,
+                builder: (context, handleAvailability, _) {
+                  return TextFormField(
+                    cursorColor: Colors.white,
+                    style: TextStyle(color: Colors.white),
+                    decoration: InputDecoration(
+                      labelText: 'Handle',
+                      labelStyle: TextStyle(color: Colors.white),
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                      ),
+                    ),
+
+                    //Quando il testo non viene modificato per 3 secondi fa una chiamata API
+                    //per capire se l'handle è già in uso oppure no.
+                    onChanged: (text) {
+                      handleAvailabilityValidator.value = false;
+                      if (_handleAvailabilityTimer?.isActive ?? false)
+                        _handleAvailabilityTimer!.cancel();
+                      _handleAvailabilityTimer =
+                          Timer(const Duration(milliseconds: 3000), () {
+                            checkHandleAvailability(text);
+                          });
+                    },
+
+
+                    validator: (value) {
+                      if(!handleAvailability) {
+                        return 'Handle già in uso';
+                      }
+                      if (value == null || value.isEmpty) {
+                        return 'Per favore inserisci il tuo handle';
+                      }
+                      handleValue = value;
+                      return null;
+                    },
+                  );
+                }
+            ),
+
+
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(vertical: 16.0),
+            //   child: ElevatedButton(
+            //     onPressed: () {
+            //       if (_formKey.currentState!.validate()) {
+            //         SignupAndNavigate(
+            //           context,
+            //           widget.emailValue,
+            //           // Usiamo widget.emailValue poiché è definito nel StatefulWidget
+            //           nameValue,
+            //           surnameValue,
+            //           handleValue,
+            //           passwordValue,
+            //           confirm_passwordValue,
+            //         );
+            //       }
+            //     },
+            //     style: ElevatedButton.styleFrom(
+            //       backgroundColor: Colors.lightBlue,
+            //       shape: RoundedRectangleBorder(
+            //         borderRadius: BorderRadius.circular(100),
+            //       ),
+            //
+            //     ),
+            //     // child: Icon(Icons.check, color: Colors.white,),
+            //     child: Text(
+            //       "Invia",
+            //       style: TextStyle(
+            //         color: Colors.white,
+            //       ),
+            //     ),
+            //   ),
+            // ),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    SignupAndNavigate(
-                      context,
-                      widget.emailValue,
-                      // Usiamo widget.emailValue poiché è definito nel StatefulWidget
-                      nameValue,
-                      surnameValue,
-                      handleValue,
-                      passwordValue,
-                      confirm_passwordValue,
+              padding: const EdgeInsets.all(16.0),
+              child: ValueListenableBuilder(
+                  valueListenable: handleAvailabilityValidator,
+                  builder: (context, handleAvailability, _){
+                    return AbsorbPointer(
+                      absorbing: !handleAvailability,
+                      child: TextButton(
+                        onPressed: () {},
+                        child: ElevatedButton(
+                          onPressed: () {
+                            print("formmmmmmmmmmmm");
+                            if (_formKey.currentState!.validate()) {
+                              SignupAndNavigate(
+                                context,
+                                widget.emailValue,
+                                // Usiamo widget.emailValue poiché è definito nel StatefulWidget
+                                nameValue,
+                                surnameValue,
+                                handleValue,
+                                passwordValue,
+                                confirm_passwordValue,
+                              );
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: handleAvailability ? Colors.lightBlue : Colors.grey,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(100),
+                            ),
+
+                          ),
+                          // child: Icon(Icons.check, color: Colors.white,),
+                          child: Text(
+                            "Invia",
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
                     );
                   }
-                },
-                child: Text('Invia'),
               ),
             ),
           ],
@@ -217,159 +287,9 @@ class _SignupFormState extends State<SignupForm> {
   }
 }
 
-// class SignupForm extends StatelessWidget {
-//   late String emailValue;
-//   SignupForm(String emailValue){
-//     this.emailValue=emailValue;
-//   }
-//
-//   final _formKey = GlobalKey<FormState>();
-//
-//
-//   late String passwordValue;
-//   late String confirm_passwordValue;
-//   late String nameValue;
-//   late String surnameValue;
-//   late String handleValue;
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Form(
-//       key: _formKey,
-//       child: Container(
-//         width: 250,
-//         child: Column(
-//           children: <Widget>[
-//             TextFormField(
-//               cursorColor: Colors.white,
-//               style: TextStyle(color: Colors.white),
-//               decoration: InputDecoration(
-//                 labelText: 'Password',
-//
-//                 labelStyle: TextStyle(color: Colors.white),
-//                 enabledBorder: UnderlineInputBorder(
-//                   borderSide: BorderSide(color: Colors.white),
-//                 ),
-//                 focusedBorder: UnderlineInputBorder(
-//                   borderSide: BorderSide(color: Colors.white),
-//                 ),
-//               ),
-//               validator: (value) {
-//                 if (value == null || value.isEmpty) {
-//                   return 'Per favore inserisci la tua password';
-//                 }
-//                 passwordValue = value;
-//                 return null;
-//               },
-//             ),
-//             TextFormField(
-//               cursorColor: Colors.white,
-//               style: TextStyle(color: Colors.white),
-//               decoration: InputDecoration(
-//                 labelText: 'Conferma Password',
-//
-//                 labelStyle: TextStyle(color: Colors.white),
-//                 enabledBorder: UnderlineInputBorder(
-//                   borderSide: BorderSide(color: Colors.white),
-//                 ),
-//                 focusedBorder: UnderlineInputBorder(
-//                   borderSide: BorderSide(color: Colors.white),
-//                 ),
-//               ),
-//               validator: (value) {
-//                 if (value == null || value.isEmpty) {
-//                   return 'Per favore ripeti la tua password';
-//                 }
-//                 confirm_passwordValue = value;
-//                 return null;
-//               },
-//             ),
-//             TextFormField(
-//               cursorColor: Colors.white,
-//               style: TextStyle(color: Colors.white),
-//               decoration: InputDecoration(
-//                 labelText: 'Nome',
-//
-//                 labelStyle: TextStyle(color: Colors.white),
-//                 enabledBorder: UnderlineInputBorder(
-//                   borderSide: BorderSide(color: Colors.white),
-//                 ),
-//                 focusedBorder: UnderlineInputBorder(
-//                   borderSide: BorderSide(color: Colors.white),
-//                 ),
-//               ),
-//               validator: (value) {
-//                 if (value == null || value.isEmpty) {
-//                   return 'Per favore inserisci il tuo nome';
-//                 }
-//                 nameValue = value;
-//                 return null;
-//               },
-//             ),
-//             TextFormField(
-//               cursorColor: Colors.white,
-//               style: TextStyle(color: Colors.white),
-//               decoration: InputDecoration(
-//                 labelText: 'Cognome',
-//
-//                 labelStyle: TextStyle(color: Colors.white),
-//                 enabledBorder: UnderlineInputBorder(
-//                   borderSide: BorderSide(color: Colors.white),
-//                 ),
-//                 focusedBorder: UnderlineInputBorder(
-//                   borderSide: BorderSide(color: Colors.white),
-//                 ),
-//               ),
-//               validator: (value) {
-//                 if (value == null || value.isEmpty) {
-//                   return 'Per favore inserisci il tuo cognome';
-//                 }
-//                 surnameValue = value;
-//                 return null;
-//               },
-//             ),
-//             TextFormField(
-//               cursorColor: Colors.white,
-//               style: TextStyle(color: Colors.white),
-//               decoration: InputDecoration(
-//                 labelText: 'Handle',
-//
-//                 labelStyle: TextStyle(color: Colors.white),
-//                 enabledBorder: UnderlineInputBorder(
-//                   borderSide: BorderSide(color: Colors.white),
-//                 ),
-//                 focusedBorder: UnderlineInputBorder(
-//                   borderSide: BorderSide(color: Colors.white),
-//                 ),
-//               ),
-//               validator: (value) {
-//                 if (value == null || value.isEmpty) {
-//                   return 'Per favore inserisci il tuo handle';
-//                 }
-//                 handleValue = value;
-//                 return null;
-//               },
-//               onChanged: (text) {
-//                 print("-------------------------------------------------testo cambiato in: $text");
-//               },
-//             ),
-//             Padding(
-//               padding: const EdgeInsets.symmetric(vertical: 16.0),
-//               child: ElevatedButton(
-//                 onPressed: () {
-//                   if (_formKey.currentState!.validate()) {
-//                     SignupAndNavigate(context, emailValue, nameValue, surnameValue, handleValue, passwordValue, confirm_passwordValue);
-//                   }
-//                 },
-//                 child: Text('Invia'),
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
+
+
+
 
 void SignupAndNavigate(
     BuildContext context,
@@ -401,13 +321,11 @@ void SignupAndNavigate(
 void checkHandleAvailability(String handle) async {
   bool handleAvailability = await JsonParser.handleAvailability(handle);
 
-  // print(handleAvailability == true);
-
   if (handleAvailability) {
-    print(handleAvailability);
-    handleAvailabilityValidator = true;
+    handleAvailabilityValidator.value = true;
+    print("Disponibilità handle nella funzione: $handleAvailability");
   }else {
-    print(handleAvailability);
-    handleAvailabilityValidator = false;
+    handleAvailabilityValidator.value = false;
+    print("Disponibilità handle nella funzione: $handleAvailability");
   }
 }

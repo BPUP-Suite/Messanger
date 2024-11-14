@@ -67,7 +67,16 @@ class WebSocketMethods {
               HashMap<String, dynamic> chatMap = HashMap<String, dynamic>.from(chat);
 
               print("Chat ID print: ${chatMap["chat_id"]}");
+
+              List<dynamic> messages = chatMap["messages"];
+              for(var message in messages) {
+                HashMap<String, dynamic> messageMap = HashMap<String, dynamic>.from(message);
+
+                print("Messaggio: ${messageMap["message_id"]}");
+              }
             }
+
+
 
             await LocalDatabaseMethods.updateLocalUser(user_email, handle, name, surname);
             await LocalDatabaseMethods.stampaTuttiICani();
