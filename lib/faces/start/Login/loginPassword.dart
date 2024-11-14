@@ -128,14 +128,13 @@ void LoginAndNavigate(
     LocalDatabaseMethods.databaseOpen();
     LocalDatabaseMethods.insertLocalUser(localUserID, apiKey);
     WebSocketMethods().openWebSocketConnection(localUserID, apiKey);
-
     WebSocketMethods().WebSocketSenderMessage('{"type":"init","apiKey":"$apiKey"}');
     await WebSocketMethods().WebSocketReceiver();
 
 
     //devo aspettare l'input di tutte le info di localuser
     // await LocalDatabaseMethods.stampaTuttiICani();
-    
+
 
     //chiama i metodi per salvare un valore true/false se utente è loggato
     _loadLoggedIn();

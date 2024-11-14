@@ -22,7 +22,7 @@ class WebSocketMethods {
     webSocketChannel = WebSocketChannel.connect(
       Uri.parse('$webSocketAddress/$localUserID/$apiKey'),
     );
-    
+
     // final WebSocketChannel web2 = await WebSocketChannel.connect(Uri.parse('wss://api.messanger.bpup.israiken.it/ws/$localUserID/$apiKey'));
     print("Connessione aperta (speriamo)");
   }
@@ -61,7 +61,13 @@ class WebSocketMethods {
             String name = localUserMap["name"];
             String surname = localUserMap["surname"];
 
-            print("NAMEEEEEEEEEEEEEEEEEEEEEEEEEEEE: $name");
+            //INSERIMENTO CHATS
+            List<dynamic> chats = hashData["chats"];
+            for (var chat in chats) {
+              HashMap<String, dynamic> chatMap = HashMap<String, dynamic>.from(chat);
+
+              print("Chat ID: ${chatMap["chat_id"]}");
+            }
 
             await LocalDatabaseMethods.updateLocalUser(user_email, handle, name, surname);
             await LocalDatabaseMethods.stampaTuttiICani();
