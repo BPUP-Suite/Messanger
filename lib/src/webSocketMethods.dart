@@ -66,7 +66,7 @@ class WebSocketMethods {
             for (var chat in chats) {
               HashMap<String, dynamic> chatMap = HashMap<String, dynamic>.from(chat);
 
-              print("Chat ID: ${chatMap["chat_id"]}");
+              print("Chat ID print: ${chatMap["chat_id"]}");
             }
 
             await LocalDatabaseMethods.updateLocalUser(user_email, handle, name, surname);
