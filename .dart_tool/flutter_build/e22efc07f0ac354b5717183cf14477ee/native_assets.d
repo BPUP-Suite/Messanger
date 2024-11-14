@@ -1,0 +1,1 @@
+ C:\\Users\\matt3\\StudioProjects\\Messanger\\.dart_tool\\flutter_build\\e22efc07f0ac354b5717183cf14477ee\\native_assets.yaml: 
