@@ -8,7 +8,7 @@ class LocalDatabaseMethods {
       join(await getDatabasesPath(), 'localDatabase.db'),
       onCreate: (db, version) {
         db.execute(
-          '''
+          '''          
           CREATE TABLE localUser(
             user_id TEXT,
             apiKey TEXT PRIMARY KEY,  
@@ -17,17 +17,29 @@ class LocalDatabaseMethods {
             name TEXT, 
             surname TEXT
           );
-          
-          CREATE TABLE users(
-            user_id TEXT PRIMARY KEY;
-            handle TEXT;
-          );
-          
+          ''',
+        );
+
+        db.execute(
+          '''
           CREATE TABLE chats(
             chat_id TEXT PRIMARY KEY,
-            group_channel_name TEXT NULL,
+            group_channel_name TEXT NULL
           );
-          
+          '''
+        );
+
+        db.execute(
+          '''
+          CREATE TABLE users(
+            user_id TEXT PRIMARY KEY,
+            handle TEXT
+          );
+          '''
+        );
+
+        db.execute(
+          '''
           CREATE TABLE messages (
             message_id TEXT PRIMARY KEY,
             chat_id TEXT REFERENCES chats(chat_id),
@@ -35,7 +47,11 @@ class LocalDatabaseMethods {
             text TEXT,
             date_time DATETIME
           );
-          
+          '''
+        );
+
+        db.execute(
+          '''
           CREATE TABLE chat_users(
             chat_id TEXT,
             user_id TEXT,
@@ -43,7 +59,7 @@ class LocalDatabaseMethods {
             FOREIGN KEY (chat_id) REFERENCES chats(chat_id),
             FOREIGN KEY (user_id) REFERENCES users(user_id)
           );
-          ''',
+          '''
         );
       },
       version: 1,
@@ -69,11 +85,17 @@ class LocalDatabaseMethods {
     final db = await localDatabase;
 
     // Esegui una query per selezionare tutti i cani
-    final List<Map<String, dynamic>> maps = await db.query('chats');
+    final List<Map<String, dynamic>> maps = await db.query('messages');
 
     // Stampa i risultati direttamente dalle mappe
     maps.forEach((row) {
-      print('\nChat Id: ${row['chat_id']}, \nName: ${row['name']}');
+      print(
+          '\nMessage Id: ${row['message_id']},'
+          '\nChat id: ${row['chat_id']},'
+          '\nText: ${row['text']},'
+          '\nSender: ${row['sender']},'
+          '\nDatetime: ${row['date_time']},'
+      );
     });
   }
 
@@ -118,6 +140,24 @@ class LocalDatabaseMethods {
       await db.insert(
         'chats',
         {'chat_id': chat_id, 'group_channel_name': group_channel_name},
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+    }
+    catch (e) {
+      print("Errore durante l'inserimento della chat: $e");
+    }
+  }
+
+
+
+  static Future<void> insertMessage(message_id, chat_id, text, sender, date) async {
+
+    final db = await localDatabase;
+
+    try {
+      await db.insert(
+        'messages',
+        {'message_id': message_id, 'chat_id': chat_id, 'text': text, 'sender': sender, 'date_time': date},
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
     }

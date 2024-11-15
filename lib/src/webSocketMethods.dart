@@ -78,6 +78,7 @@ class WebSocketMethods {
                 HashMap<String, dynamic> messageMap = HashMap<String, dynamic>.from(message);
 
                 print("Messaggio: ${messageMap["message_id"]}");
+                LocalDatabaseMethods.insertMessage(messageMap["message_id"], messageMap["chat_id"], messageMap["text"], messageMap["sender"], messageMap["date"]);
               }
             }
 
