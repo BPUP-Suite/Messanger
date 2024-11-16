@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:messanger_bpup/faces/start/Login/loginPassword.dart';
+import 'package:messanger_bpup/faces/start/emailCheck.dart';
 import 'package:messanger_bpup/src/API/jsonParser.dart';
 import 'dart:async';
 
@@ -49,6 +49,7 @@ class SignupForm extends StatefulWidget {
 
 class _SignupFormState extends State<SignupForm> {
   final _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormFieldState> _handleTextFieldKey = GlobalKey<FormFieldState>();
 
   Timer? _handleAvailabilityTimer;
 
@@ -57,6 +58,26 @@ class _SignupFormState extends State<SignupForm> {
   late String nameValue;
   late String surnameValue;
   late String handleValue;
+
+  bool isLoading = false;
+
+  Future<bool> checkHandleAvailability(String handle) async {
+    bool handleAvailability = await JsonParser.handleAvailability(handle);
+
+    if (handleAvailability) {
+      handleAvailabilityValidator.value = true;
+      print("Disponibilità handle nella funzione: $handleAvailability");
+      return true;
+    } else {
+      handleAvailabilityValidator.value = false;
+      print("Disponibilità handle nella funzione: $handleAvailability");
+      return false;
+    }
+  }
+
+
+
+
 
 
   @override
@@ -156,11 +177,11 @@ class _SignupFormState extends State<SignupForm> {
             ),
 
 
-
-            ValueListenableBuilder(
+            ValueListenableBuilder<bool>(
                 valueListenable: handleAvailabilityValidator,
                 builder: (context, handleAvailability, _) {
                   return TextFormField(
+                    key: _handleTextFieldKey,
                     cursorColor: Colors.white,
                     style: TextStyle(color: Colors.white),
                     decoration: InputDecoration(
@@ -176,31 +197,50 @@ class _SignupFormState extends State<SignupForm> {
 
                     //Quando il testo non viene modificato per 3 secondi fa una chiamata API
                     //per capire se l'handle è già in uso oppure no.
-                    onChanged: (text) {
+                    onChanged: (text) async {
+
+
                       handleAvailabilityValidator.value = false;
+
+                      setState(() => isLoading = true);
                       if (_handleAvailabilityTimer?.isActive ?? false)
                         _handleAvailabilityTimer!.cancel();
+
+                      //aspetta 3 secondi dopo che non ci sono modifiche al text field
+                      // e poi manda una richiesta di check disponibilità handle
                       _handleAvailabilityTimer =
-                          Timer(const Duration(milliseconds: 3000), () {
-                            checkHandleAvailability(text);
+                          Timer(const Duration(milliseconds: 3000), () async {
+                            final checkHandleInsideTimer = await checkHandleAvailability(text);
+                            handleAvailabilityValidator.value = checkHandleInsideTimer;
+
+                            setState(() => isLoading = false);
+
+                            if(!checkHandleInsideTimer) {
+                              _handleTextFieldKey.currentState?.validate();
+                            }
                           });
                     },
 
 
+
+
                     validator: (value) {
-                      if(!handleAvailability) {
-                        return 'Handle già in uso';
-                      }
                       if (value == null || value.isEmpty) {
+                        handleAvailabilityValidator.value = false;
+                        setState(() => isLoading = false);
                         return 'Per favore inserisci il tuo handle';
                       }
+                      if (!handleAvailability) {
+                        print("VALIDATOR PROBLEMS - handle availability: $handleAvailability");
+                        return 'Handle già in uso';
+                      }
+
                       handleValue = value;
                       return null;
                     },
                   );
                 }
             ),
-
 
             // Padding(
             //   padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -239,46 +279,55 @@ class _SignupFormState extends State<SignupForm> {
               padding: const EdgeInsets.all(16.0),
               child: ValueListenableBuilder(
                   valueListenable: handleAvailabilityValidator,
-                  builder: (context, handleAvailability, _){
+                  builder: (context, handleAvailability, _) {
                     return AbsorbPointer(
                       absorbing: !handleAvailability,
-                      child: TextButton(
-                        onPressed: () {},
-                        child: ElevatedButton(
-                          onPressed: () {
-                            print("formmmmmmmmmmmm");
-                            if (_formKey.currentState!.validate()) {
-                              SignupAndNavigate(
-                                context,
-                                widget.emailValue,
-                                // Usiamo widget.emailValue poiché è definito nel StatefulWidget
-                                nameValue,
-                                surnameValue,
-                                handleValue,
-                                passwordValue,
-                                confirm_passwordValue,
-                              );
-                            }
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: handleAvailability ? Colors.lightBlue : Colors.grey,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(100),
-                            ),
-
-                          ),
-                          // child: Icon(Icons.check, color: Colors.white,),
-                          child: Text(
-                            "Invia",
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            SignupAndNavigate(
+                              context,
+                              widget.emailValue,
+                              // Usiamo widget.emailValue poiché è definito nel StatefulWidget
+                              nameValue,
+                              surnameValue,
+                              handleValue,
+                              passwordValue,
+                              confirm_passwordValue,
+                            );
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: handleAvailability
+                              ? Colors.lightBlue
+                              : Colors.grey,
+                          shape: isLoading
+                              ? CircleBorder()
+                              : RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
                         ),
+                        // child: Text(
+                        //   "Invia",
+                        //   style: TextStyle(
+                        //     color: Colors.white,
+                        //   ),
+                        // ),
+                        child: isLoading
+                            ? SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                          ),
+                        )
+                            : Text(
+                                "Invia",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
                       ),
                     );
-                  }
-              ),
+                  }),
             ),
           ],
         ),
@@ -286,10 +335,6 @@ class _SignupFormState extends State<SignupForm> {
     );
   }
 }
-
-
-
-
 
 void SignupAndNavigate(
     BuildContext context,
@@ -308,7 +353,7 @@ void SignupAndNavigate(
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => LoginPassword(emailValue: emailValue),
+        builder: (context) => EmailCheck(),
       ),
     );
   } else {
@@ -317,15 +362,3 @@ void SignupAndNavigate(
 }
 
 
-
-void checkHandleAvailability(String handle) async {
-  bool handleAvailability = await JsonParser.handleAvailability(handle);
-
-  if (handleAvailability) {
-    handleAvailabilityValidator.value = true;
-    print("Disponibilità handle nella funzione: $handleAvailability");
-  }else {
-    handleAvailabilityValidator.value = false;
-    print("Disponibilità handle nella funzione: $handleAvailability");
-  }
-}

@@ -32,4 +32,6 @@ com.bpup.messanger.messanger_bpup.app-packageDebugResources-30 C:\Users\matt3\St
 com.bpup.messanger.messanger_bpup.app-merged_res-31 C:\Users\matt3\StudioProjects\Messanger\build\app\intermediates\merged_res\debug
 com.bpup.messanger.messanger_bpup.app-packaged_res-32 C:\Users\matt3\StudioProjects\Messanger\build\flutter_plugin_android_lifecycle\intermediates\packaged_res\debug
 com.bpup.messanger.messanger_bpup.app-packaged_res-33 C:\Users\matt3\StudioProjects\Messanger\build\local_auth_android\intermediates\packaged_res\debug
-com.bpup.messanger.messanger_bpup.app-packaged_res-34 C:\Users\matt3\StudioProjects\Messanger\build\shared_preferences_android\intermediates\packaged_res\debug
+com.bpup.messanger.messanger_bpup.app-packaged_res-34 C:\Users\matt3\StudioProjects\Messanger\build\path_provider_android\intermediates\packaged_res\debug
+com.bpup.messanger.messanger_bpup.app-packaged_res-35 C:\Users\matt3\StudioProjects\Messanger\build\shared_preferences_android\intermediates\packaged_res\debug
+com.bpup.messanger.messanger_bpup.app-packaged_res-36 C:\Users\matt3\StudioProjects\Messanger\build\sqflite_android\intermediates\packaged_res\debug
