@@ -16,7 +16,7 @@ class WebSocketMethods {
 
   // Funzione per aprire la connessione WebSocket
   //(al giorno 10/11/24 01:20 ancora da testare)
-  void openWebSocketConnection(String _localUserID, String _apiKey) {
+  openWebSocketConnection(String _localUserID, String _apiKey) {
     localUserID = _localUserID;
     apiKey = _apiKey;
     webSocketChannel = WebSocketChannel.connect(
@@ -42,7 +42,7 @@ class WebSocketMethods {
   Future<String> WebSocketReceiver() async {
     await webSocketChannel.ready;
 
-    webSocketChannel.stream.listen((data) async {
+    await webSocketChannel.stream.listen((data) async {
       // webSocketChannel.sink.add('{"init":$apiKey}');
       // _listNotifier.add(ChatMessage(message, "NonMatteo", DateTime.now()));
       HashMap hashData = JsonParser().convertJsonToDynamicStructure(data);
@@ -71,6 +71,18 @@ class WebSocketMethods {
 
               print("Chat ID print: ${chatMap["chat_id"]}");
               LocalDatabaseMethods.insertChat(chatMap["chat_id"], chatMap["name"]);
+
+              //INSERIMENTO USERS
+              List<dynamic> users = chatMap["users"];
+              for(var user in users) {
+                HashMap<String, dynamic> userMap = HashMap<String, dynamic>.from(user);
+
+                print("User: ${userMap["handle"]}");
+                LocalDatabaseMethods.insertUsers(userMap["handle"]);
+                LocalDatabaseMethods.insertChatAndUsers(chatMap["chat_id"], userMap["handle"]);
+              }
+
+
 
               //INSERIMENTO MESSAGES
               List<dynamic> messages = chatMap["messages"];

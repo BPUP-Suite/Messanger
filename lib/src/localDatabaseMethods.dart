@@ -32,8 +32,7 @@ class LocalDatabaseMethods {
         db.execute(
           '''
           CREATE TABLE users(
-            user_id TEXT PRIMARY KEY,
-            handle TEXT
+            handle TEXT PRIMARY KEY
           );
           '''
         );
@@ -41,7 +40,7 @@ class LocalDatabaseMethods {
         db.execute(
           '''
           CREATE TABLE messages (
-            message_id TEXT PRIMARY KEY,
+            message_id TEXT,
             chat_id TEXT REFERENCES chats(chat_id),
             sender TEXT,
             text TEXT,
@@ -54,10 +53,10 @@ class LocalDatabaseMethods {
           '''
           CREATE TABLE chat_users(
             chat_id TEXT,
-            user_id TEXT,
-            PRIMARY KEY (chat_id, user_id),
+            handle TEXT,
+            PRIMARY KEY (chat_id, handle),
             FOREIGN KEY (chat_id) REFERENCES chats(chat_id),
-            FOREIGN KEY (user_id) REFERENCES users(user_id)
+            FOREIGN KEY (handle) REFERENCES users(handle)
           );
           '''
         );
@@ -80,23 +79,65 @@ class LocalDatabaseMethods {
 
 
 
-
+  //Metodo provvisorio (ovviamente)
   static Future<void> stampaTuttiICani() async {
     final db = await localDatabase;
 
     // Esegui una query per selezionare tutti i cani
-    final List<Map<String, dynamic>> maps = await db.query('messages');
+    final List<Map<String, dynamic>> maps = await db.query('users');
 
     // Stampa i risultati direttamente dalle mappe
     maps.forEach((row) {
       print(
-          '\nMessage Id: ${row['message_id']},'
-          '\nChat id: ${row['chat_id']},'
-          '\nText: ${row['text']},'
-          '\nSender: ${row['sender']},'
-          '\nDatetime: ${row['date_time']},'
+          '\nChat ID: ${row['chat_id']},'
+              '\nHandle: ${row['handle']}'
       );
     });
+  }
+
+
+
+  //prende le chat dal DB per inserirle nella ChatList
+  Future<List<Map<String, dynamic>>> fetchChats() async {
+    final db = await localDatabase;
+
+    return await db.query('chats');
+  }
+
+
+
+  //estrae uno user se il group_channel_name è null, quindi lo mette come nome della chat
+  Future<List<Map<String, dynamic>>> fetchUser(chat_id) async {
+    final db = await localDatabase;
+
+    return await db.query(
+        'chat_users',
+        columns: ['handle'],
+        where: 'chat_id = ?',
+        whereArgs: ['$chat_id']
+    );
+  }
+
+
+
+  Future<List<Map<String, dynamic>>> fetchLastMessage(chat_id) async {
+    final db = await localDatabase;
+
+    // print(await db.query(
+    //   'messages',
+    //   orderBy: 'message_id DESC',
+    //   limit: 1,
+    //   where: 'chat_id = ?',
+    //   whereArgs: ['$chat_id']
+    // ));
+
+    return await db.query(
+        'messages',
+        orderBy: 'message_id DESC',
+        limit: 1,
+        where: 'chat_id = ?',
+        whereArgs: ['$chat_id']
+    );
   }
 
 
@@ -165,6 +206,49 @@ class LocalDatabaseMethods {
       print("Errore durante l'inserimento della chat: $e");
     }
   }
+
+
+
+  static Future<void> insertUsers(handle) async {
+
+    final db = await localDatabase;
+
+    try {
+      await db.insert(
+        'users',
+        {'handle': handle},
+
+        //Se trova un handle uguale lo ignora e non fa nulla
+        conflictAlgorithm: ConflictAlgorithm.ignore,
+      );
+    }
+    catch (e) {
+      print("Errore durante l'inserimento dello user: $e");
+    }
+  }
+
+
+
+  static Future<void> insertChatAndUsers(chat_id, handle) async {
+
+    final db = await localDatabase;
+
+    try {
+      await db.insert(
+        'chat_users',
+        {'chat_id': chat_id, 'handle': handle},
+
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+    }
+    catch (e) {
+      print("Errore durante l'inserimento nella tabella di mezzo chat_users: $e");
+    }
+  }
+
+
+
+
 
 
 

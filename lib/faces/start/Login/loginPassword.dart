@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:messanger_bpup/faces/chatList.dart';
 import 'package:messanger_bpup/src/API/jsonParser.dart';
@@ -39,16 +41,19 @@ class LoginPassword extends StatelessWidget {
   }
 }
 
-class LoginPasswordForm extends StatelessWidget {
-  late final String emailValue;
+class LoginPasswordForm extends StatefulWidget {
+  final String emailValue;
 
-  LoginPasswordForm(String emailValue) {
-    this.emailValue = emailValue;
-  }
+  LoginPasswordForm(this.emailValue);
 
+  @override
+  _LoginPasswordFormState createState() => _LoginPasswordFormState();
+}
+
+class _LoginPasswordFormState extends State<LoginPasswordForm> {
   final _formKey = GlobalKey<FormState>();
-
   late String passwordValue;
+  bool _isDatabaseLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -84,29 +89,47 @@ class LoginPasswordForm extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    // ScaffoldMessenger.of(context).showSnackBar(
-                    //   SnackBar(content: Text('Form valido!')),
-                    // );
+                    setState(() {
+                      _isDatabaseLoading = true;
+                    });
 
-                    LoginAndNavigate(context, emailValue, passwordValue);
+                    await databaseAndWebSocketInit(context, widget.emailValue, passwordValue);
+
+
+
+
                   }
                 },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.lightBlue,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(100),
-                  ),
+                // style: ElevatedButton.styleFrom(
+                //   backgroundColor: Colors.lightBlue,
+                //   shape: RoundedRectangleBorder(
+                //     borderRadius: BorderRadius.circular(100),
+                //   ),
+                // ),
 
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: _isDatabaseLoading ? Colors.grey : Colors.lightBlue,
+                  shape: _isDatabaseLoading
+                      ? CircleBorder()
+                      : RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
                 ),
-                // child: Icon(Icons.check, color: Colors.white,),
-                child: Text(
-                  "Invia",
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
-                ),
+
+                child: _isDatabaseLoading
+                    ? const SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                      ),
+                    )
+                    : const Text(
+                        "Invia",
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
               ),
             ),
           ],
@@ -116,45 +139,51 @@ class LoginPasswordForm extends StatelessWidget {
   }
 }
 
-void LoginAndNavigate(
+Future<void> databaseAndWebSocketInit(
     BuildContext context, String emailValue, String passwordValue) async {
-    String apiKey = await JsonParser.loginPasswordJson(emailValue, passwordValue);
-    String localUserID = await JsonParser.getUserID(apiKey);
+  String apiKey = await JsonParser.loginPasswordJson(emailValue, passwordValue);
+  String localUserID = await JsonParser.getUserID(apiKey);
+
+  print(apiKey);
+  print(localUserID);
+  bool isWebSocketCompleted = false;
 
   if (apiKey != "false") {
-
-
     //DATABASE LOCALE
-    LocalDatabaseMethods.databaseOpen();
-    LocalDatabaseMethods.insertLocalUser(localUserID, apiKey);
-    WebSocketMethods().openWebSocketConnection(localUserID, apiKey);
-    WebSocketMethods().WebSocketSenderMessage('{"type":"init","apiKey":"$apiKey"}');
-    await WebSocketMethods().WebSocketReceiver();
 
+    await LocalDatabaseMethods.databaseOpen();
+    await LocalDatabaseMethods.insertLocalUser(localUserID, apiKey);
+    await WebSocketMethods().openWebSocketConnection(localUserID, apiKey);
+    await WebSocketMethods().WebSocketSenderMessage('{"type":"init","apiKey":"$apiKey"}');
 
-    //devo aspettare l'input di tutte le info di localuser
-    // await LocalDatabaseMethods.stampaTuttiICani();
+    // Esegui la funzione WebSocketReceiver e aggiorna la variabile isWebSocketCompleted
+    WebSocketMethods().WebSocketReceiver().then((_) {
+      isWebSocketCompleted = true;
+    });
 
+    // Attendi fino a quando WebSocketReceiver non ha completato
+    while (!isWebSocketCompleted) {
+      await Future.delayed(Duration(milliseconds: 100));
+    }
 
     //chiama i metodi per salvare un valore true/false se utente è loggato
     _loadLoggedIn();
     _saveLoggedIn(true);
 
-
-
-
-
-
-    Navigator.push(
+    // Sposta il Navigator qui
+    await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ChatList(),
+        builder: (context) => const ChatList(),
       ),
     );
   } else {
     print("Password errata");
   }
 }
+
+
+
 
 //carica preferenza se utente loggato oppure no
 Future<void> _loadLoggedIn() async {
