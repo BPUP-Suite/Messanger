@@ -1,6 +1,6 @@
 -- Merging decision tree log ---
 application
-INJECTED from C:\Users\matt3\StudioProjects\Messanger\android\app\src\main\AndroidManifest.xml:5:5-36:19
+INJECTED from C:\Users\matt3\StudioProjects\Messanger\android\app\src\main\AndroidManifest.xml:6:5-37:19
 INJECTED from C:\Users\matt3\StudioProjects\Messanger\android\app\src\debug\AndroidManifest.xml
 MERGED from [androidx.window:window:1.2.0] C:\Users\matt3\.gradle\caches\transforms-3\3e108fe9d597d03770ae82acaebb5b63\transformed\jetified-window-1.2.0\AndroidManifest.xml:22:5-29:19
 MERGED from [androidx.window:window:1.2.0] C:\Users\matt3\.gradle\caches\transforms-3\3e108fe9d597d03770ae82acaebb5b63\transformed\jetified-window-1.2.0\AndroidManifest.xml:22:5-29:19
@@ -21,8 +21,8 @@ MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\ma
 	android:name
 		INJECTED from C:\Users\matt3\StudioProjects\Messanger\android\app\src\main\AndroidManifest.xml
 manifest
-ADDED from C:\Users\matt3\StudioProjects\Messanger\android\app\src\main\AndroidManifest.xml:1:1-48:12
-MERGED from C:\Users\matt3\StudioProjects\Messanger\android\app\src\main\AndroidManifest.xml:1:1-48:12
+ADDED from C:\Users\matt3\StudioProjects\Messanger\android\app\src\main\AndroidManifest.xml:1:1-49:12
+MERGED from C:\Users\matt3\StudioProjects\Messanger\android\app\src\main\AndroidManifest.xml:1:1-49:12
 INJECTED from C:\Users\matt3\StudioProjects\Messanger\android\app\src\debug\AndroidManifest.xml:1:1-7:12
 INJECTED from C:\Users\matt3\StudioProjects\Messanger\android\app\src\debug\AndroidManifest.xml:1:1-7:12
 INJECTED from C:\Users\matt3\StudioProjects\Messanger\android\app\src\debug\AndroidManifest.xml:1:1-7:12
@@ -81,22 +81,24 @@ MERGED from [androidx.biometric:biometric:1.1.0] C:\Users\matt3\.gradle\caches\t
 MERGED from [androidx.biometric:biometric:1.1.0] C:\Users\matt3\.gradle\caches\transforms-3\b66ac9c1b3a5764f3905bfae9ea1d9e3\transformed\biometric-1.1.0\AndroidManifest.xml:24:5-72
 	android:name
 		ADDED from C:\Users\matt3\StudioProjects\Messanger\android\app\src\main\AndroidManifest.xml:3:22-69
-queries
-ADDED from C:\Users\matt3\StudioProjects\Messanger\android\app\src\main\AndroidManifest.xml:42:5-47:15
-intent#action:name:android.intent.action.PROCESS_TEXT+data:mimeType:text/plain
-ADDED from C:\Users\matt3\StudioProjects\Messanger\android\app\src\main\AndroidManifest.xml:43:9-46:18
-action#android.intent.action.PROCESS_TEXT
-ADDED from C:\Users\matt3\StudioProjects\Messanger\android\app\src\main\AndroidManifest.xml:44:13-72
-	android:name
-		ADDED from C:\Users\matt3\StudioProjects\Messanger\android\app\src\main\AndroidManifest.xml:44:21-70
-data
-ADDED from C:\Users\matt3\StudioProjects\Messanger\android\app\src\main\AndroidManifest.xml:45:13-50
-	android:mimeType
-		ADDED from C:\Users\matt3\StudioProjects\Messanger\android\app\src\main\AndroidManifest.xml:45:19-48
 uses-permission#android.permission.INTERNET
-ADDED from C:\Users\matt3\StudioProjects\Messanger\android\app\src\debug\AndroidManifest.xml:6:5-66
+ADDED from C:\Users\matt3\StudioProjects\Messanger\android\app\src\main\AndroidManifest.xml:4:5-66
+MERGED from C:\Users\matt3\StudioProjects\Messanger\android\app\src\main\AndroidManifest.xml:4:5-66
+MERGED from C:\Users\matt3\StudioProjects\Messanger\android\app\src\main\AndroidManifest.xml:4:5-66
 	android:name
-		ADDED from C:\Users\matt3\StudioProjects\Messanger\android\app\src\debug\AndroidManifest.xml:6:22-64
+		ADDED from C:\Users\matt3\StudioProjects\Messanger\android\app\src\main\AndroidManifest.xml:4:22-64
+queries
+ADDED from C:\Users\matt3\StudioProjects\Messanger\android\app\src\main\AndroidManifest.xml:43:5-48:15
+intent#action:name:android.intent.action.PROCESS_TEXT+data:mimeType:text/plain
+ADDED from C:\Users\matt3\StudioProjects\Messanger\android\app\src\main\AndroidManifest.xml:44:9-47:18
+action#android.intent.action.PROCESS_TEXT
+ADDED from C:\Users\matt3\StudioProjects\Messanger\android\app\src\main\AndroidManifest.xml:45:13-72
+	android:name
+		ADDED from C:\Users\matt3\StudioProjects\Messanger\android\app\src\main\AndroidManifest.xml:45:21-70
+data
+ADDED from C:\Users\matt3\StudioProjects\Messanger\android\app\src\main\AndroidManifest.xml:46:13-50
+	android:mimeType
+		ADDED from C:\Users\matt3\StudioProjects\Messanger\android\app\src\main\AndroidManifest.xml:46:19-48
 uses-sdk
 INJECTED from C:\Users\matt3\StudioProjects\Messanger\android\app\src\debug\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from C:\Users\matt3\StudioProjects\Messanger\android\app\src\debug\AndroidManifest.xml

@@ -93,7 +93,6 @@ class EmailCheckForm extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(100),
                   ),
-
                 ),
                 // child: Icon(Icons.check, color: Colors.white,),
                 child: Text(

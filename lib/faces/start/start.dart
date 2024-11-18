@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:messanger_bpup/faces/chatList.dart';
-import 'package:messanger_bpup/faces/chats/chatPanel.dart';
 import 'package:messanger_bpup/faces/start/emailCheck.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,7 +10,7 @@ late bool _isLoggedIn = false;
 
 
 
-//DA OTTIMIZZARE CORRETTAMENTE MA COME È ORA FUNZIONA (?)
+//DA OTTIMIZZARE CORRETTAMENTE MA COME È ORA FUNZIONA
 //SE UTENTE LOGGATO ALLORA MANDA A CHATLIST, ALTRIMENTI NON DOVREBBE FARE UNA SEGA
 Future<bool> isLoggedInSkip(context) async{
 
@@ -39,77 +38,62 @@ class Start extends StatelessWidget {
 
 
 
-
   @override
   Widget build(BuildContext context) {
-
-
-
     return Scaffold(
       backgroundColor: Color(0xff354966),
       appBar: AppBar(
-        title: Text(
-          "Start",
-          style: TextStyle(color: Colors.white),
-        ),
+        // title: Text(
+        //   "Start",
+        //   style: TextStyle(color: Colors.white),
+        // ),
         centerTitle: true,
-        backgroundColor: Color(0xff202c3e),
-        iconTheme: IconThemeData(color: Colors.white),
+        backgroundColor: Color(0xff354966),
+        // iconTheme: IconThemeData(color: Colors.white),
       ),
       body: Center(
-        child: Column(
-          children: [
-            BiometricsAppOpening(),
-            ElevatedButton(
-              child: Text(
-                "Email",
-                style: TextStyle(fontSize: 30),
+        child: Container(
+          margin: EdgeInsets.only(top: 100),
+          child: Column(
+            // mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              BiometricsAppOpening(),
+              Container(
+                margin: EdgeInsets.all(30),
+                child: CircleAvatar(
+                  radius: 100,
+                  backgroundImage: NetworkImage('https://picsum.photos/200'),
+                ),
               ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => EmailCheck(),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.lightBlue,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(100),
                   ),
-                );
-              },
-            ),
-            ElevatedButton(
-              child: Text(
-                "Chat List",
-                style: TextStyle(fontSize: 30),
-              ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ChatList(),
-                  ),
-                );
-              },
-            ),
-            ElevatedButton(
-              child: Text(
-                "Chat",
-                style: TextStyle(fontSize: 30),
-              ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ChatPanel(
-                      chatID: null,
+                ),
+                child: Text(
+                  "Inizia",
+                  style: TextStyle(fontSize: 20, color: Colors.white),
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => EmailCheck(),
                     ),
-                  ),
-                );
-              },
-            ),
-          ],
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 }
+
+
 
 //Biometrics
 class BiometricsAppOpening extends StatefulWidget {

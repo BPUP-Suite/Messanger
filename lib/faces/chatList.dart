@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:messanger_bpup/faces/Settings/profile.dart';
 import 'package:messanger_bpup/faces/Settings/settings.dart';
+import 'package:messanger_bpup/faces/chats/chatPanel.dart';
 import 'package:messanger_bpup/faces/start/start.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:messanger_bpup/src/localDatabaseMethods.dart';
@@ -206,7 +207,14 @@ class _ChatScreenState extends State<ChatScreen> {
                         return Column(
                           children: [
                             GestureDetector(
-                              onTap: () {},
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ChatPanel(chatID: chat['chat_id']),
+                                  ),
+                                );
+                              },
                               child: ListTile(
                                   leading: ExcludeSemantics(
                                     child: CircleAvatar(

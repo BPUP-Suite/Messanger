@@ -1,54 +1,47 @@
 import 'package:flutter/material.dart';
-import 'package:messanger_bpup/src/obj/chat.dart';
-import 'package:messanger_bpup/src/obj/chatMessage.dart';
 import '../../src/obj/localDatabaseAccess.dart';
 
-final List<ChatMessage> chatMessages = [];
+
 
 class ChatPanel extends StatelessWidget {
   ChatPanel({super.key, required this.chatID});
 
   final chatID;
-  late final chatMessages = LocalDatabaseAccess.database.chats
-      .where((e) => e.chatID == chatID)
-      .elementAt(0)
-      .messages;
+
 
   @override
   Widget build(BuildContext context) {
-    Chat chatObject = LocalDatabaseAccess.database.chats
-        .where((e) => e.chatID == chatID)
-        .elementAt(0);
     return Scaffold(
         backgroundColor: Color(0xff354966),
         appBar: AppBar(
           backgroundColor: Color(0xff202c3e),
           iconTheme: IconThemeData(color: Colors.white),
           //barra superiore
-          title: Row(
-            children: [
-              CircleAvatar(
-                backgroundImage: NetworkImage(
-                    'https://picsum.photos/200'), // Sostituisci con il percorso della tua immagine
-              ),
-              SizedBox(width: 15), // Spazio tra l'avatar e il testo
-              Builder(builder: (context) {
-                if (chatObject.groupChannelName == null) {
-                  return Text(
-                    chatObject.usersHandle[1],
-                    style: TextStyle(color: Colors.white),
-                  );
-                } else {
-                  return Text(
-                    chatObject.groupChannelName.toString(),
-                    style: TextStyle(color: Colors.white),
-                  );
-                }
-              }),
-              Spacer(),
-              Icon(Icons.more_vert_rounded),
-            ],
-          ),
+          // title: Row(
+          //   children: [
+          //     CircleAvatar(
+          //       backgroundImage: NetworkImage(
+          //           'https://picsum.photos/200'), // Sostituisci con il percorso della tua immagine
+          //     ),
+          //     SizedBox(width: 15), // Spazio tra l'avatar e il testo
+          //     Builder(builder: (context) {
+          //       if (chatObject.groupChannelName == null) {
+          //         return Text(
+          //           chatObject.usersHandle[1],
+          //           style: TextStyle(color: Colors.white),
+          //         );
+          //       } else {
+          //         return Text(
+          //           chatObject.groupChannelName.toString(),
+          //           style: TextStyle(color: Colors.white),
+          //         );
+          //       }
+          //     }
+          //     ),
+          //     Spacer(),
+          //     Icon(Icons.more_vert_rounded),
+          //   ],
+          // ),
         ),
 
         //body
@@ -74,13 +67,6 @@ class MsgListView extends StatelessWidget {
 
   final chatID;
 
-  late final chatMessages = LocalDatabaseAccess.database.chats
-      .where((e) => e.chatID == chatID)
-      .elementAt(0)
-      .messages;
-
-  late final _messages = chatMessages.toList();
-
   @override
   Widget build(BuildContext context) {
     // WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -91,11 +77,13 @@ class MsgListView extends StatelessWidget {
       child: Column(children: <Widget>[
         Container(
           child: Expanded(
-              child: ListView.builder(
-                  itemCount: _messages.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return buildMessage(index, _messages, context, chatID);
-                  })),
+              // child: ListView.builder(
+              //     itemCount: _messages.length,
+              //     itemBuilder: (BuildContext context, int index) {
+              //       return buildMessage(index, _messages, context, chatID);
+              //     })
+            child: Text("widget"),
+          ),
         )
       ]),
     );
