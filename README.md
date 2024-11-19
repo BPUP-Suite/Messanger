@@ -4,9 +4,16 @@ App di messagistica in tempo reale sviluppato con tools come Flutter e Android S
 
 Supporta Android, iOS, Windows, MacOS, Linux ed è utilizzabile anche sul web. (IN TEORIA, stiamo ancora lavorando a quella per android, QUINDI CALMA)
 
-Server hostato su docker in questa REPO (Metti il link alla repo che io non ho voglia :D)
+Server hostato su docker in questa [REPO](https://github.com/BPUP-Suite/Messanger_API)
 
-Timeline:
+# INDICE
+
+ - [Timeline](#Timeline)
+ - Abbiamo solo queste per ora,non rompere :/
+
+# Timeline:
+
+Attenzione, non è una timeline seria, quella seria seria, è in un project dell'organizzazione insieme alla roadmap [PUBBLICA](https://github.com/orgs/BPUP-Suite/projects/4) (ovviamente molto più sintetica, qua ci aggiungo qualsiasi piccola cosa insieme ad altre stupidate)
 
 25/09/2024
 
