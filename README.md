@@ -98,13 +98,13 @@ Timeline:
  
   Ah giusto, fantastico sc btw
 
-  19/11/2024
+19/11/2024
 
-  - Me sa che da adesso in poi l'aggiornamento a sta timeline sarà settimanale (anche perchè mi ritrovo sempre il martedì ad aggiornarla)
-  - IO {SOD} non sto più lavorando da qualche giorno, ho un esamettino stupido di Analisi e mi voglio concentrare su quello
-  - Nelle giornate precedenti però ho continuato a fare mini bug fix e ottimizzazioni del codice qua e là e iniziato a predisporre nuovi metodi per poi sistemare definitivamente il send e receive dei messaggi (e speriamo, riuscir a far un video dove comunichiamo tra di noi da APK)
-  - {MM} nel frattempo fa robe strane grafiche di cui non conosco le origini:
-    1) pallini che girano per il caricamento
-    2) animazioni per il validator (che adesso funziona e controlla effettivamente i valori)
-    3) restyle delle chat list (con tutti i valori che necessitano [nome_chat,immagine,ultimo msg,data ultimo msg e messaggi non letti])
-  - Infine sistemata TEMPORANEAMENTE (anche se sappiano tutti sarà semi permanente) delle websocket per ottenere tutti i dati INIZIALI (ancora il send_message, l'ack e in generale l'update del database locale non esistono)
+ - Me sa che da adesso in poi l'aggiornamento a sta timeline sarà settimanale (anche perchè mi ritrovo sempre il martedì ad aggiornarla)
+ - IO {SOD} non sto più lavorando da qualche giorno, ho un esamettino stupido di Analisi e mi voglio concentrare su quello
+ - Nelle giornate precedenti però ho continuato a fare mini bug fix e ottimizzazioni del codice qua e là e iniziato a predisporre nuovi metodi per poi sistemare definitivamente il send e receive dei messaggi (e speriamo, riuscir a far un video dove comunichiamo tra di noi da APK)
+ - {MM} nel frattempo fa robe strane grafiche di cui non conosco le origini:
+   1) pallini che girano per il caricamento
+   2) animazioni per il validator (che adesso funziona e controlla effettivamente i valori)
+   3) restyle delle chat list (con tutti i valori che necessitano [nome_chat,immagine,ultimo msg,data ultimo msg e messaggi non letti])
+ - Infine sistemata TEMPORANEAMENTE (anche se sappiano tutti sarà semi permanente) delle websocket per ottenere tutti i dati INIZIALI (ancora il send_message, l'ack e in generale l'update del database locale non esistono)
