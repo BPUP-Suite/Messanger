@@ -14,8 +14,8 @@ class WebSocketMethods {
 
   static late WebSocketChannel webSocketChannel;
 
-  // Funzione per aprire la connessione WebSocket
-  //(al giorno 10/11/24 01:20 ancora da testare)
+
+
   openWebSocketConnection(String _localUserID, String _apiKey) {
     localUserID = _localUserID;
     apiKey = _apiKey;
@@ -34,7 +34,6 @@ class WebSocketMethods {
     webSocketChannel.sink.add(message);
 
   }
-
 
 
 
@@ -69,7 +68,10 @@ class WebSocketMethods {
             for (var chat in chats) {
               HashMap<String, dynamic> chatMap = HashMap<String, dynamic>.from(chat);
 
-              print("Chat ID print: ${chatMap["chat_id"]}");
+              if(chatMap["name"] == null) {
+                chatMap["name"] = "";
+              }
+
               LocalDatabaseMethods.insertChat(chatMap["chat_id"], chatMap["name"]);
 
               //INSERIMENTO USERS

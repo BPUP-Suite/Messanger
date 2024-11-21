@@ -24,7 +24,7 @@ class LocalDatabaseMethods {
           '''
           CREATE TABLE chats(
             chat_id TEXT PRIMARY KEY,
-            group_channel_name TEXT NULL
+            group_channel_name TEXT
           );
           '''
         );
@@ -89,7 +89,6 @@ class LocalDatabaseMethods {
     // Stampa i risultati direttamente dalle mappe
     maps.forEach((row) {
       print(
-          '\nChat ID: ${row['chat_id']},'
               '\nHandle: ${row['handle']}'
       );
     });
@@ -123,18 +122,22 @@ class LocalDatabaseMethods {
   Future<List<Map<String, dynamic>>> fetchLastMessage(chat_id) async {
     final db = await localDatabase;
 
-    // print(await db.query(
-    //   'messages',
-    //   orderBy: 'message_id DESC',
-    //   limit: 1,
-    //   where: 'chat_id = ?',
-    //   whereArgs: ['$chat_id']
-    // ));
-
     return await db.query(
         'messages',
         orderBy: 'message_id DESC',
         limit: 1,
+        where: 'chat_id = ?',
+        whereArgs: ['$chat_id']
+    );
+  }
+
+
+
+  Future<List<Map<String, dynamic>>> fetchAllChatMessages(chat_id) async {
+    final db = await localDatabase;
+
+    return await db.query(
+        'messages',
         where: 'chat_id = ?',
         whereArgs: ['$chat_id']
     );

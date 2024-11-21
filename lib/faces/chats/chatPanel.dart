@@ -1,13 +1,12 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
-import '../../src/obj/localDatabaseAccess.dart';
-
-
+import 'package:messanger_bpup/src/localDatabaseMethods.dart';
 
 class ChatPanel extends StatelessWidget {
-  ChatPanel({super.key, required this.chatID});
+  ChatPanel({super.key, required this.chatID, required this.groupChannelName});
 
   final chatID;
-
+  final String groupChannelName;
 
   @override
   Widget build(BuildContext context) {
@@ -17,31 +16,52 @@ class ChatPanel extends StatelessWidget {
           backgroundColor: Color(0xff202c3e),
           iconTheme: IconThemeData(color: Colors.white),
           //barra superiore
-          // title: Row(
-          //   children: [
-          //     CircleAvatar(
-          //       backgroundImage: NetworkImage(
-          //           'https://picsum.photos/200'), // Sostituisci con il percorso della tua immagine
-          //     ),
-          //     SizedBox(width: 15), // Spazio tra l'avatar e il testo
-          //     Builder(builder: (context) {
-          //       if (chatObject.groupChannelName == null) {
-          //         return Text(
-          //           chatObject.usersHandle[1],
-          //           style: TextStyle(color: Colors.white),
-          //         );
-          //       } else {
-          //         return Text(
-          //           chatObject.groupChannelName.toString(),
-          //           style: TextStyle(color: Colors.white),
-          //         );
-          //       }
-          //     }
-          //     ),
-          //     Spacer(),
-          //     Icon(Icons.more_vert_rounded),
-          //   ],
-          // ),
+          title: Row(
+            children: [
+              CircleAvatar(
+                backgroundImage: NetworkImage(
+                    'https://picsum.photos/200'), // Sostituisci con il percorso della tua immagine
+              ),
+              SizedBox(width: 15), // Spazio tra l'avatar e il testo
+              FutureBuilder(
+                future: LocalDatabaseMethods().fetchUser(chatID),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return Center(child: Text('Errore.'));
+                  } else {
+                    final user = snapshot.data!;
+                    if (groupChannelName != "") {
+                      return Text(
+                        '$groupChannelName',
+                        style: const TextStyle(
+                          color: Colors.white,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      );
+                    } else {
+                      return Text(
+                        '${user[0]['handle']}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      );
+                    }
+                  }
+                },
+              ),
+
+              // FutureBuilder(
+              Spacer(),
+              Icon(Icons.more_vert_rounded),
+            ],
+          ),
         ),
 
         //body
@@ -55,125 +75,204 @@ class ChatPanel extends StatelessWidget {
 
           //barra sotto che comprende graffetta, messaggio, send button
           Container(
-            child: MsgBottomBar(),
+            child: MsgBottomBar(chatID),
           ),
         ]));
   }
 }
 
-//list view dei messaggi, li stampa
-class MsgListView extends StatelessWidget {
-  MsgListView({super.key, required this.chatID});
+//print dei messaggini
+class MsgListView extends StatefulWidget {
+  const MsgListView({super.key, required this.chatID});
 
   final chatID;
 
   @override
-  Widget build(BuildContext context) {
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-    // });
-    return Container(
-      margin: EdgeInsets.only(left: 10, right: 10),
-      child: Column(children: <Widget>[
-        Container(
-          child: Expanded(
-              // child: ListView.builder(
-              //     itemCount: _messages.length,
-              //     itemBuilder: (BuildContext context, int index) {
-              //       return buildMessage(index, _messages, context, chatID);
-              //     })
-            child: Text("widget"),
-          ),
-        )
-      ]),
-    );
+  State<MsgListView> createState() => _MsgListViewState();
+}
+
+class _MsgListViewState extends State<MsgListView> {
+  static final StreamController<List<Map<String, dynamic>>> _streamController =
+      StreamController();
+
+  @override
+  void initState() {
+    super.initState();
+    // _listenToMessages();
   }
 
-  //capisce se mettere il messaggio a destra o sinistra in base al sender e fa la grafichina dei msg
-  buildMessage(index, messages, context, chatID) {
-    if (messages[index].sender ==
-        LocalDatabaseAccess.database.chats
-            .where((e) => e.chatID == chatID)
-            .elementAt(0)
-            .usersHandle[1]) {
-      return Align(
-        alignment: FractionalOffset.centerRight,
-        child: Container(
-          constraints: BoxConstraints(
-              minWidth: 10, maxWidth: MediaQuery.of(context).size.width / 1.4),
-          padding: EdgeInsets.all(10),
-          margin: EdgeInsets.all(5),
-          child: Column(
-            children: [
-              Text(
-                messages[index].getText,
-                style: TextStyle(color: Colors.white),
-              ),
-              Text(
-                "${messages[index].getDateTime.hour.toString()}:${messages[index].getDateTime.minute.toString()}",
-                style: TextStyle(color: Colors.white),
-              ),
-            ],
-          ),
-          decoration: BoxDecoration(
-            color: Colors.blueAccent,
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20),
-                topRight: Radius.circular(4),
-                bottomLeft: Radius.circular(20),
-                bottomRight: Radius.circular(20)),
-          ),
+  @override
+  void dispose() {
+    _streamController.close();
+    super.dispose();
+  }
+
+
+
+
+  //funzione orribile: OGNI 1 SEC FETCHA TUTTI I MESSAGGI, cambia 🚨
+  // void _listenToMessages() async {
+  //   Timer.periodic(Duration(seconds: 1), (timer) async {
+  //     final messages =
+  //         await LocalDatabaseMethods().fetchAllChatMessages(widget.chatID);
+  //     _streamController.sink.add(messages);
+  //     print(messages);
+  //   });
+  // }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Color(0xff354966),
+      body: Container(
+        child: FutureBuilder<List<Map<String, dynamic>>>(
+          future: LocalDatabaseMethods().fetchAllChatMessages(widget.chatID),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Center(child: Text("Error: ${snapshot.error}"));
+            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return Center(child: Text("No messages available"));
+            } else {
+              return StreamBuilder<List<Map<String, dynamic>>>(
+                stream: _streamController.stream,
+                initialData: snapshot.data,
+                builder: (context, streamSnapshot) {
+                  if (streamSnapshot.hasData) {
+                    return ListView.builder(
+                      itemCount: streamSnapshot.data!.length,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          title: Text(streamSnapshot.data![index]['text']),
+                        );
+                      },
+                    );
+                  } else {
+                    return Center(child: Text("No messages available"));
+                  }
+                },
+              );
+            }
+          },
         ),
-      );
-    } else if (messages[index].sender !=
-        LocalDatabaseAccess.database.chats
-            .where((e) => e.chatID == chatID)
-            .elementAt(0)
-            .usersHandle[1]) {
-      return Align(
-        alignment: FractionalOffset.centerLeft,
-        child: Container(
-          constraints: BoxConstraints(
-              minWidth: 10, maxWidth: MediaQuery.of(context).size.width / 1.4),
-          padding: EdgeInsets.all(10),
-          margin: EdgeInsets.all(5),
-          child: Column(
-            children: [
-              Text(
-                messages[index].getText,
-                style: TextStyle(color: Colors.white),
-              ),
-              Text(
-                "${messages[index].getDateTime.hour.toString()}:${messages[index].getDateTime.minute.toString()}",
-                style: TextStyle(color: Colors.white),
-              ),
-            ],
-          ),
-          decoration: BoxDecoration(
-            color: Colors.blueAccent,
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(4),
-                topRight: Radius.circular(20),
-                bottomRight: Radius.circular(20),
-                bottomLeft: Radius.circular(20)),
-          ),
-        ),
-      );
-    } else {
-      // Handle other senders or return a default widget
-      return print(
-          "Complimenti, è difficile ottenere questo errore... e tu ci sei riuscito");
-    }
+      ),
+    );
   }
 }
 
+//list view dei messaggi, li stampa
+// class MsgListView extends StatelessWidget {
+//   MsgListView({super.key, required this.chatID});
+//
+//   final chatID;
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     // WidgetsBinding.instance.addPostFrameCallback((_) {
+//     //   _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+//     // });
+//     return Container(
+//       margin: EdgeInsets.only(left: 10, right: 10),
+//       child: Column(children: [
+//         Container(
+//           child: Expanded(
+//             child: ,
+//           ),
+//         )
+//       ]),
+//     );
+//   }
+//
+//   //capisce se mettere il messaggio a destra o sinistra in base al sender e fa la grafichina dei msg
+//   buildMessage(index, messages, context, chatID) {
+//     if (messages[index].sender ==
+//         LocalDatabaseAccess.database.chats
+//             .where((e) => e.chatID == chatID)
+//             .elementAt(0)
+//             .usersHandle[1]) {
+//       return Align(
+//         alignment: FractionalOffset.centerRight,
+//         child: Container(
+//           constraints: BoxConstraints(
+//               minWidth: 10, maxWidth: MediaQuery.of(context).size.width / 1.4),
+//           padding: EdgeInsets.all(10),
+//           margin: EdgeInsets.all(5),
+//           child: Column(
+//             children: [
+//               Text(
+//                 messages[index].getText,
+//                 style: TextStyle(color: Colors.white),
+//               ),
+//               Text(
+//                 "${messages[index].getDateTime.hour.toString()}:${messages[index].getDateTime.minute.toString()}",
+//                 style: TextStyle(color: Colors.white),
+//               ),
+//             ],
+//           ),
+//           decoration: BoxDecoration(
+//             color: Colors.blueAccent,
+//             borderRadius: BorderRadius.only(
+//                 topLeft: Radius.circular(20),
+//                 topRight: Radius.circular(4),
+//                 bottomLeft: Radius.circular(20),
+//                 bottomRight: Radius.circular(20)),
+//           ),
+//         ),
+//       );
+//     } else if (messages[index].sender !=
+//         LocalDatabaseAccess.database.chats
+//             .where((e) => e.chatID == chatID)
+//             .elementAt(0)
+//             .usersHandle[1]) {
+//       return Align(
+//         alignment: FractionalOffset.centerLeft,
+//         child: Container(
+//           constraints: BoxConstraints(
+//               minWidth: 10, maxWidth: MediaQuery.of(context).size.width / 1.4),
+//           padding: EdgeInsets.all(10),
+//           margin: EdgeInsets.all(5),
+//           child: Column(
+//             children: [
+//               Text(
+//                 messages[index].getText,
+//                 style: TextStyle(color: Colors.white),
+//               ),
+//               Text(
+//                 "${messages[index].getDateTime.hour.toString()}:${messages[index].getDateTime.minute.toString()}",
+//                 style: TextStyle(color: Colors.white),
+//               ),
+//             ],
+//           ),
+//           decoration: BoxDecoration(
+//             color: Colors.blueAccent,
+//             borderRadius: BorderRadius.only(
+//                 topLeft: Radius.circular(4),
+//                 topRight: Radius.circular(20),
+//                 bottomRight: Radius.circular(20),
+//                 bottomLeft: Radius.circular(20)),
+//           ),
+//         ),
+//       );
+//     } else {
+//       // Handle other senders or return a default widget
+//       return print(
+//           "Complimenti, è difficile ottenere questo errore... e tu ci sei riuscito");
+//     }
+//   }
+// }
+
+//ORRIBILE QUESTO WIDGET, SISTEMALO PER FAVORE 🚨
+
 //barra invio messaggio sotto
 class MsgBottomBar extends StatelessWidget {
+  final chatID;
+
   //controllo testo si/no per cambio di icona
   final TextEditingController _controllerMessage = TextEditingController();
   final ValueNotifier<bool> _hasText = ValueNotifier<bool>(false);
 
-  MsgBottomBar() {
+  MsgBottomBar(this.chatID) {
     _controllerMessage.addListener(() {
       _hasText.value = _controllerMessage.text.isNotEmpty;
     });
@@ -183,6 +282,14 @@ class MsgBottomBar extends StatelessWidget {
   void _onSend() {
     if (_controllerMessage.text.isNotEmpty) {
       //changenotifier
+
+
+
+
+      LocalDatabaseMethods.insertMessage(50001, chatID, "prova messaggio",
+          "sender", "2024-11-20 23:39:18.940747");
+
+      // _streamController.sink.add(messages);
 
       _controllerMessage.clear();
     }

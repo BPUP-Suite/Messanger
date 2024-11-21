@@ -211,7 +211,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => ChatPanel(chatID: chat['chat_id']),
+                                    builder: (context) => ChatPanel(chatID: chat['chat_id'], groupChannelName: chat['group_channel_name'],),
                                   ),
                                 );
                               },
@@ -234,8 +234,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                                 if (snapshot.connectionState ==
                                                     ConnectionState.waiting) {
                                                   return Center(
-                                                    // child:
-                                                    //     CircularProgressIndicator(),
+                                                    child:
+                                                        CircularProgressIndicator(),
                                                   );
                                                 } else if (snapshot.hasError) {
                                                   return Center(
@@ -250,7 +250,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                                   final user = snapshot.data!;
                                                   if (chat[
                                                           'group_channel_name'] !=
-                                                      null) {
+                                                      "") {
                                                     return Text(chat[
                                                             'group_channel_name']
                                                         .toString());

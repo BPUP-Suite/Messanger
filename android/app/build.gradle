@@ -21,6 +21,21 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
+
+        //Messa da me questa
+        buildTypes {
+            release {
+                manifestPlaceholders = [applicationName: "android.app.Application"]
+            }
+
+            debug {
+                manifestPlaceholders = [applicationName: "android.app.Application"]
+            }
+            build{
+                manifestPlaceholders = [applicationName: "android.app.Application"]
+            }
+        }
+
         applicationId = "com.bpup.messanger.messanger_bpup"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
