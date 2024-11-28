@@ -3,7 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:messanger_bpup/faces/chatList.dart';
 import 'package:messanger_bpup/faces/start/emailCheck.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:messanger_bpup/src/webSocketMethods.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../src/localDatabaseMethods.dart';
 
 late bool _isLoggedIn = false;
 
@@ -16,6 +19,7 @@ Future<bool> isLoggedInSkip(context) async{
 
   await _loadLoggedIn();
   print("Start skip Loggato?: $_isLoggedIn");
+
   if(_isLoggedIn){
     Navigator.push(
       context,

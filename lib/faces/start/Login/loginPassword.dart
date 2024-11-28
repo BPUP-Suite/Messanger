@@ -151,10 +151,28 @@ Future<void> databaseAndWebSocketInit(
   if (apiKey != "false") {
     //DATABASE LOCALE
 
+    bool doesDBExists = await LocalDatabaseMethods.checkDatabaseExistence();
+    print('Esistenza Database LOGIN 1: ${doesDBExists.toString()}');
+
     await LocalDatabaseMethods.databaseOpen();
+
+    doesDBExists = await LocalDatabaseMethods.checkDatabaseExistence();
+    print('Esistenza Database LOGIN 2: ${doesDBExists.toString()}');
+
     await LocalDatabaseMethods.insertLocalUser(localUserID, apiKey);
+
+    doesDBExists = await LocalDatabaseMethods.checkDatabaseExistence();
+    print('Esistenza Database LOGIN 3: ${doesDBExists.toString()}');
+
     await WebSocketMethods().openWebSocketConnection(localUserID, apiKey);
+
+    doesDBExists = await LocalDatabaseMethods.checkDatabaseExistence();
+    print('Esistenza Database LOGIN 4: ${doesDBExists.toString()}');
+
     await WebSocketMethods().WebSocketSenderMessage('{"type":"init","apiKey":"$apiKey"}');
+
+    doesDBExists = await LocalDatabaseMethods.checkDatabaseExistence();
+    print('Esistenza Database LOGIN 5: ${doesDBExists.toString()}');
 
     // Esegui la funzione WebSocketReceiver e aggiorna la variabile isWebSocketCompleted
     WebSocketMethods().WebSocketReceiver().then((_) {
@@ -165,6 +183,12 @@ Future<void> databaseAndWebSocketInit(
     while (!isWebSocketCompleted) {
       await Future.delayed(Duration(milliseconds: 100));
     }
+
+    doesDBExists = await LocalDatabaseMethods.checkDatabaseExistence();
+    print('Esistenza Database LOGIN 6: ${doesDBExists.toString()}');
+
+
+
 
     //chiama i metodi per salvare un valore true/false se utente è loggato
     _loadLoggedIn();

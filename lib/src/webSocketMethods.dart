@@ -32,7 +32,7 @@ class WebSocketMethods {
   Future<void> WebSocketSenderMessage(String message) async {
     await webSocketChannel.ready;
     webSocketChannel.sink.add(message);
-
+    print("Messaggio inviato alla websocket: $message");
   }
 
 
@@ -102,7 +102,7 @@ class WebSocketMethods {
             await LocalDatabaseMethods.stampaTuttiICani();
           }
           if(init == "False"){
-
+            print("server error during init");
           }
           break;
         }

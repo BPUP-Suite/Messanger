@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:messanger_bpup/src/localDatabaseMethods.dart';
+import 'package:messanger_bpup/src/webSocketMethods.dart';
 
 class ChatPanel extends StatelessWidget {
   ChatPanel({super.key, required this.chatID, required this.groupChannelName});
@@ -135,22 +136,12 @@ class _MsgListViewState extends State<MsgListView> {
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
               return Center(child: Text("No messages available"));
             } else {
-              return StreamBuilder<List<Map<String, dynamic>>>(
-                stream: _streamController.stream,
-                initialData: snapshot.data,
-                builder: (context, streamSnapshot) {
-                  if (streamSnapshot.hasData) {
-                    return ListView.builder(
-                      itemCount: streamSnapshot.data!.length,
-                      itemBuilder: (context, index) {
-                        return ListTile(
-                          title: Text(streamSnapshot.data![index]['text']),
-                        );
-                      },
-                    );
-                  } else {
-                    return Center(child: Text("No messages available"));
-                  }
+              return ListView.builder(
+                itemCount: snapshot.data!.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text(snapshot.data![index]['text']),
+                  );
                 },
               );
             }
@@ -284,10 +275,10 @@ class MsgBottomBar extends StatelessWidget {
       //changenotifier
 
 
+      WebSocketMethods().WebSocketSenderMessage('{"type":"send_message","text":"${_controllerMessage.text}","chat_id":"$chatID","receiver":"b"}');
 
-
-      LocalDatabaseMethods.insertMessage(50001, chatID, "prova messaggio",
-          "sender", "2024-11-20 23:39:18.940747");
+      // LocalDatabaseMethods.insertMessage(50001, chatID, "prova messaggio",
+      //     "sender", "2024-11-20 23:39:18.940747");
 
       // _streamController.sink.add(messages);
 

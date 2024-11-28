@@ -17,11 +17,11 @@ class LocalDatabaseMethods {
             name TEXT, 
             surname TEXT
           );
-          ''',
+          '''
         );
 
         db.execute(
-          '''
+            '''
           CREATE TABLE chats(
             chat_id TEXT PRIMARY KEY,
             group_channel_name TEXT
@@ -30,7 +30,7 @@ class LocalDatabaseMethods {
         );
 
         db.execute(
-          '''
+            '''
           CREATE TABLE users(
             handle TEXT PRIMARY KEY
           );
@@ -38,7 +38,7 @@ class LocalDatabaseMethods {
         );
 
         db.execute(
-          '''
+            '''
           CREATE TABLE messages (
             message_id TEXT,
             chat_id TEXT REFERENCES chats(chat_id),
@@ -50,7 +50,7 @@ class LocalDatabaseMethods {
         );
 
         db.execute(
-          '''
+            '''
           CREATE TABLE chat_users(
             chat_id TEXT,
             handle TEXT,
@@ -89,7 +89,7 @@ class LocalDatabaseMethods {
     // Stampa i risultati direttamente dalle mappe
     maps.forEach((row) {
       print(
-              '\nHandle: ${row['handle']}'
+          '\nHandle: ${row['handle']}'
       );
     });
   }
@@ -264,11 +264,11 @@ class LocalDatabaseMethods {
 
 
 
-  // static Future<void> init() async {
-  //
-  //   final db = await localDatabase;
-  //
-  //   await
-  //
-  // }
+// static Future<void> init() async {
+//
+//   final db = await localDatabase;
+//
+//   await
+//
+// }
 }
