@@ -106,6 +106,17 @@ class WebSocketMethods {
           }
           break;
         }
+        case "send_message": {
+          String send_message = hashData["send_message"];
+          if(send_message == "True") {
+
+          }
+          if(send_message == "False") {
+
+          }
+
+          break;
+        }
 
 
 

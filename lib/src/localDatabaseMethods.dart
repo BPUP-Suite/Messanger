@@ -78,6 +78,47 @@ class LocalDatabaseMethods {
 
 
 
+  Future<String> fetchLocalUserID() async {
+    final db = await localDatabase;
+
+    final result = await db.query(
+      'localUser',
+      columns: ['user_id'],
+      limit: 1,
+    );
+
+    if (result.isNotEmpty) {
+      final Map<String, dynamic> user = result.first;
+      final String userId = user['user_id'];
+      return userId;
+    } else {
+      // Handle the case where no user ID is found
+      return 'User ID not found'; // Or any other appropriate default value
+    }
+  }
+
+
+
+  Future<String> fetchLocalUserApiKey() async {
+    final db = await localDatabase;
+
+    final result = await db.query(
+      'localUser',
+      columns: ['apiKey'],
+      limit: 1,
+    );
+
+    if (result.isNotEmpty) {
+      final Map<String, dynamic> user = result.first;
+      final String apiKey = user['apiKey'];
+      return apiKey;
+    } else {
+      // Handle the case where no user ID is found
+      return 'apiKey not found'; // Or any other appropriate default value
+    }
+  }
+
+
 
   //Metodo provvisorio (ovviamente)
   static Future<void> stampaTuttiICani() async {

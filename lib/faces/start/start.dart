@@ -20,6 +20,9 @@ Future<bool> isLoggedInSkip(context) async{
   await _loadLoggedIn();
   print("Start skip Loggato?: $_isLoggedIn");
 
+
+
+
   if(_isLoggedIn){
     Navigator.push(
       context,
