@@ -48,6 +48,7 @@ class WebSocketMethods {
       String type = hashData["type"];
 
       switch(type) {
+        //INIT --> quello che ricevo quando faccio il login
         case "init": {
           String init = hashData["init"];
           if(init == "True"){
@@ -95,29 +96,39 @@ class WebSocketMethods {
                 LocalDatabaseMethods.insertMessage(messageMap["message_id"], messageMap["chat_id"], messageMap["text"], messageMap["sender"], messageMap["date"]);
               }
             }
-
-
-
-
-            await LocalDatabaseMethods.stampaTuttiICani();
           }
           if(init == "False"){
             print("server error during init");
           }
           break;
         }
+
+        //SEND_MESSAGE --> quello che ricevo quando mando un messaggio
         case "send_message": {
           String send_message = hashData["send_message"];
           if(send_message == "True") {
-
+            print("Messaggio tornato indietro: true");
           }
           if(send_message == "False") {
-
+            print("Messaggio tornato indietro: false");
           }
 
           break;
         }
 
+
+
+        //RECEIVE_MESSAGE --> ricevo dall'India un messaggio
+        case "receive_message": {
+          String message_id = hashData["message_id"];
+          String chat_id = hashData["chat_id"];
+          String text = hashData["text"];
+          String sender = hashData["sender"];
+          String date = hashData["date"];
+          LocalDatabaseMethods.insertMessage(message_id, chat_id, text, sender, date);
+
+          break;
+        }
 
 
         default: {print("sei stronzo");}

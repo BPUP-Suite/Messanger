@@ -1,4 +1,4 @@
-#Fri Nov 29 13:14:15 CET 2024
+#Sun Dec 01 00:09:53 CET 2024
 base.0=C\:\\Users\\matt3\\StudioProjects\\Messanger\\build\\app\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes.dex
 base.1=C\:\\Users\\matt3\\StudioProjects\\Messanger\\build\\app\\intermediates\\dex\\debug\\mergeLibDexDebug\\0\\classes.dex
 base.2=C\:\\Users\\matt3\\StudioProjects\\Messanger\\build\\app\\intermediates\\dex\\debug\\mergeProjectDexDebug\\0\\classes.dex

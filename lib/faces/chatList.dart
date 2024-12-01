@@ -25,8 +25,11 @@ class ChatList extends StatelessWidget {
         ),
         centerTitle: true,
         backgroundColor: Color(0xff202c3e),
-        scrolledUnderElevation: 0,
+
+
         //Non fa cambiare colore alla AppBar quando la scrollbar ci va sotto
+        scrolledUnderElevation: 0,
+
         // automaticallyImplyLeading: false,
         iconTheme: IconThemeData(color: Colors.white),
       ),
@@ -44,9 +47,30 @@ class ChatList extends StatelessWidget {
             ),
             Container(
               margin: EdgeInsets.only(bottom: 40),
-              child: Text(
-                "Nome Cognome",
-                style: TextStyle(color: Colors.white, fontSize: 20),
+              child: Container(
+                child: ListTile(
+                    title: FutureBuilder(
+                        future: LocalDatabaseMethods().fetchLocalUserNameAndSurname(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState == ConnectionState.waiting) {
+                            return Center(child: CircularProgressIndicator());
+                          } else if (snapshot.hasError) {
+                            return Center(child: Text("Error: ${snapshot.error}"));
+                          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                            return Center(child: Text("No name and surname available"));
+                          } else {
+                            return Center(
+                              child: Text(
+                                snapshot.data!,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                ),
+                              ),
+                            );
+                          }
+                        })
+                ),
               ),
             ),
             ListTile(
@@ -88,23 +112,6 @@ class ChatList extends StatelessWidget {
                   ),
                 );
               },
-            ),
-            Container(
-              margin: EdgeInsets.only(top: 80),
-              child: ElevatedButton(
-                child: ListTile(
-                  leading: Icon(Icons.home),
-                  title: Text("Start (da togliere)"),
-                ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Start(),
-                    ),
-                  );
-                },
-              ),
             ),
           ],
         ),

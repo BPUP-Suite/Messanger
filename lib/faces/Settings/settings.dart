@@ -137,11 +137,11 @@ class Settings extends StatelessWidget {
             //logout
             GestureDetector(
               onTap: () {
-                resetBiometricsPreference();      //works
-                resetLoggedIn();                  //workava, spero continui a farlo
-                resetLocalDatabase();             //da errore (magia)
+                resetBiometricsPreference(); //works
+                resetLoggedIn(); //workava, spero continui a farlo
+                resetLocalDatabase(); //da errore (magia)
 
-                backToLoginAfterLogout(context);  //works
+                backToLoginAfterLogout(context); //works
               },
               child: Column(
                 children: [
@@ -168,7 +168,7 @@ class Settings extends StatelessWidget {
                   ),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -196,28 +196,26 @@ class Settings extends StatelessWidget {
   //3° funzione del logout: reset preferenza isLoggedIn
   Future<void> resetLoggedIn() async {
     SharedPreferences isLoggedInPreference =
-    await SharedPreferences.getInstance();
+        await SharedPreferences.getInstance();
     isLoggedInPreference.setBool('isLoggedIn', false);
     print("Preferenza isLoggedIn a FALSE");
   }
 
-  //4° funzione del logout: fa sparire il database locale
+  //4° funzione del logout: fa svuotare (ma non eliminare) il database locale, ho provato a chiuderlo, ma non gli piace
   Future<void> resetLocalDatabase() async {
     final localDatabasePath = await getDatabasesPath();
     final localDBPath = join(localDatabasePath, 'localDatabase.db');
 
-    try {
-      // Apri il database in modalità read-write
-      final database = await openDatabase(localDBPath);
+    // Open the database
+    final database = await openDatabase(localDBPath);
 
-      // Chiudi tutte le transazioni aperte (se presenti)
-      await database.close();
+    // Get a list of all tables
+    final List<Map<String, dynamic>> tables = await database
+        .rawQuery('SELECT name FROM sqlite_master WHERE type = "table"');
 
-      // Elimina il file del database
-      await deleteDatabase(localDBPath);
-      print("Database locale eliminato correttamente");
-    } catch (e) {
-      print("Errore durante l'eliminazione del database: $e");
+    // Iterate over tables and delete their contents
+    for (var table in tables) {
+      await database.delete(table['name']);
     }
   }
 }

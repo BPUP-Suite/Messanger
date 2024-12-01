@@ -120,19 +120,66 @@ class LocalDatabaseMethods {
 
 
 
-  //Metodo provvisorio (ovviamente)
-  static Future<void> stampaTuttiICani() async {
+  //fetch localuser name + surname
+  Future<String> fetchLocalUserNameAndSurname() async {
     final db = await localDatabase;
 
-    // Esegui una query per selezionare tutti i cani
-    final List<Map<String, dynamic>> maps = await db.query('users');
+    final result = await db.query(
+      'localUser',
+      columns: ['name', 'surname'],
+    );
 
-    // Stampa i risultati direttamente dalle mappe
-    maps.forEach((row) {
-      print(
-          '\nHandle: ${row['handle']}'
-      );
-    });
+    if (result.isNotEmpty) {
+      final Map<String, dynamic> user = result.first;
+      final String name = user['name'];
+      final String surname = user['surname'];
+      return '$name $surname';
+    } else {
+      return 'name or/and surname not found';
+    }
+  }
+
+
+
+  //fetch email localuser
+  Future<String> fetchLocalUserEmail() async {
+    final db = await localDatabase;
+
+
+
+    final result = await db.query(
+      'localUser',
+      columns: ['user_email'],
+    );
+
+    if (result.isNotEmpty) {
+      final Map<String, dynamic> user = result.first;
+      final String user_email = user['user_email'];
+      return user_email;
+    } else {
+      return 'email not found';
+    }
+  }
+
+
+
+  Future<String> fetchLocalUserhandle() async {
+    final db = await localDatabase;
+
+
+
+    final result = await db.query(
+      'localUser',
+      columns: ['handle'],
+    );
+
+    if (result.isNotEmpty) {
+      final Map<String, dynamic> user = result.first;
+      final String handle = user['handle'];
+      return handle;
+    } else {
+      return 'handle not found';
+    }
   }
 
 
@@ -208,6 +255,8 @@ class LocalDatabaseMethods {
 
     final db = await localDatabase;
 
+
+
     await db.update(
       'localUser',
       where: "true=true",
@@ -235,7 +284,7 @@ class LocalDatabaseMethods {
 
 
 
-  static Future<void> insertMessage(message_id, chat_id, text, sender, date) async {
+  static Future<void> insertMessage(String? message_id, chat_id, text, sender, String? date) async {
 
     final db = await localDatabase;
 

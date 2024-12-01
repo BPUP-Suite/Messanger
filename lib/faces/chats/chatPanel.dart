@@ -3,14 +3,25 @@ import 'package:flutter/material.dart';
 import 'package:messanger_bpup/src/localDatabaseMethods.dart';
 import 'package:messanger_bpup/src/webSocketMethods.dart';
 
+late String localUserID;
+
+getLocalUserID() async {
+  localUserID = await LocalDatabaseMethods().fetchLocalUserID();
+}
+
 class ChatPanel extends StatelessWidget {
   ChatPanel({super.key, required this.chatID, required this.groupChannelName});
 
   final chatID;
   final String groupChannelName;
 
+
+
   @override
   Widget build(BuildContext context) {
+
+    getLocalUserID();
+    print("LOCAL USER ID - CHAT PANEL: $localUserID");
     return Scaffold(
         backgroundColor: Color(0xff354966),
         appBar: AppBar(
@@ -108,9 +119,6 @@ class _MsgListViewState extends State<MsgListView> {
     super.dispose();
   }
 
-
-
-
   //funzione orribile: OGNI 1 SEC FETCHA TUTTI I MESSAGGI, cambia 🚨
   // void _listenToMessages() async {
   //   Timer.periodic(Duration(seconds: 1), (timer) async {
@@ -126,7 +134,8 @@ class _MsgListViewState extends State<MsgListView> {
     return Scaffold(
       backgroundColor: Color(0xff354966),
       body: Container(
-        child: FutureBuilder<List<Map<String, dynamic>>>(
+        child: FutureBuilder<List<Map<String, dynamic>>> (
+
           future: LocalDatabaseMethods().fetchAllChatMessages(widget.chatID),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -139,9 +148,9 @@ class _MsgListViewState extends State<MsgListView> {
               return ListView.builder(
                 itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(snapshot.data![index]['text']),
-                  );
+                  return
+                    buildMessage(index, snapshot.data!, context, widget.chatID);
+                  Text("ciao");
                 },
               );
             }
@@ -152,106 +161,86 @@ class _MsgListViewState extends State<MsgListView> {
   }
 }
 
-//list view dei messaggi, li stampa
-// class MsgListView extends StatelessWidget {
-//   MsgListView({super.key, required this.chatID});
-//
-//   final chatID;
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     // WidgetsBinding.instance.addPostFrameCallback((_) {
-//     //   _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-//     // });
-//     return Container(
-//       margin: EdgeInsets.only(left: 10, right: 10),
-//       child: Column(children: [
-//         Container(
-//           child: Expanded(
-//             child: ,
-//           ),
-//         )
-//       ]),
-//     );
-//   }
-//
-//   //capisce se mettere il messaggio a destra o sinistra in base al sender e fa la grafichina dei msg
-//   buildMessage(index, messages, context, chatID) {
-//     if (messages[index].sender ==
-//         LocalDatabaseAccess.database.chats
-//             .where((e) => e.chatID == chatID)
-//             .elementAt(0)
-//             .usersHandle[1]) {
-//       return Align(
-//         alignment: FractionalOffset.centerRight,
-//         child: Container(
-//           constraints: BoxConstraints(
-//               minWidth: 10, maxWidth: MediaQuery.of(context).size.width / 1.4),
-//           padding: EdgeInsets.all(10),
-//           margin: EdgeInsets.all(5),
-//           child: Column(
-//             children: [
-//               Text(
-//                 messages[index].getText,
-//                 style: TextStyle(color: Colors.white),
-//               ),
-//               Text(
-//                 "${messages[index].getDateTime.hour.toString()}:${messages[index].getDateTime.minute.toString()}",
-//                 style: TextStyle(color: Colors.white),
-//               ),
-//             ],
-//           ),
-//           decoration: BoxDecoration(
-//             color: Colors.blueAccent,
-//             borderRadius: BorderRadius.only(
-//                 topLeft: Radius.circular(20),
-//                 topRight: Radius.circular(4),
-//                 bottomLeft: Radius.circular(20),
-//                 bottomRight: Radius.circular(20)),
-//           ),
-//         ),
-//       );
-//     } else if (messages[index].sender !=
-//         LocalDatabaseAccess.database.chats
-//             .where((e) => e.chatID == chatID)
-//             .elementAt(0)
-//             .usersHandle[1]) {
-//       return Align(
-//         alignment: FractionalOffset.centerLeft,
-//         child: Container(
-//           constraints: BoxConstraints(
-//               minWidth: 10, maxWidth: MediaQuery.of(context).size.width / 1.4),
-//           padding: EdgeInsets.all(10),
-//           margin: EdgeInsets.all(5),
-//           child: Column(
-//             children: [
-//               Text(
-//                 messages[index].getText,
-//                 style: TextStyle(color: Colors.white),
-//               ),
-//               Text(
-//                 "${messages[index].getDateTime.hour.toString()}:${messages[index].getDateTime.minute.toString()}",
-//                 style: TextStyle(color: Colors.white),
-//               ),
-//             ],
-//           ),
-//           decoration: BoxDecoration(
-//             color: Colors.blueAccent,
-//             borderRadius: BorderRadius.only(
-//                 topLeft: Radius.circular(4),
-//                 topRight: Radius.circular(20),
-//                 bottomRight: Radius.circular(20),
-//                 bottomLeft: Radius.circular(20)),
-//           ),
-//         ),
-//       );
-//     } else {
-//       // Handle other senders or return a default widget
-//       return print(
-//           "Complimenti, è difficile ottenere questo errore... e tu ci sei riuscito");
-//     }
-//   }
-// }
+
+
+
+
+
+
+//   // capisce se mettere il messaggio a destra o sinistra in base al sender e fa la grafichina dei msg
+buildMessage(index, messages, context, chatID) {
+
+  DateTime lastMessageDateTime = DateTime.parse(messages[index]['date_time']);
+
+  //sender inteso come UserID
+  if (messages[index]['sender'] == localUserID) {
+    return Align(
+      alignment: FractionalOffset.centerRight,
+      child: Container(
+        constraints: BoxConstraints(
+            minWidth: 10, maxWidth: MediaQuery.of(context).size.width / 1.4),
+        padding: EdgeInsets.all(10),
+        margin: EdgeInsets.all(5),
+        child: Column(
+          children: [
+            Text(
+              messages[index]['text'],
+              style: TextStyle(color: Colors.white),
+            ),
+            Text(
+              '${lastMessageDateTime.hour.toString()}:${lastMessageDateTime.minute.toString()}',
+              style: TextStyle(color: Colors.white),
+            ),
+          ],
+        ),
+        decoration: BoxDecoration(
+          color: Colors.blueAccent,
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(4),
+              bottomLeft: Radius.circular(20),
+              bottomRight: Radius.circular(20)),
+        ),
+      ),
+    );
+  } else if (messages[index]['sender'] != localUserID) {
+    return Align(
+      alignment: FractionalOffset.centerLeft,
+      child: Container(
+        constraints: BoxConstraints(
+            minWidth: 10, maxWidth: MediaQuery.of(context).size.width / 1.4),
+        padding: EdgeInsets.all(10),
+        margin: EdgeInsets.all(5),
+        child: Column(
+          children: [
+            Text(
+              messages[index]['text'],
+              style: TextStyle(color: Colors.white),
+            ),
+            Text(
+              '${lastMessageDateTime.hour.toString()}:${lastMessageDateTime.minute.toString()}',
+              style: TextStyle(color: Colors.white),
+            ),
+          ],
+        ),
+        decoration: BoxDecoration(
+          color: Colors.blueAccent,
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(4),
+              topRight: Radius.circular(20),
+              bottomRight: Radius.circular(20),
+              bottomLeft: Radius.circular(20)),
+        ),
+      ),
+    );
+  } else {
+    // Handle other senders or return a default widget
+    return print(
+        "Complimenti, è difficile ottenere questo errore... e tu ci sei riuscito");
+  }
+}
+
+
 
 //ORRIBILE QUESTO WIDGET, SISTEMALO PER FAVORE 🚨
 
@@ -274,8 +263,8 @@ class MsgBottomBar extends StatelessWidget {
     if (_controllerMessage.text.isNotEmpty) {
       //changenotifier
 
-
-      WebSocketMethods().WebSocketSenderMessage('{"type":"send_message","text":"${_controllerMessage.text}","chat_id":"$chatID","receiver":"b"}');
+      WebSocketMethods().WebSocketSenderMessage(
+          '{"type":"send_message","text":"${_controllerMessage.text}","chat_id":"$chatID","receiver":"l"}');
 
       // LocalDatabaseMethods.insertMessage(50001, chatID, "prova messaggio",
       //     "sender", "2024-11-20 23:39:18.940747");
