@@ -5,7 +5,6 @@ import 'package:messanger_bpup/faces/start/emailCheck.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:messanger_bpup/src/webSocketMethods.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../src/localDatabaseMethods.dart';
 
 late bool _isLoggedIn = false;
@@ -17,13 +16,22 @@ late bool _isLoggedIn = false;
 //SE UTENTE LOGGATO ALLORA MANDA A CHATLIST, ALTRIMENTI NON DOVREBBE FARE UNA SEGA
 Future<bool> isLoggedInSkip(context) async{
 
+
+
   await _loadLoggedIn();
   print("Start skip Loggato?: $_isLoggedIn");
 
 
 
 
+  //cosa succede se utente già loggato
   if(_isLoggedIn){
+
+    String localUserID = await LocalDatabaseMethods().fetchLocalUserID();
+    String localUserApiKey = await LocalDatabaseMethods().fetchLocalUserApiKey();
+
+    WebSocketMethods().openWebSocketConnection(localUserID, localUserApiKey);
+
     Navigator.push(
       context,
       MaterialPageRoute(

@@ -3,11 +3,41 @@ import 'package:flutter/material.dart';
 import 'package:messanger_bpup/src/localDatabaseMethods.dart';
 import 'package:messanger_bpup/src/webSocketMethods.dart';
 
-late String localUserID;
+
+//se metto late e non lo inizializzo esplode, bho
+String localUserID = "";
 
 getLocalUserID() async {
   localUserID = await LocalDatabaseMethods().fetchLocalUserID();
 }
+
+
+
+
+
+
+final ScrollController _scrollControllerMsg = ScrollController();
+
+void scrollToTheEnd() {
+  // WidgetsBinding.instance.addPostFrameCallback((_) {
+  //   if (_scrollController.hasClients) { // Controlla se il controller ha una posizione valida
+  //     _scrollController.animateTo(
+  //       _scrollController.position.maxScrollExtent,
+  //       duration: Duration(milliseconds: 500),
+  //       curve: Curves.easeInOut,
+  //     );
+  //   }
+  // });
+  // Dopo che la ListView è stata costruita, scorri fino in fondo
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    _scrollControllerMsg.jumpTo(_scrollControllerMsg.position.minScrollExtent);
+  });
+  print("Scrollato fino alla fine");
+}
+
+
+
+
 
 class ChatPanel extends StatelessWidget {
   ChatPanel({super.key, required this.chatID, required this.groupChannelName});
@@ -15,12 +45,10 @@ class ChatPanel extends StatelessWidget {
   final chatID;
   final String groupChannelName;
 
-
-
   @override
   Widget build(BuildContext context) {
-
     getLocalUserID();
+
     print("LOCAL USER ID - CHAT PANEL: $localUserID");
     return Scaffold(
         backgroundColor: Color(0xff354966),
@@ -104,13 +132,20 @@ class MsgListView extends StatefulWidget {
 }
 
 class _MsgListViewState extends State<MsgListView> {
-  static final StreamController<List<Map<String, dynamic>>> _streamController =
-      StreamController();
+
+  final StreamController<List<Map<String, dynamic>>> _streamController =
+  StreamController.broadcast(); // Use broadcast stream for multiple listeners
+
+  List<Map<String, dynamic>> _messages = []; // Store fetched messages
+
+
+
+
 
   @override
   void initState() {
     super.initState();
-    // _listenToMessages();
+    _fetchData(); // Fetch messages initially and update UI
   }
 
   @override
@@ -119,57 +154,59 @@ class _MsgListViewState extends State<MsgListView> {
     super.dispose();
   }
 
-  //funzione orribile: OGNI 1 SEC FETCHA TUTTI I MESSAGGI, cambia 🚨
-  // void _listenToMessages() async {
-  //   Timer.periodic(Duration(seconds: 1), (timer) async {
-  //     final messages =
-  //         await LocalDatabaseMethods().fetchAllChatMessages(widget.chatID);
-  //     _streamController.sink.add(messages);
-  //     print(messages);
-  //   });
-  // }
+  void _fetchData() async {
+    try {
+      final messages = await LocalDatabaseMethods().fetchAllChatMessages(widget.chatID);
+      _messages = messages; // Store the data
+      _streamController.sink.add(messages); // Add fetched messages
+    } catch (error) {
+      // Handle error gracefully, e.g. show a snackbar
+      print("Error fetching messages: $error");
+    }
+
+    //dopo aver inserito correttamente (speriamo) tutti i dati nella lista allora la scrolla fino alla fine
+    // scrollToTheEnd();
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: Color(0xff354966),
-      body: Container(
-        child: FutureBuilder<List<Map<String, dynamic>>> (
+      body: StreamBuilder<List<Map<String, dynamic>>>(
+        stream: _streamController.stream,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
 
-          future: LocalDatabaseMethods().fetchAllChatMessages(widget.chatID),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError) {
-              return Center(child: Text("Error: ${snapshot.error}"));
-            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return Center(child: Text("No messages available"));
-            } else {
-              return ListView.builder(
+            return ListView.builder(
+                reverse: true,
+                shrinkWrap: true,
+                controller: _scrollControllerMsg,
+                physics: const BouncingScrollPhysics(),
                 itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) {
-                  return
-                    buildMessage(index, snapshot.data!, context, widget.chatID);
-                  Text("ciao");
-                },
-              );
-            }
-          },
-        ),
+                  final reversedIndex = snapshot.data!.length - index - 1;
+                  // Add print statements within buildMessage to debug its logic
+                  return buildMessage(reversedIndex, snapshot.data!, context, widget.chatID);
+                }
+            );
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text("Error fetching messages: ${snapshot.error}"), // Show error message with details
+            );
+          } else {
+            return Center(child: CircularProgressIndicator());
+          }
+        },
       ),
     );
   }
 }
 
-
-
-
-
-
-
 //   // capisce se mettere il messaggio a destra o sinistra in base al sender e fa la grafichina dei msg
 buildMessage(index, messages, context, chatID) {
-
   DateTime lastMessageDateTime = DateTime.parse(messages[index]['date_time']);
 
   //sender inteso come UserID
@@ -242,6 +279,27 @@ buildMessage(index, messages, context, chatID) {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //ORRIBILE QUESTO WIDGET, SISTEMALO PER FAVORE 🚨
 
 //barra invio messaggio sotto
@@ -259,17 +317,20 @@ class MsgBottomBar extends StatelessWidget {
   }
 
   //fa controlli se il messaggio non è vuoto
-  void _onSend() {
+  void _onSend() async {
     if (_controllerMessage.text.isNotEmpty) {
-      //changenotifier
-
       WebSocketMethods().WebSocketSenderMessage(
           '{"type":"send_message","text":"${_controllerMessage.text}","chat_id":"$chatID","receiver":"l"}');
 
-      // LocalDatabaseMethods.insertMessage(50001, chatID, "prova messaggio",
-      //     "sender", "2024-11-20 23:39:18.940747");
+
+      // LocalDatabaseMethods.insertMessage("mammt", chatID, "prova messaggio", "sender", "2024-11-20 23:39:18.940747");
+
 
       // _streamController.sink.add(messages);
+
+
+      scrollToTheEnd();
+
 
       _controllerMessage.clear();
     }

@@ -108,9 +108,11 @@ class WebSocketMethods {
           String send_message = hashData["send_message"];
           if(send_message == "True") {
             print("Messaggio tornato indietro: true");
+
           }
           if(send_message == "False") {
             print("Messaggio tornato indietro: false");
+
           }
 
           break;
@@ -126,7 +128,7 @@ class WebSocketMethods {
           String sender = hashData["sender"];
           String date = hashData["date"];
           LocalDatabaseMethods.insertMessage(message_id, chat_id, text, sender, date);
-
+          print("Nuovo messaggio ricevuto da $sender!");
           break;
         }
 
