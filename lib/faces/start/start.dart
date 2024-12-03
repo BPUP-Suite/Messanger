@@ -27,9 +27,10 @@ Future<bool> isLoggedInSkip(context) async{
   //cosa succede se utente già loggato
   if(_isLoggedIn){
 
+
+    //Apertura del websocket se l'utente è già loggato, importante
     String localUserID = await LocalDatabaseMethods().fetchLocalUserID();
     String localUserApiKey = await LocalDatabaseMethods().fetchLocalUserApiKey();
-
     WebSocketMethods().openWebSocketConnection(localUserID, localUserApiKey);
 
     Navigator.push(
@@ -166,6 +167,8 @@ class _BiometricsAppOpeningState extends State<BiometricsAppOpening> {
 
         if(authenticated){
           isLoggedInSkip(context);              //NON GLI PIACE MA FUNZIONA (?)
+        } else {
+          SystemChannels.platform.invokeMethod('SystemNavigator.pop');
         }
       } on PlatformException catch (e) {
         print(e);

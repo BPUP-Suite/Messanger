@@ -261,7 +261,7 @@
     },
     {
       "name": "shared_preferences_android",
-      "rootUri": "file:///C:/Users/matt3/AppData/Local/Pub/Cache/hosted/pub.dev/shared_preferences_android-2.3.3",
+      "rootUri": "file:///C:/Users/matt3/AppData/Local/Pub/Cache/hosted/pub.dev/shared_preferences_android-2.3.4",
       "packageUri": "lib/",
       "languageVersion": "3.5"
     },
@@ -422,10 +422,10 @@
       "languageVersion": "3.5"
     }
   ],
-  "generated": "2024-12-02T17:39:22.982875Z",
+  "generated": "2024-12-03T08:28:27.578287Z",
   "generator": "pub",
-  "generatorVersion": "3.5.3",
+  "generatorVersion": "3.5.4",
   "flutterRoot": "file:///C:/flutter",
-  "flutterVersion": "3.24.3",
+  "flutterVersion": "3.24.4",
   "pubCache": "file:///C:/Users/matt3/AppData/Local/Pub/Cache"
 }
