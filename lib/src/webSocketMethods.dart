@@ -42,8 +42,6 @@ class WebSocketMethods {
     await webSocketChannel.ready;
 
     await webSocketChannel.stream.listen((data) async {
-      // webSocketChannel.sink.add('{"init":$apiKey}');
-      // _listNotifier.add(ChatMessage(message, "NonMatteo", DateTime.now()));
       HashMap hashData = JsonParser().convertJsonToDynamicStructure(data);
       String type = hashData["type"];
 
@@ -108,7 +106,8 @@ class WebSocketMethods {
           String send_message = hashData["send_message"];
           if(send_message == "True") {
             print("Messaggio tornato indietro: true");
-
+            String hash = hashData["hash"];
+            print(hash);
           }
           if(send_message == "False") {
             print("Messaggio tornato indietro: false");

@@ -1,12 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:messanger_bpup/faces/start/start.dart';
 import 'package:messanger_bpup/src/localDatabaseMethods.dart';
-import 'package:messanger_bpup/src/webSocketMethods.dart';
-
-
-
-
-
 
 
 
@@ -20,9 +14,9 @@ void main() async{
   print('Esistenza Database: ${doesDBExists.toString()}');
 
   if(doesDBExists == true) {
-    String localUserID = await LocalDatabaseMethods().fetchLocalUserID();
-    String localUserApiKey = await LocalDatabaseMethods().fetchLocalUserApiKey();
-    WebSocketMethods().openWebSocketConnection(localUserID, localUserApiKey);
+    // String localUserID = await LocalDatabaseMethods().fetchLocalUserID();
+    // String localUserApiKey = await LocalDatabaseMethods().fetchLocalUserApiKey();
+    // WebSocketMethods().openWebSocketConnection(localUserID, localUserApiKey);
   }
 
 }

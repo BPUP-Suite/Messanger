@@ -6,7 +6,6 @@ import 'package:messanger_bpup/src/API/jsonParser.dart';
 class EmailCheck extends StatelessWidget {
   const EmailCheck({super.key});
 
-
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -53,10 +52,12 @@ class EmailCheckForm extends StatelessWidget {
           children: <Widget>[
             TextFormField(
               cursorColor: Colors.white,
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(
+                color: Colors.white,
+                decoration: TextDecoration.none,
+              ),
               decoration: InputDecoration(
                 labelText: 'Email',
-
                 labelStyle: TextStyle(color: Colors.white),
                 enabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(color: Colors.white),
@@ -78,7 +79,6 @@ class EmailCheckForm extends StatelessWidget {
 
                 return null;
               },
-
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -91,7 +91,7 @@ class EmailCheckForm extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.lightBlue,
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(100),
+                    borderRadius: BorderRadius.circular(100),
                   ),
                 ),
                 // child: Icon(Icons.check, color: Colors.white,),
@@ -120,8 +120,7 @@ void checkEmailAndNavigate(BuildContext context, String emailValue) async {
         builder: (context) => Signup(emailValue: emailValue),
       ),
     );
-  }
-  else{
+  } else {
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -130,4 +129,3 @@ void checkEmailAndNavigate(BuildContext context, String emailValue) async {
     );
   }
 }
-

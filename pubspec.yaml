@@ -36,7 +36,7 @@ dependencies:
   web_socket_channel:
   path_provider:
   sqflite:
-  provider:
+  bcrypt:
 
 
 

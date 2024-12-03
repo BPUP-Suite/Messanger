@@ -1,7 +1,9 @@
+import 'package:bcrypt/bcrypt.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:messanger_bpup/src/localDatabaseMethods.dart';
 import 'package:messanger_bpup/src/webSocketMethods.dart';
+
 
 
 //se metto late e non lo inizializzo esplode, bho
@@ -319,8 +321,28 @@ class MsgBottomBar extends StatelessWidget {
   //fa controlli se il messaggio non è vuoto
   void _onSend() async {
     if (_controllerMessage.text.isNotEmpty) {
+
+      String messageSalt = BCrypt.gensalt();
+
+      String hashedMessage = BCrypt.hashpw(_controllerMessage.text, messageSalt);
+      print(hashedMessage);
+
       WebSocketMethods().WebSocketSenderMessage(
-          '{"type":"send_message","text":"${_controllerMessage.text}","chat_id":"$chatID","receiver":"l"}');
+          '{"type":"send_message","text":"${_controllerMessage.text}","chat_id":"$chatID","salt":"$messageSalt"}');
+
+
+
+
+
+      // String password = 'mySecurePassword';
+
+      // Crea l'hash della password
+      // String hashedPassword = BCrypt.hashpw(password, salt);
+      // print("SALEEEEEEEEEEEEEEEEEEEEEEE: $salt");
+      // print('Password originale: $password');
+      // print('Password crittografata: $hashedPassword');
+
+
 
 
       // LocalDatabaseMethods.insertMessage("mammt", chatID, "prova messaggio", "sender", "2024-11-20 23:39:18.940747");
