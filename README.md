@@ -115,3 +115,13 @@ Attenzione, non è una timeline seria, quella seria seria, è in un project dell
    2) animazioni per il validator (che adesso funziona e controlla effettivamente i valori)
    3) restyle delle chat list (con tutti i valori che necessitano [nome_chat,immagine,ultimo msg,data ultimo msg e messaggi non letti])
  - Infine sistemata TEMPORANEAMENTE (anche se sappiano tutti sarà semi permanente) delle websocket per ottenere tutti i dati INIZIALI (ancora il send_message, l'ack e in generale l'update del database locale non esistono)
+
+03/12/2024
+
+ - Aiutooooooooooooooooooooooooooooooooo
+ - Ho fatto il parziale di analisi, 2/2 volo
+ - Si ritorna a sviluppare questa fantastica applicazione
+ - Nuove modifiche lato server con dei piccoli aggiustamenti ai metodi già esistenti tipo un limite di caratteri di 2056 (numero random, dopo capirò il vero limite del database), ottimizzato il metodo init che prima faceva cose strane per ottenere lo user_id (tipo tramite api_key che veniva trasformata in handle e dopo in user_id?? non so cosa stessi facendo)
+ - Aggiunta una fantastica nuova pagine solo per noi fantastici admin (aggiunti più che altro per {MM} che ogni volta mi chiedeva i log del server a cui potevi accedere solo tramite ssh a oracle e leggendo il file fantastico nei data) che permette la visualizzazione dei log da pagina web
+ - Lato client, ora i messaggini workano meglio ma manca ancora la parte fondamentale live
+ - Inoltre ho trovato un fantastico buggettino con il biometric access che {MM} ha prontamente provveduto a fixare (grande efficenza questo lavoratore) 
