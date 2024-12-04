@@ -16,6 +16,8 @@ getLocalUserID() async {
 
 
 
+List<Map<String, dynamic>> _messages = []; // Store fetched messages
+
 
 
 final ScrollController _scrollControllerMsg = ScrollController();
@@ -46,6 +48,10 @@ class ChatPanel extends StatelessWidget {
 
   final chatID;
   final String groupChannelName;
+
+  StreamController<List<Map<String, dynamic>>> _streamController =
+  StreamController.broadcast(); // Use broadcast stream for multiple listeners
+
 
   @override
   Widget build(BuildContext context) {
@@ -111,13 +117,13 @@ class ChatPanel extends StatelessWidget {
           //parte in cui appaiono i messaggi
           Expanded(
             child: Container(
-              child: MsgListView(chatID: chatID),
+              child: MsgListView(chatID: chatID, streamController :_streamController),
             ),
           ),
 
           //barra sotto che comprende graffetta, messaggio, send button
           Container(
-            child: MsgBottomBar(chatID),
+            child: MsgBottomBar(chatID, _streamController),
           ),
         ]));
   }
@@ -125,9 +131,10 @@ class ChatPanel extends StatelessWidget {
 
 //print dei messaggini
 class MsgListView extends StatefulWidget {
-  const MsgListView({super.key, required this.chatID});
+  const MsgListView({super.key, required this.chatID, required this.streamController});
 
   final chatID;
+  final streamController;
 
   @override
   State<MsgListView> createState() => _MsgListViewState();
@@ -135,10 +142,9 @@ class MsgListView extends StatefulWidget {
 
 class _MsgListViewState extends State<MsgListView> {
 
-  final StreamController<List<Map<String, dynamic>>> _streamController =
-  StreamController.broadcast(); // Use broadcast stream for multiple listeners
 
-  List<Map<String, dynamic>> _messages = []; // Store fetched messages
+
+
 
 
 
@@ -152,7 +158,6 @@ class _MsgListViewState extends State<MsgListView> {
 
   @override
   void dispose() {
-    _streamController.close();
     super.dispose();
   }
 
@@ -160,7 +165,7 @@ class _MsgListViewState extends State<MsgListView> {
     try {
       final messages = await LocalDatabaseMethods().fetchAllChatMessages(widget.chatID);
       _messages = messages; // Store the data
-      _streamController.sink.add(messages); // Add fetched messages
+      widget.streamController.sink.add(messages); // Add fetched messages
     } catch (error) {
       // Handle error gracefully, e.g. show a snackbar
       print("Error fetching messages: $error");
@@ -178,7 +183,7 @@ class _MsgListViewState extends State<MsgListView> {
     return Scaffold(
       backgroundColor: Color(0xff354966),
       body: StreamBuilder<List<Map<String, dynamic>>>(
-        stream: _streamController.stream,
+        stream: widget.streamController.stream,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
 
@@ -305,31 +310,46 @@ buildMessage(index, messages, context, chatID) {
 //ORRIBILE QUESTO WIDGET, SISTEMALO PER FAVORE 🚨
 
 //barra invio messaggio sotto
-class MsgBottomBar extends StatelessWidget {
-  final chatID;
+class MsgBottomBar extends StatefulWidget {
+  const MsgBottomBar(this.chatID, this.streamController , {Key? key}) : super(key: key);
+  final String chatID;
+  final streamController;
 
-  //controllo testo si/no per cambio di icona
+
+
+  @override
+  _MsgBottomBarState createState() => _MsgBottomBarState();
+}
+
+class _MsgBottomBarState extends State<MsgBottomBar> {
   final TextEditingController _controllerMessage = TextEditingController();
   final ValueNotifier<bool> _hasText = ValueNotifier<bool>(false);
 
-  MsgBottomBar(this.chatID) {
+  @override
+  void initState() {
+    super.initState();
     _controllerMessage.addListener(() {
       _hasText.value = _controllerMessage.text.isNotEmpty;
     });
   }
 
-  //fa controlli se il messaggio non è vuoto
   void _onSend() async {
     if (_controllerMessage.text.isNotEmpty) {
-
       String messageSalt = BCrypt.gensalt();
 
-      String hashedMessage = BCrypt.hashpw(_controllerMessage.text, messageSalt);
+      String hashedMessage = BCrypt.hashpw(
+          _controllerMessage.text, messageSalt);
       print(hashedMessage);
 
       WebSocketMethods().WebSocketSenderMessage(
-          '{"type":"send_message","text":"${_controllerMessage.text}","chat_id":"$chatID","salt":"$messageSalt"}');
+          '{"type":"send_message","text":"${_controllerMessage
+              .text}","chat_id":"${widget.chatID}","salt":"$messageSalt"}');
 
+
+      widget.streamController.sink.add([..._messages, {
+      'sender': localUserID,
+      'text': _controllerMessage.text,
+      'date_time': DateTime.now().toString()}]);
 
 
 
@@ -343,12 +363,7 @@ class MsgBottomBar extends StatelessWidget {
       // print('Password crittografata: $hashedPassword');
 
 
-
-
       // LocalDatabaseMethods.insertMessage("mammt", chatID, "prova messaggio", "sender", "2024-11-20 23:39:18.940747");
-
-
-      // _streamController.sink.add(messages);
 
 
       scrollToTheEnd();
@@ -358,7 +373,7 @@ class MsgBottomBar extends StatelessWidget {
     }
   }
 
-  @override
+    @override
   Widget build(BuildContext context) {
     return Container(
       color: Color(0xff202c3e),
@@ -398,11 +413,11 @@ class MsgBottomBar extends StatelessWidget {
                                 Expanded(
                                   child: Container(
                                     decoration: BoxDecoration(
-                                        // borderRadius: BorderRadius.vertical(
-                                        //   top: Radius.circular(10),
-                                        // ),
-                                        // color: Colors.yellow,
-                                        ),
+                                      // borderRadius: BorderRadius.vertical(
+                                      //   top: Radius.circular(10),
+                                      // ),
+                                      // color: Colors.yellow,
+                                    ),
                                     child: Center(
                                       child: Text(
                                         'Pannello 1',
@@ -414,11 +429,11 @@ class MsgBottomBar extends StatelessWidget {
                                 Expanded(
                                   child: Container(
                                     decoration: BoxDecoration(
-                                        // borderRadius: BorderRadius.vertical(
-                                        //   top: Radius.circular(10),
-                                        // ),
-                                        // color: Colors.yellow,
-                                        ),
+                                      // borderRadius: BorderRadius.vertical(
+                                      //   top: Radius.circular(10),
+                                      // ),
+                                      // color: Colors.yellow,
+                                    ),
                                     child: Center(
                                       child: Text(
                                         'Pannello 2',
@@ -430,11 +445,11 @@ class MsgBottomBar extends StatelessWidget {
                                 Expanded(
                                   child: Container(
                                     decoration: BoxDecoration(
-                                        // borderRadius: BorderRadius.vertical(
-                                        //   top: Radius.circular(10),
-                                        // ),
-                                        // color: Colors.yellow,
-                                        ),
+                                      // borderRadius: BorderRadius.vertical(
+                                      //   top: Radius.circular(10),
+                                      // ),
+                                      // color: Colors.yellow,
+                                    ),
                                     child: Center(
                                       child: Text(
                                         'Pannello 3',
@@ -446,11 +461,11 @@ class MsgBottomBar extends StatelessWidget {
                                 Expanded(
                                   child: Container(
                                     decoration: BoxDecoration(
-                                        // borderRadius: BorderRadius.vertical(
-                                        //   top: Radius.circular(10),
-                                        // ),
-                                        // color: Colors.yellow,
-                                        ),
+                                      // borderRadius: BorderRadius.vertical(
+                                      //   top: Radius.circular(10),
+                                      // ),
+                                      // color: Colors.yellow,
+                                    ),
                                     child: Center(
                                       child: Text(
                                         'Pannello 4',
