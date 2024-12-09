@@ -37,6 +37,7 @@ dependencies:
   path_provider:
   sqflite:
   bcrypt:
+  provider:
 
 
 

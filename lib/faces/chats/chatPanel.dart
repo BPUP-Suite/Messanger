@@ -1,24 +1,21 @@
+import 'package:messanger_bpup/src/chatMessagesProvider.dart';
+import 'package:provider/provider.dart';
 import 'package:bcrypt/bcrypt.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:messanger_bpup/src/localDatabaseMethods.dart';
 import 'package:messanger_bpup/src/webSocketMethods.dart';
 
-
-
 //se metto late e non lo inizializzo esplode, bho
+//può generare un bug però, attenzione, dai un occhio
 String localUserID = "";
 
 getLocalUserID() async {
   localUserID = await LocalDatabaseMethods().fetchLocalUserID();
 }
 
-
-
-
-List<Map<String, dynamic>> _messages = []; // Store fetched messages
-
-
+// Store fetched messages
+// List<Map<String, dynamic>> _messages = [];
 
 final ScrollController _scrollControllerMsg = ScrollController();
 
@@ -39,19 +36,15 @@ void scrollToTheEnd() {
   print("Scrollato fino alla fine");
 }
 
-
-
-
-
 class ChatPanel extends StatelessWidget {
   ChatPanel({super.key, required this.chatID, required this.groupChannelName});
 
   final chatID;
   final String groupChannelName;
 
-  StreamController<List<Map<String, dynamic>>> _streamController =
-  StreamController.broadcast(); // Use broadcast stream for multiple listeners
-
+  // Use broadcast stream for multiple listeners
+  // StreamController<List<Map<String, dynamic>>> _streamController =
+  // StreamController.broadcast();
 
   @override
   Widget build(BuildContext context) {
@@ -113,43 +106,42 @@ class ChatPanel extends StatelessWidget {
         ),
 
         //body
-        body: Column(children: [
-          //parte in cui appaiono i messaggi
-          Expanded(
-            child: Container(
-              child: MsgListView(chatID: chatID, streamController :_streamController),
-            ),
-          ),
+        body: ChangeNotifierProvider(
+            create: (_) => ChatMessagesProvider(),
+          child: Consumer<ChatMessagesProvider>(
+              builder: (context, provider, child) {
+                return Column(children: [
+                  //parte in cui appaiono i messaggi
+                  Expanded(
+                    child: Container(
+                      child: MsgListView(chatID: chatID),
+                    ),
+                  ),
 
-          //barra sotto che comprende graffetta, messaggio, send button
-          Container(
-            child: MsgBottomBar(chatID, _streamController),
-          ),
-        ]));
+                  //barra sotto che comprende graffetta, messaggio, send button
+                  Container(
+                    child: MsgBottomBar(chatID),
+                  ),
+                ]
+                );
+              }
+          )
+        )
+    );
   }
 }
 
 //print dei messaggini
 class MsgListView extends StatefulWidget {
-  const MsgListView({super.key, required this.chatID, required this.streamController});
+  const MsgListView({super.key, required this.chatID});
 
   final chatID;
-  final streamController;
 
   @override
   State<MsgListView> createState() => _MsgListViewState();
 }
 
 class _MsgListViewState extends State<MsgListView> {
-
-
-
-
-
-
-
-
-
   @override
   void initState() {
     super.initState();
@@ -164,48 +156,43 @@ class _MsgListViewState extends State<MsgListView> {
   void _fetchData() async {
     try {
       final messages = await LocalDatabaseMethods().fetchAllChatMessages(widget.chatID);
-      _messages = messages; // Store the data
-      widget.streamController.sink.add(messages); // Add fetched messages
+      context.read<ChatMessagesProvider>().messages = messages;
     } catch (error) {
-      // Handle error gracefully, e.g. show a snackbar
       print("Error fetching messages: $error");
     }
-
-    //dopo aver inserito correttamente (speriamo) tutti i dati nella lista allora la scrolla fino alla fine
-    // scrollToTheEnd();
   }
-
 
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: Color(0xff354966),
-      body: StreamBuilder<List<Map<String, dynamic>>>(
-        stream: widget.streamController.stream,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-
-            return ListView.builder(
-                reverse: true,
-                shrinkWrap: true,
-                controller: _scrollControllerMsg,
-                physics: const BouncingScrollPhysics(),
-                itemCount: snapshot.data!.length,
-                itemBuilder: (context, index) {
-                  final reversedIndex = snapshot.data!.length - index - 1;
-                  // Add print statements within buildMessage to debug its logic
-                  return buildMessage(reversedIndex, snapshot.data!, context, widget.chatID);
-                }
-            );
-          } else if (snapshot.hasError) {
-            return Center(
-              child: Text("Error fetching messages: ${snapshot.error}"), // Show error message with details
-            );
-          } else {
-            return Center(child: CircularProgressIndicator());
-          }
+      body: Consumer<ChatMessagesProvider>(
+        builder: (context, provider, child) {
+          return StreamBuilder<List<Map<String, dynamic>>>(
+            stream: provider.messagesStream,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return ListView.builder(
+                  reverse: true,
+                  shrinkWrap: true,
+                  controller: _scrollControllerMsg,
+                  physics: const BouncingScrollPhysics(),
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (context, index) {
+                    final reversedIndex = snapshot.data!.length - index - 1;
+                    return buildMessage(reversedIndex, snapshot.data!, context, widget.chatID);
+                  },
+                );
+              } else if (snapshot.hasError) {
+                return Center(
+                  child: Text("Error fetching messages: ${snapshot.error}"),
+                );
+              } else {
+                return Center(child: CircularProgressIndicator());
+              }
+            },
+          );
         },
       ),
     );
@@ -284,38 +271,12 @@ buildMessage(index, messages, context, chatID) {
   }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //ORRIBILE QUESTO WIDGET, SISTEMALO PER FAVORE 🚨
 
 //barra invio messaggio sotto
 class MsgBottomBar extends StatefulWidget {
-  const MsgBottomBar(this.chatID, this.streamController , {Key? key}) : super(key: key);
+  const MsgBottomBar(this.chatID, {Key? key}) : super(key: key);
   final String chatID;
-  final streamController;
-
-
 
   @override
   _MsgBottomBarState createState() => _MsgBottomBarState();
@@ -336,44 +297,37 @@ class _MsgBottomBarState extends State<MsgBottomBar> {
   void _onSend() async {
     if (_controllerMessage.text.isNotEmpty) {
       String messageSalt = BCrypt.gensalt();
-
-      String hashedMessage = BCrypt.hashpw(
-          _controllerMessage.text, messageSalt);
-      print(hashedMessage);
+      String hashedMessage =
+          BCrypt.hashpw(_controllerMessage.text, messageSalt);
 
       WebSocketMethods().WebSocketSenderMessage(
-          '{"type":"send_message","text":"${_controllerMessage
-              .text}","chat_id":"${widget.chatID}","salt":"$messageSalt"}');
-
-
-      widget.streamController.sink.add([..._messages, {
-      'sender': localUserID,
-      'text': _controllerMessage.text,
-      'date_time': DateTime.now().toString()}]);
+          '{"type":"send_message","text":"${_controllerMessage.text}","chat_id":"${widget.chatID}","salt":"$messageSalt"}');
 
 
 
-
-      // String password = 'mySecurePassword';
-
-      // Crea l'hash della password
-      // String hashedPassword = BCrypt.hashpw(password, salt);
-      // print("SALEEEEEEEEEEEEEEEEEEEEEEE: $salt");
-      // print('Password originale: $password');
-      // print('Password crittografata: $hashedPassword');
+      Map<String, dynamic> newMessage = {
+        'sender': localUserID,
+        'text': _controllerMessage.text,
+        'date_time': DateTime.now().toString(),
+      };
 
 
-      // LocalDatabaseMethods.insertMessage("mammt", chatID, "prova messaggio", "sender", "2024-11-20 23:39:18.940747");
+      //aggiungo messaggio a lista messaggi stream
+      context.read<ChatMessagesProvider>().addMessage(newMessage);
 
+
+      // widget.streamController.sink.add([..._messages, {
+      // 'sender': localUserID,
+      // 'text': _controllerMessage.text,
+      // 'date_time': DateTime.now().toString()}]);
 
       scrollToTheEnd();
-
 
       _controllerMessage.clear();
     }
   }
 
-    @override
+  @override
   Widget build(BuildContext context) {
     return Container(
       color: Color(0xff202c3e),
@@ -413,11 +367,11 @@ class _MsgBottomBarState extends State<MsgBottomBar> {
                                 Expanded(
                                   child: Container(
                                     decoration: BoxDecoration(
-                                      // borderRadius: BorderRadius.vertical(
-                                      //   top: Radius.circular(10),
-                                      // ),
-                                      // color: Colors.yellow,
-                                    ),
+                                        // borderRadius: BorderRadius.vertical(
+                                        //   top: Radius.circular(10),
+                                        // ),
+                                        // color: Colors.yellow,
+                                        ),
                                     child: Center(
                                       child: Text(
                                         'Pannello 1',
@@ -429,11 +383,11 @@ class _MsgBottomBarState extends State<MsgBottomBar> {
                                 Expanded(
                                   child: Container(
                                     decoration: BoxDecoration(
-                                      // borderRadius: BorderRadius.vertical(
-                                      //   top: Radius.circular(10),
-                                      // ),
-                                      // color: Colors.yellow,
-                                    ),
+                                        // borderRadius: BorderRadius.vertical(
+                                        //   top: Radius.circular(10),
+                                        // ),
+                                        // color: Colors.yellow,
+                                        ),
                                     child: Center(
                                       child: Text(
                                         'Pannello 2',
@@ -445,11 +399,11 @@ class _MsgBottomBarState extends State<MsgBottomBar> {
                                 Expanded(
                                   child: Container(
                                     decoration: BoxDecoration(
-                                      // borderRadius: BorderRadius.vertical(
-                                      //   top: Radius.circular(10),
-                                      // ),
-                                      // color: Colors.yellow,
-                                    ),
+                                        // borderRadius: BorderRadius.vertical(
+                                        //   top: Radius.circular(10),
+                                        // ),
+                                        // color: Colors.yellow,
+                                        ),
                                     child: Center(
                                       child: Text(
                                         'Pannello 3',
@@ -461,11 +415,11 @@ class _MsgBottomBarState extends State<MsgBottomBar> {
                                 Expanded(
                                   child: Container(
                                     decoration: BoxDecoration(
-                                      // borderRadius: BorderRadius.vertical(
-                                      //   top: Radius.circular(10),
-                                      // ),
-                                      // color: Colors.yellow,
-                                    ),
+                                        // borderRadius: BorderRadius.vertical(
+                                        //   top: Radius.circular(10),
+                                        // ),
+                                        // color: Colors.yellow,
+                                        ),
                                     child: Center(
                                       child: Text(
                                         'Pannello 4',

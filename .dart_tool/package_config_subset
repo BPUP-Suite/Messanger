@@ -114,6 +114,10 @@ meta
 2.12
 file:///C:/Users/matt3/AppData/Local/Pub/Cache/hosted/pub.dev/meta-1.15.0/
 file:///C:/Users/matt3/AppData/Local/Pub/Cache/hosted/pub.dev/meta-1.15.0/lib/
+nested
+2.12
+file:///C:/Users/matt3/AppData/Local/Pub/Cache/hosted/pub.dev/nested-1.0.0/
+file:///C:/Users/matt3/AppData/Local/Pub/Cache/hosted/pub.dev/nested-1.0.0/lib/
 path
 3.0
 file:///C:/Users/matt3/AppData/Local/Pub/Cache/hosted/pub.dev/path-1.9.0/
@@ -127,9 +131,9 @@ path_provider_android
 file:///C:/Users/matt3/AppData/Local/Pub/Cache/hosted/pub.dev/path_provider_android-2.2.14/
 file:///C:/Users/matt3/AppData/Local/Pub/Cache/hosted/pub.dev/path_provider_android-2.2.14/lib/
 path_provider_foundation
-3.2
-file:///C:/Users/matt3/AppData/Local/Pub/Cache/hosted/pub.dev/path_provider_foundation-2.4.0/
-file:///C:/Users/matt3/AppData/Local/Pub/Cache/hosted/pub.dev/path_provider_foundation-2.4.0/lib/
+3.3
+file:///C:/Users/matt3/AppData/Local/Pub/Cache/hosted/pub.dev/path_provider_foundation-2.4.1/
+file:///C:/Users/matt3/AppData/Local/Pub/Cache/hosted/pub.dev/path_provider_foundation-2.4.1/lib/
 path_provider_linux
 2.19
 file:///C:/Users/matt3/AppData/Local/Pub/Cache/hosted/pub.dev/path_provider_linux-2.2.1/
@@ -150,6 +154,10 @@ plugin_platform_interface
 3.0
 file:///C:/Users/matt3/AppData/Local/Pub/Cache/hosted/pub.dev/plugin_platform_interface-2.1.8/
 file:///C:/Users/matt3/AppData/Local/Pub/Cache/hosted/pub.dev/plugin_platform_interface-2.1.8/lib/
+provider
+2.12
+file:///C:/Users/matt3/AppData/Local/Pub/Cache/hosted/pub.dev/provider-6.1.2/
+file:///C:/Users/matt3/AppData/Local/Pub/Cache/hosted/pub.dev/provider-6.1.2/lib/
 shared_preferences
 3.4
 file:///C:/Users/matt3/AppData/Local/Pub/Cache/hosted/pub.dev/shared_preferences-2.3.3/
