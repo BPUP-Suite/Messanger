@@ -1,7 +1,6 @@
 import 'package:messanger_bpup/src/chatMessagesProvider.dart';
 import 'package:provider/provider.dart';
 import 'package:bcrypt/bcrypt.dart';
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:messanger_bpup/src/localDatabaseMethods.dart';
 import 'package:messanger_bpup/src/webSocketMethods.dart';

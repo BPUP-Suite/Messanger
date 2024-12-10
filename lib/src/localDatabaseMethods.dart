@@ -44,7 +44,7 @@ class LocalDatabaseMethods {
             chat_id TEXT REFERENCES chats(chat_id),
             sender TEXT,
             text TEXT,
-            date_time DATETIME
+            date_time DATETIME,
             hash TEXT
           );
           '''
@@ -299,7 +299,7 @@ class LocalDatabaseMethods {
           'date_time': date,
           'hash': hash,
         },
-        conflictAlgorithm: ConflictAlgorithm.replace,
+        conflictAlgorithm: ConflictAlgorithm.ignore,
       );
     } catch (e) {
       print("Errore durante l'inserimento del messaggio: $e");
