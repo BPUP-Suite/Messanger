@@ -201,7 +201,17 @@ class _MsgListViewState extends State<MsgListView> {
 
 //   // capisce se mettere il messaggio a destra o sinistra in base al sender e fa la grafichina dei msg
 buildMessage(index, messages, context, chatID) {
-  DateTime lastMessageDateTime = DateTime.parse(messages[index]['date_time']);
+  
+  late DateTime lastMessageDateTime;
+  
+  if(messages[index]['date_time'] == ""){
+    //test, cambiare correttamente
+    lastMessageDateTime = DateTime(2024);
+  } else {
+    lastMessageDateTime = DateTime.parse(messages[index]['date_time']);
+  }
+
+
 
   //sender inteso come UserID
   if (messages[index]['sender'] == localUserID) {
@@ -303,6 +313,7 @@ class _MsgBottomBarState extends State<MsgBottomBar> {
       WebSocketMethods().WebSocketSenderMessage(
           '{"type":"send_message","text":"${_controllerMessage.text}","chat_id":"${widget.chatID}","salt":"$messageSalt"}');
 
+      LocalDatabaseMethods.insertMessage("", widget.chatID, _controllerMessage.text, localUserID, "");
 
 
       Map<String, dynamic> newMessage = {

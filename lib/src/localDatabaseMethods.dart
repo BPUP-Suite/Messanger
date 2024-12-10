@@ -284,19 +284,23 @@ class LocalDatabaseMethods {
 
 
 
-  static Future<void> insertMessage(String? message_id, chat_id, text, sender, String? date) async {
-
+  static Future<void> insertMessage(String? message_id, String chat_id, String text, String sender, String? date) async {
     final db = await localDatabase;
 
     try {
       await db.insert(
         'messages',
-        {'message_id': message_id, 'chat_id': chat_id, 'text': text, 'sender': sender, 'date_time': date},
+        {
+          'message_id': message_id,
+          'chat_id': chat_id,
+          'text': text,
+          'sender': sender,
+          'date_time': date,
+        },
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
-    }
-    catch (e) {
-      print("Errore durante l'inserimento della chat: $e");
+    } catch (e) {
+      print("Errore durante l'inserimento del messaggio: $e");
     }
   }
 
