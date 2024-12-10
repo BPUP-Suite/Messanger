@@ -217,5 +217,7 @@ class Settings extends StatelessWidget {
     for (var table in tables) {
       await database.delete(table['name']);
     }
+
+    // databaseFactory.deleteDatabase(localDBPath);
   }
 }

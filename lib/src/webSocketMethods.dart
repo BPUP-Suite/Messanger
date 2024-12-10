@@ -90,7 +90,7 @@ class WebSocketMethods {
                 HashMap<String, dynamic> messageMap = HashMap<String, dynamic>.from(message);
 
                 print("Messaggio: ${messageMap["message_id"]}");
-                LocalDatabaseMethods.insertMessage(messageMap["message_id"], messageMap["chat_id"], messageMap["text"], messageMap["sender"], messageMap["date"]);
+                LocalDatabaseMethods.insertMessage(messageMap["message_id"], messageMap["chat_id"], messageMap["text"], messageMap["sender"], messageMap["date"], "");
               }
             }
           }
@@ -125,7 +125,8 @@ class WebSocketMethods {
           String text = hashData["text"];
           String sender = hashData["sender"];
           String date = hashData["date"];
-          LocalDatabaseMethods.insertMessage(message_id, chat_id, text, sender, date);
+          String hash = "";
+          LocalDatabaseMethods.insertMessage(message_id, chat_id, text, sender, date, hash);
           print("Nuovo messaggio ricevuto da $sender!");
           break;
         }

@@ -45,6 +45,7 @@ class LocalDatabaseMethods {
             sender TEXT,
             text TEXT,
             date_time DATETIME
+            hash TEXT
           );
           '''
         );
@@ -284,7 +285,7 @@ class LocalDatabaseMethods {
 
 
 
-  static Future<void> insertMessage(String? message_id, String chat_id, String text, String sender, String? date) async {
+  static Future<void> insertMessage(String message_id, String chat_id, String text, String sender, String date, String hash) async {
     final db = await localDatabase;
 
     try {
@@ -296,6 +297,29 @@ class LocalDatabaseMethods {
           'text': text,
           'sender': sender,
           'date_time': date,
+          'hash': hash,
+        },
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+    } catch (e) {
+      print("Errore durante l'inserimento del messaggio: $e");
+    }
+  }
+
+
+
+  static Future<void> updateSendMessage(String date, String message_id, String hash) async {
+    final db = await localDatabase;
+
+    try {
+      await db.update(
+        'messages',
+        where: 'hash = ?',
+        whereArgs: ['$hash'],
+        {
+          'date_time': date,
+          'message_id': message_id,
+          'hash': "",
         },
         conflictAlgorithm: ConflictAlgorithm.replace,
       );

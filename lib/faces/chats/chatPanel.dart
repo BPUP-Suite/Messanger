@@ -310,10 +310,13 @@ class _MsgBottomBarState extends State<MsgBottomBar> {
       String hashedMessage =
           BCrypt.hashpw(_controllerMessage.text, messageSalt);
 
+      print(messageSalt);
+      print(hashedMessage);
+
       WebSocketMethods().WebSocketSenderMessage(
           '{"type":"send_message","text":"${_controllerMessage.text}","chat_id":"${widget.chatID}","salt":"$messageSalt"}');
 
-      LocalDatabaseMethods.insertMessage("", widget.chatID, _controllerMessage.text, localUserID, "");
+      LocalDatabaseMethods.insertMessage("", widget.chatID, _controllerMessage.text, localUserID, "", "");
 
 
       Map<String, dynamic> newMessage = {
