@@ -4,6 +4,9 @@ import 'package:bcrypt/bcrypt.dart';
 import 'package:flutter/material.dart';
 import 'package:messanger_bpup/src/localDatabaseMethods.dart';
 import 'package:messanger_bpup/src/webSocketMethods.dart';
+import 'package:intl/intl.dart';
+
+import '../../src/messageService.dart';
 
 //se metto late e non lo inizializzo esplode, bho
 //può generare un bug però, attenzione, dai un occhio
@@ -35,6 +38,15 @@ void scrollToTheEnd() {
   print("Scrollato fino alla fine");
 }
 
+
+
+
+
+
+
+
+
+
 class ChatPanel extends StatelessWidget {
   ChatPanel({super.key, required this.chatID, required this.groupChannelName});
 
@@ -47,6 +59,7 @@ class ChatPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     getLocalUserID();
 
     print("LOCAL USER ID - CHAT PANEL: $localUserID");
@@ -55,6 +68,7 @@ class ChatPanel extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: Color(0xff202c3e),
           iconTheme: IconThemeData(color: Colors.white),
+          scrolledUnderElevation: 0,
           //barra superiore
           title: Row(
             children: [
@@ -200,9 +214,9 @@ class _MsgListViewState extends State<MsgListView> {
 
 //   // capisce se mettere il messaggio a destra o sinistra in base al sender e fa la grafichina dei msg
 buildMessage(index, messages, context, chatID) {
-  
+
   late DateTime lastMessageDateTime;
-  
+
   if(messages[index]['date_time'] == ""){
     //test, cambiare correttamente
     lastMessageDateTime = DateTime(2024);
@@ -210,7 +224,8 @@ buildMessage(index, messages, context, chatID) {
     lastMessageDateTime = DateTime.parse(messages[index]['date_time']);
   }
 
-
+  // Formatta l'orario con zeri iniziali
+  final formattedTime = DateFormat.Hm().format(lastMessageDateTime);
 
   //sender inteso come UserID
   if (messages[index]['sender'] == localUserID) {
@@ -228,7 +243,7 @@ buildMessage(index, messages, context, chatID) {
               style: TextStyle(color: Colors.white),
             ),
             Text(
-              '${lastMessageDateTime.hour.toString()}:${lastMessageDateTime.minute.toString()}',
+              formattedTime,
               style: TextStyle(color: Colors.white),
             ),
           ],
@@ -258,7 +273,7 @@ buildMessage(index, messages, context, chatID) {
               style: TextStyle(color: Colors.white),
             ),
             Text(
-              '${lastMessageDateTime.hour.toString()}:${lastMessageDateTime.minute.toString()}',
+              formattedTime,
               style: TextStyle(color: Colors.white),
             ),
           ],
@@ -326,7 +341,7 @@ class _MsgBottomBarState extends State<MsgBottomBar> {
 
 
       //aggiungo messaggio a lista messaggi stream
-      context.read<ChatMessagesProvider>().addMessage(newMessage);
+      messageService.notifyListeners(newMessage);
 
 
       // widget.streamController.sink.add([..._messages, {

@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.bpup.messanger.messanger_bpup.app-mergeDebugResources-29:/values-large-v4/values-large-v4.xml",
+            "outputFile": "com.bpup.messanger.messanger_bpup.app-mergeDebugResources-39:/values-large-v4/values-large-v4.xml",
             "map": [
                 {
                     "source": "C:\\Users\\matt3\\.gradle\\caches\\transforms-3\\0d9cf90d33b0d2fb6bcd318d06e7b982\\transformed\\appcompat-1.2.0\\res\\values-large-v4\\values-large-v4.xml",

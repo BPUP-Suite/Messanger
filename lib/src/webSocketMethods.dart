@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:messanger_bpup/src/API/jsonParser.dart';
 import 'package:messanger_bpup/src/localDatabaseMethods.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
-import 'chatMessagesProvider.dart';
-import 'package:provider/provider.dart';
-
+import 'messageService.dart';
 
 class WebSocketMethods {
 
@@ -74,6 +72,8 @@ class WebSocketMethods {
                 HashMap<String, dynamic> messageMap = HashMap<String, dynamic>.from(message);
 
                 LocalDatabaseMethods.insertMessage(messageMap["message_id"], messageMap["chat_id"], messageMap["text"], messageMap["sender"].toString(), messageMap["date"], "");
+                // Aggiungi il messaggio alla lista tramite il provider
+                // Provider.of<ChatMessagesProvider>(context, listen: false).addMessage(messageMap);
               }
             }
           }
@@ -90,12 +90,22 @@ class WebSocketMethods {
             String hash = hashData["hash"];
             print(hash);
 
-
+            // print("prima");
+            // Map<String, dynamic> newMessage = {
+            //   'sender': "nonio",
+            //   'text': "testo",
+            //   'date_time': DateTime.now().toString(),
+            // };
+            //
+            // print(newMessage);
+            //
+            // //aggiungo messaggio a lista messaggi stream
+            // Provider.of<ChatMessagesProvider>(context, listen: false).addMessage(newMessage);
+            // print("dopo");
           }
           if(send_message == "False") {
             print("Messaggio tornato indietro: false");
           }
-
           break;
         }
 
@@ -108,6 +118,26 @@ class WebSocketMethods {
           String hash = "";
           LocalDatabaseMethods.insertMessage(message_id, chat_id, text, sender, date, hash);
           print("Nuovo messaggio ricevuto da $sender");
+
+          print("prima del receive");
+
+          Map<String, dynamic> newMessage = {
+            'sender': sender,
+            'text': text,
+            'date_time': date,
+          };
+
+          print("durante il receive");
+
+          //aggiungo messaggio a lista messaggi stream
+          // Provider.of<ChatMessagesProvider>(context, listen: false).addMessage(newMessage);
+          // ChatMessagesProvider().addMessage(newMessage);
+
+          messageService.notifyListeners(newMessage);
+
+          print("dopo del receive");
+
+
           break;
         }
 

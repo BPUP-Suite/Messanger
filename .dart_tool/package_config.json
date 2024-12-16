@@ -159,9 +159,9 @@
     },
     {
       "name": "local_auth_darwin",
-      "rootUri": "file:///C:/Users/matt3/AppData/Local/Pub/Cache/hosted/pub.dev/local_auth_darwin-1.4.1",
+      "rootUri": "file:///C:/Users/matt3/AppData/Local/Pub/Cache/hosted/pub.dev/local_auth_darwin-1.4.2",
       "packageUri": "lib/",
-      "languageVersion": "3.3"
+      "languageVersion": "3.4"
     },
     {
       "name": "local_auth_platform_interface",
@@ -213,7 +213,7 @@
     },
     {
       "name": "path_provider_android",
-      "rootUri": "file:///C:/Users/matt3/AppData/Local/Pub/Cache/hosted/pub.dev/path_provider_android-2.2.14",
+      "rootUri": "file:///C:/Users/matt3/AppData/Local/Pub/Cache/hosted/pub.dev/path_provider_android-2.2.15",
       "packageUri": "lib/",
       "languageVersion": "3.5"
     },
@@ -267,15 +267,15 @@
     },
     {
       "name": "shared_preferences_android",
-      "rootUri": "file:///C:/Users/matt3/AppData/Local/Pub/Cache/hosted/pub.dev/shared_preferences_android-2.3.4",
+      "rootUri": "file:///C:/Users/matt3/AppData/Local/Pub/Cache/hosted/pub.dev/shared_preferences_android-2.4.0",
       "packageUri": "lib/",
       "languageVersion": "3.5"
     },
     {
       "name": "shared_preferences_foundation",
-      "rootUri": "file:///C:/Users/matt3/AppData/Local/Pub/Cache/hosted/pub.dev/shared_preferences_foundation-2.5.3",
+      "rootUri": "file:///C:/Users/matt3/AppData/Local/Pub/Cache/hosted/pub.dev/shared_preferences_foundation-2.5.4",
       "packageUri": "lib/",
-      "languageVersion": "3.3"
+      "languageVersion": "3.4"
     },
     {
       "name": "shared_preferences_linux",
@@ -428,7 +428,7 @@
       "languageVersion": "3.5"
     }
   ],
-  "generated": "2024-12-10T18:28:00.293073Z",
+  "generated": "2024-12-16T15:09:34.841271Z",
   "generator": "pub",
   "generatorVersion": "3.5.3",
   "flutterRoot": "file:///C:/flutter",

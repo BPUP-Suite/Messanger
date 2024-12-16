@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:messanger_bpup/faces/start/start.dart';
+import 'package:messanger_bpup/src/chatMessagesProvider.dart';
 import 'package:messanger_bpup/src/localDatabaseMethods.dart';
+import 'package:provider/provider.dart';
 
 
 
@@ -8,7 +10,14 @@ import 'package:messanger_bpup/src/localDatabaseMethods.dart';
 void main() async{
   // WebSocketReceiver();
 
-  runApp(MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ChatMessagesProvider()),
+      ],
+      child: MyApp(),
+    ),
+  );
 
   bool doesDBExists = await LocalDatabaseMethods.checkDatabaseExistence();
   print('Esistenza Database: ${doesDBExists.toString()}');
